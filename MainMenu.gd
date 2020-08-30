@@ -43,4 +43,4 @@ func _on_HostOnlineGame_pressed():
 
 func _on_Start_pressed():
 	$HostScreen.hide()
-	Server.start($HostScreen/ServerName.text, int($HostScreen/PlayerCount.text))
+	Server.start($HostScreen/ServerName.text, int($HostScreen/PlayerCount.text), 100)

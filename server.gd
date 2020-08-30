@@ -10,7 +10,7 @@ const MAX_PLAYERS = 6
 
 var min_players
 
-func start(game_name, min_players_input):
+func start(game_name, min_players_input, max_players):
 	print("Starting Server")
 	
 	min_players = min_players_input
@@ -21,7 +21,7 @@ func start(game_name, min_players_input):
 	ServerTracker.register_game(game_name)
 	
 	var server = NetworkedMultiplayerENet.new()
-	server.create_server(ServerTracker.DEFAULT_PORT, Main.MAX_PLAYERS)
+	server.create_server(ServerTracker.DEFAULT_PORT, max_players)
 	get_tree().set_network_peer(server)
 	print("Awaiting Clients")
 
