@@ -89,8 +89,10 @@ remote func switch_level(new_level_name, level_data):
 	print("clinent switch universe")
 	get_multiverse().switch_level(new_level_name, level_data)
 
-remote func ship_exit_system(player_id):
+remote func remove_entity(player_id):
 	print("client.ship_exit_system")
 	var exiting_ship = get_level().get_node("players/" + str(player_id))
 	get_level().get_node("players").remove_child(exiting_ship)
-	
+
+remote func send_entity(destination, entity_data):
+	get_level().receive_entity(destination, entity_data)

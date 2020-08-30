@@ -25,11 +25,21 @@ func deserialize(data):
 	for key in data.keys():
 		var node = get_node(key)
 		for serial_data in data[key]:
-			# TODO: Is `load` the smartest thing to use here?
-			var object = load(serial_data["scene"]).instance()
-			object.deserialize(serial_data["state"])
-			object.name = serial_data["name"]
-			node.add_child(object)
+			receive_entity(key, serial_data)
+
+func receive_entity(destination, serial_data):
+	var node = get_node(destination)
+	print("serial_data: ", serial_data)
+	# TODO: Is `load` the smartest thing to use here?
+	var object = load(serial_data["scene"]).instance()
+	object.deserialize(serial_data["state"])
+	object.name = serial_data["name"]
+	node.add_child(object)
+
+func remove_entity(destination, name):
+	var node = get_node(destination)
+	var node_to_remove = get_node(name)
+	node.remove_child(node_to_remove)
 
 func get_player_ids():
 	var ids = []

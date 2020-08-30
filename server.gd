@@ -79,6 +79,14 @@ func _on_game_start_countdown_timeout():
 		net_players.add_child(player)
 		spawn_ship(player_id, spawn_position * spawn_position_counter, "level1")
 	
+func send_entity(level, destination, entity):
+	for id in level.get_player_ids():
+		Client.rpc_id(id, "send_entity", destination, entity.serialize())
+
+func remove_entity(level, destination, entity):
+	for id in level.get_player_ids():
+		Client.rpc_id(id, "remove_entity", destination, entity.name)
+	
 func get_level(level):
 	return get_multiverse().get_level(level)
 	
@@ -108,8 +116,10 @@ func switch_player_universe(player):
 	var new_level_name = "level2" if  test_level else "level1" # TODO: Specify destination universe
 	var new_level = get_level(new_level_name)
 	var old_level = player.get_level().get_node("world")
+	send_entity(new_level, "players", player)
+	
 	get_multiverse().switch_player_level(player, new_level_name)
-	print("serealized level: ", new_level.serialize())
+	
 	Client.rpc_id(int(player.name), "switch_level", new_level_name, new_level.serialize())
-	for id in old_level.get_player_ids():
-		Client.rpc_id(id, "ship_exit_system", player.name)
+	
+	remove_entity(old_level, "players", player.name)
