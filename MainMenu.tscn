@@ -1,0 +1,232 @@
+[gd_scene load_steps=2 format=2]
+
+[ext_resource path="res://MainMenu.gd" type="Script" id=1]
+
+[node name="MainMenu" type="Node2D"]
+script = ExtResource( 1 )
+
+[node name="MainScreen" type="Panel" parent="."]
+margin_left = 347.439
+margin_top = 159.303
+margin_right = 647.439
+margin_bottom = 381.303
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="FindGameButton" type="Button" parent="MainScreen"]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -62.6654
+margin_top = -28.8877
+margin_right = 65.335
+margin_bottom = -8.88769
+rect_pivot_offset = Vector2( 84.1736, 20 )
+text = "Find Online Game"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="HostOnlineGame" type="Button" parent="MainScreen"]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -45.1821
+margin_top = 2.15908
+margin_right = 44.8179
+margin_bottom = 22.1591
+rect_pivot_offset = Vector2( 84.1736, 20 )
+text = "Host Server"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="QuitButton" type="Button" parent="MainScreen"]
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+margin_left = -19.3326
+margin_top = -46.8319
+margin_right = 20.6674
+margin_bottom = -26.8319
+text = "Quit"
+
+[node name="JoinButton" type="Button" parent="MainScreen"]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -36.1591
+margin_top = 33.0677
+margin_right = 35.8409
+margin_bottom = 53.0677
+text = "Join By IP"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label" type="Label" parent="MainScreen"]
+anchor_left = 0.5
+anchor_right = 0.5
+margin_left = -53.8326
+margin_top = 13.3484
+margin_right = 55.1674
+margin_bottom = 27.3484
+text = "TANK CONQUEST"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="EnterName" type="LineEdit" parent="MainScreen"]
+anchor_left = 0.5
+anchor_right = 0.5
+margin_left = -59.1674
+margin_top = 41.38
+margin_right = 57.8326
+margin_bottom = 65.38
+text = "Enter Name"
+
+[node name="FindScreen" type="Panel" parent="."]
+visible = false
+margin_left = 347.439
+margin_top = 157.968
+margin_right = 647.439
+margin_bottom = 379.968
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="GamesList" type="VBoxContainer" parent="FindScreen"]
+margin_left = 20.0
+margin_top = 38.0
+margin_right = 283.0
+margin_bottom = 188.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="CancelButton" type="Button" parent="FindScreen"]
+margin_left = 9.5386
+margin_top = 195.378
+margin_right = 63.5386
+margin_bottom = 215.378
+text = "Cancel"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label" type="Label" parent="FindScreen"]
+anchor_left = 0.5
+anchor_right = 0.5
+margin_left = -35.5
+margin_top = 9.34387
+margin_right = 35.5
+margin_bottom = 23.3439
+text = "JOIN GAME"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="JoinScreen" type="Panel" parent="."]
+visible = false
+margin_left = 347.439
+margin_top = 157.968
+margin_right = 647.439
+margin_bottom = 379.968
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="CancelButton" type="Button" parent="JoinScreen"]
+margin_left = 9.5386
+margin_top = 195.378
+margin_right = 63.5386
+margin_bottom = 215.378
+text = "Cancel"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label" type="Label" parent="JoinScreen"]
+anchor_left = 0.5
+anchor_right = 0.5
+margin_left = -35.5
+margin_top = 9.34387
+margin_right = 35.5
+margin_bottom = 23.3439
+text = "JOIN BY IP"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="HostScreen" type="Panel" parent="."]
+visible = false
+margin_left = 347.439
+margin_top = 157.968
+margin_right = 647.439
+margin_bottom = 379.968
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="CancelButton" type="Button" parent="HostScreen"]
+margin_left = 9.5386
+margin_top = 195.378
+margin_right = 63.5386
+margin_bottom = 215.378
+text = "Cancel"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label" type="Label" parent="HostScreen"]
+anchor_left = 0.5
+anchor_right = 0.5
+margin_left = -35.5
+margin_top = 9.34387
+margin_right = 35.5
+margin_bottom = 23.3439
+text = "Host Game"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="ServerName" type="LineEdit" parent="HostScreen"]
+anchor_left = 0.5
+anchor_right = 0.5
+margin_left = -59.1674
+margin_top = 42.715
+margin_right = 57.8326
+margin_bottom = 66.715
+text = "Server Name"
+
+[node name="PlayerCount" type="LineEdit" parent="HostScreen"]
+anchor_left = 0.5
+anchor_right = 0.5
+margin_left = -59.1674
+margin_top = 78.8735
+margin_right = 57.8326
+margin_bottom = 102.873
+text = "Min Players"
+
+[node name="Start" type="Button" parent="HostScreen"]
+margin_left = 234.057
+margin_top = 193.696
+margin_right = 288.057
+margin_bottom = 213.696
+text = "Start"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+[connection signal="pressed" from="MainScreen/FindGameButton" to="." method="_on_FindGameButton_pressed"]
+[connection signal="pressed" from="MainScreen/HostOnlineGame" to="." method="_on_HostOnlineGame_pressed"]
+[connection signal="pressed" from="MainScreen/QuitButton" to="." method="_on_QuitButton_pressed"]
+[connection signal="pressed" from="MainScreen/JoinButton" to="." method="_on_JoinButton_pressed"]
+[connection signal="pressed" from="FindScreen/CancelButton" to="." method="_on_CancelButton_pressed"]
+[connection signal="pressed" from="JoinScreen/CancelButton" to="." method="_on_CancelButton_pressed"]
+[connection signal="pressed" from="HostScreen/CancelButton" to="." method="_on_CancelButton_pressed"]
+[connection signal="pressed" from="HostScreen/Start" to="." method="_on_Start_pressed"]

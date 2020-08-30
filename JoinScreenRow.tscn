@@ -1,0 +1,24 @@
+[gd_scene load_steps=2 format=2]
+
+[ext_resource path="res://JoinScreenRow.gd" type="Script" id=1]
+
+[node name="JoinScreenRow" type="HBoxContainer"]
+margin_right = 137.0
+margin_bottom = 23.0
+script = ExtResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label" type="Label" parent="."]
+margin_top = 4.0
+margin_right = 96.0
+margin_bottom = 18.0
+text = "<Game Name>"
+
+[node name="Join" type="Button" parent="."]
+margin_left = 100.0
+margin_right = 136.0
+margin_bottom = 23.0
+text = "join"
+[connection signal="pressed" from="Join" to="." method="_on_Join_pressed"]
