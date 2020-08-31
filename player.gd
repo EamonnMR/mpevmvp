@@ -37,11 +37,10 @@ func _physics_process(delta):
 		handle_rotation(delta)
 		handle_thrust(delta)
 		
-		rset("puppet_dir", direction)
-		rset("puppet_pos", position)
-		rset("puppet_thrusting", thrusting)
-		rset("puppet_velocity", get_linear_velocity())
-		
+		rset_ex("puppet_dir", direction)
+		rset_ex("puppet_pos", position)
+		rset_ex("puppet_thrusting", thrusting)
+		rset_ex("puppet_velocity", get_linear_velocity())
 		
 		if shooting and shot_cooldown:
 			Server.fire_shot(self)
@@ -127,6 +126,8 @@ func anglemod(angle):
 	return fmod(angle + ARC, ARC)
 
 # TODO: Fill these in
+# These get Rset anyway, but it should make the flash of wrongness go away
+
 
 func serialize():
 	return {}
@@ -134,3 +135,11 @@ func serialize():
 func deserialize(data):
 	pass
 
+# TODO: Move to superclass
+
+func rset_ex(puppet_var, value):
+	# This avoids a whole lot of extra network traffic...
+	# and a whole lot of "Invalid packet received. Requested node was not found."
+
+	for id in get_level().get_node("world").get_player_ids():
+		rset_id(id, puppet_var, value)

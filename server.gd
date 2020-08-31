@@ -81,11 +81,16 @@ func _on_game_start_countdown_timeout():
 	
 func send_entity(level, destination, entity):
 	for id in level.get_player_ids():
-		Client.rpc_id(id, "send_entity", destination, entity.serialize())
+		Client.rpc_id(id, "send_entity", destination, {
+			"name": entity.name,
+			"scene": entity.filename,
+			"state": entity.serialize()
+		})
 
-func remove_entity(level, destination, entity):
+func remove_entity(level, destination, entity_name):
 	for id in level.get_player_ids():
-		Client.rpc_id(id, "remove_entity", destination, entity.name)
+		print("Remove entity: ", destination, "/", entity_name, " from clients: ", level.get_player_ids())
+		Client.rpc_id(id, "remove_entity", destination, entity_name)
 	
 func get_level(level):
 	return get_multiverse().get_level(level)
