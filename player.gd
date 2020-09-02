@@ -22,13 +22,13 @@ var input_state: Node
 func _ready():
 	if (name == str(Client.client_id)):
 		$Camera2D.make_current()
-	
-	input_state = get_input_state()
+	if(is_network_master()):
+		input_state = get_input_state()
 	$RotationSprite.set_direction(direction)
 
 func _physics_process(delta):
 	if (is_network_master()):
-		var input_state = get_input_state()
+		# var input_state = get_input_state()
 		
 		shooting = input_state.puppet_shooting
 		jumping = input_state.puppet_jumping
@@ -73,6 +73,7 @@ func handle_thrust(delta):
 		
 
 func get_input_state():
+	print(get_tree().get_root().print_tree_pretty())
 	return get_tree().get_root().get_node(Game.INPUT).get_node(name)
 
 func get_limited_velocity():

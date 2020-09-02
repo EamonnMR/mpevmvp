@@ -88,8 +88,9 @@ func send_entity(level, destination, entity):
 		})
 
 func remove_entity(level, destination, entity_name):
+	print('remove entity: ', entity_name, 'from level: ', level.get_node('../').name)
 	for id in level.get_player_ids():
-		print("Remove entity: ", destination, "/", entity_name, " from clients: ", level.get_player_ids())
+		print("Remove entity: ", destination, "/", entity_name, " from client: ", id)
 		Client.rpc_id(id, "remove_entity", destination, entity_name)
 	
 func get_level(level):
@@ -113,18 +114,19 @@ func fire_shot(player):
 	player.get_level().get_node("world/shots").add_child(shot)
 	Client.rpc("fire_shot", int(player.name), shot.name)
 
-var test_level = false
-
 func switch_player_universe(player):
-	test_level = not test_level
-	print("server switch player universe")
-	var new_level_name = "level2" if  test_level else "level1" # TODO: Specify destination universe
-	var new_level = get_level(new_level_name)
 	var old_level = player.get_level().get_node("world")
+	var old_level_name = player.get_level().name
+	
+	var new_level_name = tmp_get_other_level(old_level_name)
+	print("server switch player level from ", old_level_name, " to ", new_level_name)
+	var new_level = get_level(new_level_name)
 	send_entity(new_level, "players", player)
-	
 	get_multiverse().switch_player_level(player, new_level_name)
-	
 	Client.rpc_id(int(player.name), "switch_level", new_level_name, new_level.serialize())
-	
 	remove_entity(old_level, "players", player.name)
+
+func tmp_get_other_level(old_level_name):
+	var new_level_name = "level2" if old_level_name == "level1" else "level1" # TODO: Specify destination universe
+	assert(new_level_name != old_level_name)
+	return new_level_name

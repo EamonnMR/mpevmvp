@@ -88,12 +88,15 @@ remote func fire_shot(player_id, shot_name):
 remote func switch_level(new_level_name, level_data):
 	print("clinent switch universe")
 	get_multiverse().switch_level(new_level_name, level_data)
+	get_level().print_tree_pretty()
 
 remote func remove_entity(destination, ent_name):
 	print("client.remove_entity; ", destination, "/", ent_name)
 	var entity_to_remove = get_level().get_node(destination + "/" + ent_name)
 	get_level().get_node(destination).remove_child(entity_to_remove)
-
+	get_level().print_tree_pretty()
+	
 remote func send_entity(destination, entity_data):
+	print("client.send_entity: ", destination, "/", entity_data)
 	get_level().receive_entity(destination, entity_data)
-	get_level().receive_entity(destination, entity_data)
+	get_level().print_tree_pretty()
