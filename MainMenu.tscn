@@ -76,7 +76,7 @@ margin_left = -53.8326
 margin_top = 13.3484
 margin_right = 55.1674
 margin_bottom = 27.3484
-text = "TANK CONQUEST"
+text = "MP EV MVP"
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -89,6 +89,9 @@ margin_top = 41.38
 margin_right = 57.8326
 margin_bottom = 65.38
 text = "Enter Name"
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="FindScreen" type="Panel" parent="."]
 visible = false

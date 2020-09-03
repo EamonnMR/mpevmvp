@@ -4,6 +4,7 @@ var lobby
 var client
 var client_id
 var player_name
+var map
 
 func start(ip, port, new_player_name):
 	get_tree().connect("connected_to_server", self, "_client_connected")
@@ -57,9 +58,12 @@ remote func start_game():
 	var verse = preload("res://client_universe.tscn").instance()
 	var world = verse.get_node("level1/world")
 	var player_scene = preload("res://PlayerInput.tscn").instance()
+	var map = preload("res://map/Map.tscn").instance()
+	map.hide()
 	player_scene.set_name(str(client_id))
 	player_scene.set_network_master(client_id)
 	get_tree().get_root().add_child(verse)
+	get_tree().get_root().add_child(map)
 	
 	var net_players = Node.new()
 	net_players.set_name(Game.INPUT)

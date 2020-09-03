@@ -11,6 +11,7 @@ var direction_change: int = 0
 var shooting = false
 var thrusting = false
 var jumping = false
+var map
 
 func _get_entity():
 	# TODO: Ungross this
@@ -25,6 +26,7 @@ func _physics_process(delta):
 		shooting = Input.is_key_pressed(KEY_SPACE)
 		jumping = Input.is_key_pressed(KEY_J)
 		thrusting = Input.is_key_pressed(KEY_W)
+		_handle_show_map()
 		
 		rset_id(1, "puppet_direction_change", direction_change)
 		rset_id(1, "puppet_shooting", shooting)
@@ -38,3 +40,7 @@ func _get_direction_change():
 	if Input.is_key_pressed(KEY_D):
 		dc += 1
 	return dc
+
+func _handle_show_map():
+	if Input.is_key_pressed(KEY_M):
+		get_tree().get_root().get_node("Map").show()
