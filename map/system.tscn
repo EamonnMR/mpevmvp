@@ -2,9 +2,21 @@
 
 [ext_resource path="res://map/circle.gd" type="Script" id=1]
 [ext_resource path="res://map/system.gd" type="Script" id=2]
-[ext_resource path="res://map/system_area.gd" type="Script" id=3]
 
-[sub_resource type="CircleShape2D" id=1]
+[sub_resource type="GDScript" id=1]
+script/source = "extends Area2D
+
+func _input_event(viewport, event, shape_idx):
+	print(\"Input Event\")
+	if event.type == InputEvent.MOUSE_BUTTON \\
+	and event.button_index == BUTTON_LEFT \\
+	and event.pressed:
+		get_node(\"../\").clicked()
+		return(self) 
+"
+
+[sub_resource type="CircleShape2D" id=2]
+radius = 25.014
 
 [node name="system" type="Node2D"]
 script = ExtResource( 2 )
@@ -22,7 +34,7 @@ __meta__ = {
 }
 
 [node name="Area2D" type="Area2D" parent="."]
-script = ExtResource( 3 )
+script = SubResource( 1 )
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
-shape = SubResource( 1 )
+shape = SubResource( 2 )

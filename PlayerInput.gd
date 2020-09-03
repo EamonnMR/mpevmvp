@@ -11,7 +11,7 @@ var direction_change: int = 0
 var shooting = false
 var thrusting = false
 var jumping = false
-var map
+var map_debounce = true
 
 func _get_entity():
 	# TODO: Ungross this
@@ -42,5 +42,18 @@ func _get_direction_change():
 	return dc
 
 func _handle_show_map():
-	if Input.is_key_pressed(KEY_M):
-		get_tree().get_root().get_node("Map").show()
+	if Input.is_key_pressed(KEY_M) and map_debounce:
+		map_debounce = false
+		_toggle_map()
+
+func _toggle_map():
+	var root = get_tree().get_root()
+	var maybe_map = root.get_node("Map")
+	if is_instance_valid(maybe_map):
+		root.remove_child(maybe_map)
+	else:
+		root.add_child(preload("res://map/Map.tscn").instance())
+
+
+func _on_MapDebounce_timeout():
+	map_debounce = true
