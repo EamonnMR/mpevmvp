@@ -10,6 +10,7 @@ var DAMAGE = 10
 var direction: float = 0.0
 
 func init(start_angle, new_position):
+	print("Start angle: ", start_angle)
 	$RotationSprite.set_direction(start_angle)
 	set_linear_velocity(Vector2(SPEED, 0).rotated(start_angle))
 	position = new_position
