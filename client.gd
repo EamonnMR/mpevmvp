@@ -54,13 +54,16 @@ remote func start_countdown():
 	lobby.start_countdown()
 	
 remote func start_game():
-	get_tree().get_root().remove_child(lobby)
+	var root = get_tree().get_root()
+	root.remove_child(lobby)
 	var verse = preload("res://client_universe.tscn").instance()
 	var world = verse.get_node("level1/world")
 	var player_scene = preload("res://PlayerInput.tscn").instance()
+	var background = preload("res://environment/starfield.tscn").instance()
 	player_scene.set_name(str(client_id))
 	player_scene.set_network_master(client_id)
-	get_tree().get_root().add_child(verse)
+	root.add_child(background)
+	root.add_child(verse)
 
 	
 	var net_players = Node.new()

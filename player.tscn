@@ -199,6 +199,7 @@ animations = [ {
 collision_mask = 2147483648
 contacts_reported = 1
 contact_monitor = true
+linear_damp = 0.0
 script = ExtResource( 1 )
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
