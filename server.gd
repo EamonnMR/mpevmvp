@@ -71,13 +71,16 @@ func _on_game_start_countdown_timeout():
 
 	var spawn_position = Vector2(10,10)
 	var spawn_position_counter = 0
+	var ships = []
 	for player_id in players:
 		spawn_position_counter += 1
 		var player = preload("res://PlayerInput.tscn").instance()
 		player.set_name(str(player_id))
 		player.set_network_master(player_id)
 		net_players.add_child(player)
-		spawn_ship(player_id, spawn_position * spawn_position_counter, "level1")
+		ships.append(spawn_ship(player_id, spawn_position * spawn_position_counter, "level1"))
+	for ship in ships:
+		send_entity(get_level("level1"), "players", ship)
 	
 func send_entity(level, destination, entity):
 	for id in level.get_player_ids():
@@ -103,9 +106,11 @@ func spawn_ship(player_id, position, level):
 	print("Server Spawn Ship on level: ", level)
 	var ship_type = players[player_id]["ship"]
 	var ship = Game.get_ship(ship_type, player_id)
+	ship.team_set = [player_id, players[player_id]]
 	get_level(level).get_node("players").add_child(ship)
 	ship.position = position
-	Client.rpc("spawn_ship", player_id, ship_type, position)
+	return ship
+	return ship
 	
 func fire_shot(player):
 	print("Server.fire_shot")

@@ -17,7 +17,10 @@ var jumping = false
 var jump_cooldown = false
 var thrusting = false
 var health = 20
+var puppet_health = 20
 var input_state: Node
+
+var team_set = []
 
 func _ready():
 	if (name == str(Client.client_id)):
@@ -41,6 +44,7 @@ func _physics_process(delta):
 		rset_ex("puppet_pos", position)
 		rset_ex("puppet_thrusting", thrusting)
 		rset_ex("puppet_velocity", get_linear_velocity())
+		rset_ex_cond("puppet_health", health)
 		
 		if shooting and shot_cooldown:
 			Server.fire_shot(self)
@@ -55,6 +59,7 @@ func _physics_process(delta):
 		direction = puppet_dir
 		thrusting = puppet_thrusting
 		position = puppet_pos # This should be in integrate forces, but for some reason the puppet pos variable does not work there
+		health = puppet_health
 	if (not is_network_master()):
 		# To avoid jitter alledgedly
 		pass
@@ -94,7 +99,7 @@ func _on_ShotTimer_timeout():
 
 func get_shot():
 	var shot = preload("res://bullet.tscn").instance()
-	shot.add_collision_exception_with(self)
+	shot.team_set = team_set
 	shot.init(direction, position)
 	return shot
 
@@ -131,16 +136,27 @@ func anglemod(angle):
 
 
 func serialize():
-	return {}
+	return {
+		"position": position,
+		"direction": direction,
+		"team_set": team_set,
+	}
 
 func deserialize(data):
-	pass
+	position = data["position"]
+	direction = data["direction"]
+	team_set = data["team_set"]
 
 # TODO: Move to superclass
 
 func rset_ex(puppet_var, value):
 	# This avoids a whole lot of extra network traffic...
 	# and a whole lot of "Invalid packet received. Requested node was not found."
-
 	for id in get_level().get_node("world").get_player_ids():
 		rset_id(id, puppet_var, value)
+
+func rset_ex_cond(puppet_var, value):
+	if self[puppet_var] != value:
+		print("Values differ: Rsetting")
+		self[puppet_var] = value
+		rset_ex(puppet_var, value)

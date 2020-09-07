@@ -75,12 +75,6 @@ func get_level():
 func get_multiverse():
 	return get_tree().get_root().get_node("Multiverse")
 
-remote func spawn_ship(player_id, ship_type, position):
-	print("Client.spawn_ship")
-	var ship = Game.get_ship(ship_type, player_id)
-	get_level().get_node("players").add_child(ship)
-	ship.position = position
-
 remote func fire_shot(player_id, shot_name):
 	print("Client.fire_shot", player_id)
 	var shot = get_level().get_player_entity(player_id).get_shot()

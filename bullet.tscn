@@ -4,9 +4,6 @@
 [ext_resource path="res://bullet.gd" type="Script" id=2]
 [ext_resource path="res://sprites/onyx_cc_nc/204.png" type="Texture" id=3]
 
-[sub_resource type="CircleShape2D" id=1]
-radius = 7.55314
-
 [sub_resource type="AtlasTexture" id=2]
 flags = 4
 atlas = ExtResource( 3 )
@@ -195,6 +192,9 @@ animations = [ {
 "speed": 5.0
 } ]
 
+[sub_resource type="CircleShape2D" id=39]
+radius = 4.68782
+
 [node name="shot" type="RigidBody2D"]
 collision_layer = 2
 collision_mask = 4
@@ -202,9 +202,15 @@ contacts_reported = 1
 contact_monitor = true
 script = ExtResource( 2 )
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-shape = SubResource( 1 )
-
 [node name="RotationSprite" parent="." instance=ExtResource( 1 )]
 frames = SubResource( 38 )
+
+[node name="Area2D" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+shape = SubResource( 39 )
+
+[node name="Timer" type="Timer" parent="."]
 [connection signal="body_entered" from="." to="." method="_on_shot_body_entered"]
+[connection signal="body_entered" from="Area2D" to="." method="_on_shot_body_entered"]
+[connection signal="timeout" from="Timer" to="." method="_on_Timer_timeout"]

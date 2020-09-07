@@ -5,7 +5,7 @@
 [ext_resource path="res://sprites/onyx_cc_nc/pheonix.png" type="Texture" id=3]
 
 [sub_resource type="CircleShape2D" id=1]
-radius = 40.5887
+radius = 22.8913
 
 [sub_resource type="AtlasTexture" id=2]
 flags = 4
