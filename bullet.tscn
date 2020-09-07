@@ -211,6 +211,8 @@ frames = SubResource( 38 )
 shape = SubResource( 39 )
 
 [node name="Timer" type="Timer" parent="."]
+wait_time = 5.0
+autostart = true
 [connection signal="body_entered" from="." to="." method="_on_shot_body_entered"]
 [connection signal="body_entered" from="Area2D" to="." method="_on_shot_body_entered"]
 [connection signal="timeout" from="Timer" to="." method="_on_Timer_timeout"]
