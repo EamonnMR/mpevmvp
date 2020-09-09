@@ -207,15 +207,6 @@ margin_right = 57.8326
 margin_bottom = 66.715
 text = "Server Name"
 
-[node name="PlayerCount" type="LineEdit" parent="HostScreen"]
-anchor_left = 0.5
-anchor_right = 0.5
-margin_left = -59.1674
-margin_top = 78.8735
-margin_right = 57.8326
-margin_bottom = 102.873
-text = "Min Players"
-
 [node name="Start" type="Button" parent="HostScreen"]
 margin_left = 234.057
 margin_top = 193.696
