@@ -3,17 +3,14 @@ extends Node
 var server
 var players = {}
 var players_in_systems = {}
+var net_players
 
 var WAIT_TIME = 10
 
 const MAX_PLAYERS = 6
 
-var min_players
-
-func start(game_name, min_players_input, max_players):
+func start(game_name, max_players):
 	print("Starting Server")
-	
-	min_players = min_players_input
 	
 	get_tree().connect("network_peer_connected", self, "_client_connected")
 	get_tree().connect("network_peer_disconnected", self,"_client_disconnected")
@@ -23,65 +20,53 @@ func start(game_name, min_players_input, max_players):
 	var server = NetworkedMultiplayerENet.new()
 	server.create_server(ServerTracker.DEFAULT_PORT, max_players)
 	get_tree().set_network_peer(server)
-	print("Awaiting Clients")
-
-remote func request_lobby_update(player_data):
-	print("Server.request_lobby_update")
-	players[get_tree().get_rpc_sender_id()] = player_data
-	push_lobby_update()
-
-func push_lobby_update():
-	print("Server.push_lobby_update")
-	Client.rpc("remote_lobby_update", players)
-
-func _client_connected(id):
-	print("Server: Client_Connected: ", id)
-	players[id] = {"ship": 0, "team": 0, "name": id}
-	push_lobby_update()
-	if len(players) >= min_players:
-		start_countdown()
 	
-
-func _client_disconnected(id):
-	print("Server._client_disconnected: ", id)
-	players.erase(id)
-	push_lobby_update()
-	
-func start_countdown():
-	var game_start_countdown = Timer.new()
-	game_start_countdown.connect("timeout", self, "_on_game_start_countdown_timeout") 
-	add_child(game_start_countdown)
-	game_start_countdown.set_wait_time(WAIT_TIME)
-	game_start_countdown.one_shot = true
-	game_start_countdown.start()
-	Client.rpc("start_countdown")
-	
-func _on_game_start_countdown_timeout():
-	print("Starting game")
-	Client.rpc("start_game")
 	var verse = preload("res://server_multiverse.tscn").instance()
-	var world = verse.get_node("level1")
 	verse.set_network_master(1)
 	get_tree().get_root().add_child(verse)
 	
-	var net_players = preload("res://server_input_handler.tscn").instance()
+	net_players = preload("res://server_input_handler.tscn").instance()
 	net_players.set_name(Game.INPUT)
 	get_tree().get_root().add_child(net_players)
-	print("ADDED NET PLAYERS")
 
-	var spawn_position = Vector2(10,10)
-	var spawn_position_counter = 0
-	var ships = []
-	for player_id in players:
-		spawn_position_counter += 1
-		var player = preload("res://PlayerInput.tscn").instance()
-		player.set_name(str(player_id))
-		player.set_network_master(player_id)
-		net_players.add_child(player)
-		ships.append(spawn_ship(player_id, spawn_position * spawn_position_counter, "level1"))
-	for ship in ships:
-		send_entity(get_level("level1"), "players", ship)
+func _setup_networking(max_players):
+	var server = NetworkedMultiplayerENet.new()
+	server.create_server(ServerTracker.DEFAULT_PORT, max_players)
+	get_tree().set_network_peer(server)
 	
+func _setup_multiverse():
+	var verse = preload("res://server_multiverse.tscn").instance()
+	verse.set_network_master(1)
+	get_tree().get_root().add_child(verse)
+	
+func _setup_net_players():
+	net_players = preload("res://server_input_handler.tscn").instance()
+	net_players.set_name(Game.INPUT)
+	get_tree().get_root().add_child(net_players)
+	
+
+func _client_connected(id):
+	print("Server: Client_Connected: ", id)
+	var SPAWN_LEVEL = "level1"
+	players[id] = {"ship": 0, "team": 0, "name": id}
+	
+	var player_input = preload("res://PlayerInput.tscn").instance()
+	player_input.set_name(str(id))
+	player_input.set_network_master(id)
+	net_players.add_child(player_input)
+	send_level(id, SPAWN_LEVEL, get_level(SPAWN_LEVEL))
+	var ship = spawn_ship(id, Vector2(0.0, 0.0), SPAWN_LEVEL)
+	send_entity(get_level(SPAWN_LEVEL), "players", ship)
+
+func _client_disconnected(id):
+	print("Server._client_disconnected: ", id)
+	# TODO remove player input and entity
+	players.erase(id)
+	net_players.remove_child(net_players.get_child(str(id)))
+
+func send_level(client_id, new_level_name, new_level):
+	Client.rpc_id(client_id, "switch_level", new_level_name, new_level.serialize())
+
 func send_entity(level, destination, entity):
 	for id in level.get_player_ids():
 		Client.rpc_id(id, "send_entity", destination, {
@@ -104,12 +89,11 @@ func get_multiverse():
 	
 func spawn_ship(player_id, position, level):
 	print("Server Spawn Ship on level: ", level)
-	var ship_type = players[player_id]["ship"]
+	var ship_type = 0
 	var ship = Game.get_ship(ship_type, player_id)
-	ship.team_set = [player_id, players[player_id]]
+	ship.team_set = [player_id]
 	get_level(level).get_node("players").add_child(ship)
 	ship.position = position
-	return ship
 	return ship
 	
 func fire_shot(player):
@@ -128,10 +112,12 @@ func switch_player_universe(player):
 	var new_level = get_level(new_level_name)
 	send_entity(new_level, "players", player)
 	get_multiverse().switch_player_level(player, new_level_name)
-	Client.rpc_id(int(player.name), "switch_level", new_level_name, new_level.serialize())
+	send_level(int(player.name), new_level_name, new_level)
 	remove_entity(old_level, "players", player.name)
 
 func tmp_get_other_level(old_level_name):
+	# This assumes that we've got a world with exactly two levels.
+	# Replace this with an overworld map, doors, etc.
 	var new_level_name = "level2" if old_level_name == "level1" else "level1" # TODO: Specify destination universe
 	assert(new_level_name != old_level_name)
 	return new_level_name

@@ -10,12 +10,11 @@ var player_name
 func _ready():
 	var args = OS.get_cmdline_args()
 	var kwargs = parse_args({
-		"players": "1",
 		"server-name": "Just Another EV MP",
 		"max_players": "6"
 	})
 	if OS.has_feature("Server") or "--server" in args:
-		Server.start(kwargs["server-name"], int(kwargs["players"]), int(kwargs["max_players"]))
+		Server.start(kwargs["server-name"], int(kwargs["max_players"]))
 	else:
 		# TODO: Show Menu
 		pass
