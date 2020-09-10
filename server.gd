@@ -10,40 +10,32 @@ var WAIT_TIME = 5
 const MAX_PLAYERS = 6
 
 func start(game_name, max_players):
-	print("Starting Server")
+	print("Starting Server: ", game_name, ", ", max_players)
 	
 	get_tree().connect("network_peer_connected", self, "_client_connected")
 	get_tree().connect("network_peer_disconnected", self,"_client_disconnected")
 	
-	ServerTracker.register_game(game_name)
-	
 	var server = NetworkedMultiplayerENet.new()
 	server.create_server(ServerTracker.DEFAULT_PORT, max_players)
 	get_tree().set_network_peer(server)
 	
-	var verse = preload("res://server_multiverse.tscn").instance()
-	verse.set_network_master(1)
-	get_tree().get_root().add_child(verse)
-	
-	net_players = preload("res://server_input_handler.tscn").instance()
-	net_players.set_name(Game.INPUT)
-	get_tree().get_root().add_child(net_players)
+	call_deferred("_setup_server_nodes", game_name)
 
-func _setup_networking(max_players):
-	var server = NetworkedMultiplayerENet.new()
-	server.create_server(ServerTracker.DEFAULT_PORT, max_players)
-	get_tree().set_network_peer(server)
-	
-func _setup_multiverse():
+func _setup_server_nodes(game_name):
+	# Needs to be called deferred to avoid
+	# ERROR: add_child: Condition "data.blocked > 0" is true.
+
+	print("Adding Universe")
 	var verse = preload("res://server_multiverse.tscn").instance()
 	verse.set_network_master(1)
 	get_tree().get_root().add_child(verse)
 	
-func _setup_net_players():
+	print("Adding net players")
 	net_players = preload("res://server_input_handler.tscn").instance()
 	net_players.set_name(Game.INPUT)
 	get_tree().get_root().add_child(net_players)
 	
+	ServerTracker.register_game(game_name)
 
 func _client_connected(id):
 	print("Server: Client_Connected: ", id)
@@ -55,14 +47,17 @@ func _client_connected(id):
 	net_players.add_child(player_input)
 	
 	spawn_player(id)
-
+	
+	get_tree().get_root().print_tree_pretty()
+	
 func _client_disconnected(id):
 	print("Server._client_disconnected: ", id)
 	# TODO remove player input and entity
 	players.erase(id)
-	net_players.remove_child(net_players.get_child(str(id)))
+	net_players.remove_child(net_players.get_node(str(id)))
 
 func send_level(client_id, new_level_name, new_level):
+	assert(new_level != null)
 	Client.rpc_id(client_id, "switch_level", new_level_name, new_level.serialize())
 
 func send_entity(level, destination, entity):
@@ -101,6 +96,7 @@ func _respawn_player(player_id, timer):
 func spawn_player(player_id):
 	print("Server.spawn_player: ", player_id)
 	var SPAWN_LEVEL = "level1"
+	print("level: ", SPAWN_LEVEL, " (", get_level(SPAWN_LEVEL), ")")
 	send_level(player_id, SPAWN_LEVEL, get_level(SPAWN_LEVEL))
 	var ship = create_ship(player_id, Vector2(0.0, 0.0), SPAWN_LEVEL)
 	send_entity(get_level(SPAWN_LEVEL), "players", ship)
@@ -110,6 +106,7 @@ func create_ship(player_id, position, level):
 	var ship_type = 0
 	var ship = Game.get_ship(ship_type, player_id)
 	ship.team_set = [player_id]
+	print("Get level/players: ", get_level(level).get_node("players"))
 	get_level(level).get_node("players").add_child(ship)
 	ship.position = position
 	return ship

@@ -218,5 +218,15 @@ editor_draw_screen = false
 
 [node name="RotationSprite" parent="." instance=ExtResource( 2 )]
 frames = SubResource( 38 )
+
+[node name="team_set_label" type="Label" parent="."]
+margin_left = -19.5998
+margin_top = 24.0543
+margin_right = 20.4002
+margin_bottom = 38.0543
+custom_colors/font_color = Color( 1, 1, 1, 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
 [connection signal="timeout" from="ShotTimer" to="." method="_on_ShotTimer_timeout"]
 [connection signal="timeout" from="JumpTimer" to="." method="_on_JumpTimer_timeout"]

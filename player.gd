@@ -1,6 +1,6 @@
 extends RigidBody2D
 
-const ACCEL = 20.0 #100.00
+const ACCEL = 350.0 #100.00
 const BULLET_VELOCITY = 500.0 #300
 const ROTATION_SPEED = 1.0
 
@@ -28,6 +28,16 @@ func _ready():
 	if(is_network_master()):
 		input_state = get_input_state()
 	$RotationSprite.set_direction(direction)
+	_show_debug_info()
+	
+func _show_debug_info():
+	if(OS.is_debug_build()):
+		_show_team_set()
+	
+func _show_team_set():
+	$team_set_label.show()
+	for team in team_set:
+		$team_set_label.text += str(team) + ", "
 
 func _physics_process(delta):
 	if (is_network_master()):

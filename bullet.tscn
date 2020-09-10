@@ -4,195 +4,195 @@
 [ext_resource path="res://bullet.gd" type="Script" id=2]
 [ext_resource path="res://sprites/onyx_cc_nc/204.png" type="Texture" id=3]
 
-[sub_resource type="AtlasTexture" id=2]
+[sub_resource type="AtlasTexture" id=1]
 flags = 4
 atlas = ExtResource( 3 )
 region = Rect2( 0, 0, 8, 8 )
 
-[sub_resource type="AtlasTexture" id=3]
+[sub_resource type="AtlasTexture" id=2]
 flags = 4
 atlas = ExtResource( 3 )
 region = Rect2( 8, 0, 8, 8 )
 
-[sub_resource type="AtlasTexture" id=4]
+[sub_resource type="AtlasTexture" id=3]
 flags = 4
 atlas = ExtResource( 3 )
 region = Rect2( 16, 0, 8, 8 )
 
-[sub_resource type="AtlasTexture" id=5]
+[sub_resource type="AtlasTexture" id=4]
 flags = 4
 atlas = ExtResource( 3 )
 region = Rect2( 24, 0, 8, 8 )
 
-[sub_resource type="AtlasTexture" id=6]
+[sub_resource type="AtlasTexture" id=5]
 flags = 4
 atlas = ExtResource( 3 )
 region = Rect2( 32, 0, 8, 8 )
 
-[sub_resource type="AtlasTexture" id=7]
+[sub_resource type="AtlasTexture" id=6]
 flags = 4
 atlas = ExtResource( 3 )
 region = Rect2( 40, 0, 8, 8 )
 
-[sub_resource type="AtlasTexture" id=8]
+[sub_resource type="AtlasTexture" id=7]
 flags = 4
 atlas = ExtResource( 3 )
 region = Rect2( 0, 8, 8, 8 )
 
-[sub_resource type="AtlasTexture" id=9]
+[sub_resource type="AtlasTexture" id=8]
 flags = 4
 atlas = ExtResource( 3 )
 region = Rect2( 8, 8, 8, 8 )
 
-[sub_resource type="AtlasTexture" id=10]
+[sub_resource type="AtlasTexture" id=9]
 flags = 4
 atlas = ExtResource( 3 )
 region = Rect2( 16, 8, 8, 8 )
 
-[sub_resource type="AtlasTexture" id=11]
+[sub_resource type="AtlasTexture" id=10]
 flags = 4
 atlas = ExtResource( 3 )
 region = Rect2( 24, 8, 8, 8 )
 
-[sub_resource type="AtlasTexture" id=12]
+[sub_resource type="AtlasTexture" id=11]
 flags = 4
 atlas = ExtResource( 3 )
 region = Rect2( 32, 8, 8, 8 )
 
-[sub_resource type="AtlasTexture" id=13]
+[sub_resource type="AtlasTexture" id=12]
 flags = 4
 atlas = ExtResource( 3 )
 region = Rect2( 40, 8, 8, 8 )
 
-[sub_resource type="AtlasTexture" id=14]
+[sub_resource type="AtlasTexture" id=13]
 flags = 4
 atlas = ExtResource( 3 )
 region = Rect2( 0, 16, 8, 8 )
 
-[sub_resource type="AtlasTexture" id=15]
+[sub_resource type="AtlasTexture" id=14]
 flags = 4
 atlas = ExtResource( 3 )
 region = Rect2( 8, 16, 8, 8 )
 
-[sub_resource type="AtlasTexture" id=16]
+[sub_resource type="AtlasTexture" id=15]
 flags = 4
 atlas = ExtResource( 3 )
 region = Rect2( 16, 16, 8, 8 )
 
-[sub_resource type="AtlasTexture" id=17]
+[sub_resource type="AtlasTexture" id=16]
 flags = 4
 atlas = ExtResource( 3 )
 region = Rect2( 24, 16, 8, 8 )
 
-[sub_resource type="AtlasTexture" id=18]
+[sub_resource type="AtlasTexture" id=17]
 flags = 4
 atlas = ExtResource( 3 )
 region = Rect2( 32, 16, 8, 8 )
 
-[sub_resource type="AtlasTexture" id=19]
+[sub_resource type="AtlasTexture" id=18]
 flags = 4
 atlas = ExtResource( 3 )
 region = Rect2( 40, 16, 8, 8 )
 
-[sub_resource type="AtlasTexture" id=20]
+[sub_resource type="AtlasTexture" id=19]
 flags = 4
 atlas = ExtResource( 3 )
 region = Rect2( 0, 24, 8, 8 )
 
-[sub_resource type="AtlasTexture" id=21]
+[sub_resource type="AtlasTexture" id=20]
 flags = 4
 atlas = ExtResource( 3 )
 region = Rect2( 8, 24, 8, 8 )
 
-[sub_resource type="AtlasTexture" id=22]
+[sub_resource type="AtlasTexture" id=21]
 flags = 4
 atlas = ExtResource( 3 )
 region = Rect2( 16, 24, 8, 8 )
 
-[sub_resource type="AtlasTexture" id=23]
+[sub_resource type="AtlasTexture" id=22]
 flags = 4
 atlas = ExtResource( 3 )
 region = Rect2( 24, 24, 8, 8 )
 
-[sub_resource type="AtlasTexture" id=24]
+[sub_resource type="AtlasTexture" id=23]
 flags = 4
 atlas = ExtResource( 3 )
 region = Rect2( 32, 24, 8, 8 )
 
-[sub_resource type="AtlasTexture" id=25]
+[sub_resource type="AtlasTexture" id=24]
 flags = 4
 atlas = ExtResource( 3 )
 region = Rect2( 40, 24, 8, 8 )
 
-[sub_resource type="AtlasTexture" id=26]
+[sub_resource type="AtlasTexture" id=25]
 flags = 4
 atlas = ExtResource( 3 )
 region = Rect2( 0, 32, 8, 8 )
 
-[sub_resource type="AtlasTexture" id=27]
+[sub_resource type="AtlasTexture" id=26]
 flags = 4
 atlas = ExtResource( 3 )
 region = Rect2( 8, 32, 8, 8 )
 
-[sub_resource type="AtlasTexture" id=28]
+[sub_resource type="AtlasTexture" id=27]
 flags = 4
 atlas = ExtResource( 3 )
 region = Rect2( 16, 32, 8, 8 )
 
-[sub_resource type="AtlasTexture" id=29]
+[sub_resource type="AtlasTexture" id=28]
 flags = 4
 atlas = ExtResource( 3 )
 region = Rect2( 24, 32, 8, 8 )
 
-[sub_resource type="AtlasTexture" id=30]
+[sub_resource type="AtlasTexture" id=29]
 flags = 4
 atlas = ExtResource( 3 )
 region = Rect2( 32, 32, 8, 8 )
 
-[sub_resource type="AtlasTexture" id=31]
+[sub_resource type="AtlasTexture" id=30]
 flags = 4
 atlas = ExtResource( 3 )
 region = Rect2( 40, 32, 8, 8 )
 
-[sub_resource type="AtlasTexture" id=32]
+[sub_resource type="AtlasTexture" id=31]
 flags = 4
 atlas = ExtResource( 3 )
 region = Rect2( 0, 40, 8, 8 )
 
-[sub_resource type="AtlasTexture" id=33]
+[sub_resource type="AtlasTexture" id=32]
 flags = 4
 atlas = ExtResource( 3 )
 region = Rect2( 8, 40, 8, 8 )
 
-[sub_resource type="AtlasTexture" id=34]
+[sub_resource type="AtlasTexture" id=33]
 flags = 4
 atlas = ExtResource( 3 )
 region = Rect2( 16, 40, 8, 8 )
 
-[sub_resource type="AtlasTexture" id=35]
+[sub_resource type="AtlasTexture" id=34]
 flags = 4
 atlas = ExtResource( 3 )
 region = Rect2( 24, 40, 8, 8 )
 
-[sub_resource type="AtlasTexture" id=36]
+[sub_resource type="AtlasTexture" id=35]
 flags = 4
 atlas = ExtResource( 3 )
 region = Rect2( 32, 40, 8, 8 )
 
-[sub_resource type="AtlasTexture" id=37]
+[sub_resource type="AtlasTexture" id=36]
 flags = 4
 atlas = ExtResource( 3 )
 region = Rect2( 40, 40, 8, 8 )
 
-[sub_resource type="SpriteFrames" id=38]
+[sub_resource type="SpriteFrames" id=37]
 animations = [ {
-"frames": [ SubResource( 2 ), SubResource( 3 ), SubResource( 4 ), SubResource( 5 ), SubResource( 6 ), SubResource( 7 ), SubResource( 8 ), SubResource( 9 ), SubResource( 10 ), SubResource( 11 ), SubResource( 12 ), SubResource( 13 ), SubResource( 14 ), SubResource( 15 ), SubResource( 16 ), SubResource( 17 ), SubResource( 18 ), SubResource( 19 ), SubResource( 20 ), SubResource( 21 ), SubResource( 22 ), SubResource( 23 ), SubResource( 24 ), SubResource( 25 ), SubResource( 26 ), SubResource( 27 ), SubResource( 28 ), SubResource( 29 ), SubResource( 30 ), SubResource( 31 ), SubResource( 32 ), SubResource( 33 ), SubResource( 34 ), SubResource( 35 ), SubResource( 36 ), SubResource( 37 ) ],
+"frames": [ SubResource( 1 ), SubResource( 2 ), SubResource( 3 ), SubResource( 4 ), SubResource( 5 ), SubResource( 6 ), SubResource( 7 ), SubResource( 8 ), SubResource( 9 ), SubResource( 10 ), SubResource( 11 ), SubResource( 12 ), SubResource( 13 ), SubResource( 14 ), SubResource( 15 ), SubResource( 16 ), SubResource( 17 ), SubResource( 18 ), SubResource( 19 ), SubResource( 20 ), SubResource( 21 ), SubResource( 22 ), SubResource( 23 ), SubResource( 24 ), SubResource( 25 ), SubResource( 26 ), SubResource( 27 ), SubResource( 28 ), SubResource( 29 ), SubResource( 30 ), SubResource( 31 ), SubResource( 32 ), SubResource( 33 ), SubResource( 34 ), SubResource( 35 ), SubResource( 36 ) ],
 "loop": true,
 "name": "default",
 "speed": 5.0
 } ]
 
-[sub_resource type="CircleShape2D" id=39]
+[sub_resource type="CircleShape2D" id=38]
 radius = 4.68782
 
 [node name="shot" type="RigidBody2D"]
@@ -203,16 +203,24 @@ contact_monitor = true
 script = ExtResource( 2 )
 
 [node name="RotationSprite" parent="." instance=ExtResource( 1 )]
-frames = SubResource( 38 )
+frames = SubResource( 37 )
 
 [node name="Area2D" type="Area2D" parent="."]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
-shape = SubResource( 39 )
+shape = SubResource( 38 )
 
 [node name="Timer" type="Timer" parent="."]
 wait_time = 5.0
 autostart = true
+
+[node name="team_set_label" type="Label" parent="."]
+margin_right = 40.0
+margin_bottom = 14.0
+custom_colors/font_color = Color( 1, 1, 1, 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
 [connection signal="body_entered" from="." to="." method="_on_shot_body_entered"]
 [connection signal="body_entered" from="Area2D" to="." method="_on_shot_body_entered"]
 [connection signal="timeout" from="Timer" to="." method="_on_Timer_timeout"]
