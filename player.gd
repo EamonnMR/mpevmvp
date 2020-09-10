@@ -110,7 +110,7 @@ func take_damage(damage):
 
 func server_destroyed():
 	print("Server Destroyed")
-	# TODO: Server.create_respawn_timer(name)
+	Server.set_respawn_timer(int(name))
 	rpc("destroyed")
 
 sync func destroyed():

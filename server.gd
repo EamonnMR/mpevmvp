@@ -5,7 +5,7 @@ var players = {}
 var players_in_systems = {}
 var net_players
 
-var WAIT_TIME = 10
+var WAIT_TIME = 5
 
 const MAX_PLAYERS = 6
 
@@ -47,16 +47,14 @@ func _setup_net_players():
 
 func _client_connected(id):
 	print("Server: Client_Connected: ", id)
-	var SPAWN_LEVEL = "level1"
 	players[id] = {"ship": 0, "team": 0, "name": id}
 	
 	var player_input = preload("res://PlayerInput.tscn").instance()
 	player_input.set_name(str(id))
 	player_input.set_network_master(id)
 	net_players.add_child(player_input)
-	send_level(id, SPAWN_LEVEL, get_level(SPAWN_LEVEL))
-	var ship = spawn_ship(id, Vector2(0.0, 0.0), SPAWN_LEVEL)
-	send_entity(get_level(SPAWN_LEVEL), "players", ship)
+	
+	spawn_player(id)
 
 func _client_disconnected(id):
 	print("Server._client_disconnected: ", id)
@@ -86,8 +84,28 @@ func get_level(level):
 	
 func get_multiverse():
 	return get_tree().get_root().get_node("Multiverse")
+
+func set_respawn_timer(player_id):
+	# TODO: Stick this right into world.tscn and show/hide it?
+	var timer = Timer.new()
+	timer.connect("timeout", self, "_respawn_player", [player_id, timer]) 
+	add_child(timer)
+	timer.set_wait_time(WAIT_TIME)
+	timer.one_shot = true
+	timer.start()
 	
-func spawn_ship(player_id, position, level):
+func _respawn_player(player_id, timer):
+	remove_child(timer)
+	spawn_player(player_id)
+
+func spawn_player(player_id):
+	print("Server.spawn_player: ", player_id)
+	var SPAWN_LEVEL = "level1"
+	send_level(player_id, SPAWN_LEVEL, get_level(SPAWN_LEVEL))
+	var ship = create_ship(player_id, Vector2(0.0, 0.0), SPAWN_LEVEL)
+	send_entity(get_level(SPAWN_LEVEL), "players", ship)
+
+func create_ship(player_id, position, level):
 	print("Server Spawn Ship on level: ", level)
 	var ship_type = 0
 	var ship = Game.get_ship(ship_type, player_id)
