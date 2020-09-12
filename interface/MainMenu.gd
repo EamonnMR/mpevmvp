@@ -21,7 +21,7 @@ func _on_JoinButton_pressed():
 
 func update_games_list(games):
 	var game_rows = []
-	var row_node = preload("res://JoinScreenRow.tscn")
+	var row_node = preload("res://interface/JoinScreenRow.tscn")
 	for game in games:
 		var game_row = row_node.instance()
 		game_row.apply_game(game)
