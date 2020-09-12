@@ -1,13 +1,3 @@
 [gd_scene format=2]
 
 [node name="Gameplay" type="Node2D"]
-
-[node name="Label" type="Label" parent="."]
-margin_left = 436.07
-margin_top = 283.162
-margin_right = 554.07
-margin_bottom = 297.162
-text = "TODO: ADD GAME"
-__meta__ = {
-"_edit_use_anchors_": false
-}
