@@ -35,7 +35,7 @@ func _player_connected_client(id):
 	print("Client: Player Connected: ", id)
 
 func _client_connected():
-	var player_scene = preload("res://PlayerInput.tscn").instance()
+	var player_scene = preload("res://gameplay/PlayerInput.tscn").instance()
 	player_scene.set_name(str(client_id))
 	player_scene.set_network_master(client_id)
 	var net_players = Node.new()

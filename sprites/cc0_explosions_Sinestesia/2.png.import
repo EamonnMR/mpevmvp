@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/2.png-f50a56d860fee0a848d945280967b8b5.stex"
+path="res://.import/2.png-43990503d190166a6928518fe8253063.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://cc0_explosions_Sinestesia/2.png"
-dest_files=[ "res://.import/2.png-f50a56d860fee0a848d945280967b8b5.stex" ]
+source_file="res://sprites/cc0_explosions_Sinestesia/2.png"
+dest_files=[ "res://.import/2.png-43990503d190166a6928518fe8253063.stex" ]
 
 [params]
 

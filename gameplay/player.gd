@@ -28,7 +28,7 @@ func _ready():
 	if(is_network_master()):
 		input_state = get_input_state()
 	$RotationSprite.set_direction(direction)
-	_show_debug_info()
+	# _show_debug_info()
 	
 func _show_debug_info():
 	if(OS.is_debug_build()):
@@ -108,7 +108,7 @@ func _on_ShotTimer_timeout():
 	shot_cooldown = true
 
 func get_shot():
-	var shot = preload("res://bullet.tscn").instance()
+	var shot = preload("res://gameplay/bullet.tscn").instance()
 	shot.team_set = team_set
 	shot.init(direction, position)
 	return shot

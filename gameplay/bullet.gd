@@ -17,7 +17,7 @@ func init(start_angle, new_position):
 	set_linear_velocity(Vector2(SPEED, 0).rotated(start_angle))
 	position = new_position
 	direction = start_angle
-	_show_debug_info()
+	#_show_debug_info()
 	
 func _show_debug_info():
 	if(OS.is_debug_build()):

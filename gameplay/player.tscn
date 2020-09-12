@@ -1,7 +1,7 @@
 [gd_scene load_steps=42 format=2]
 
-[ext_resource path="res://player.gd" type="Script" id=1]
-[ext_resource path="res://RotationSprite.tscn" type="PackedScene" id=2]
+[ext_resource path="res://gameplay/player.gd" type="Script" id=1]
+[ext_resource path="res://gameplay/RotationSprite.tscn" type="PackedScene" id=2]
 [ext_resource path="res://sprites/onyx_cc_nc/pheonix.png" type="Texture" id=3]
 
 [sub_resource type="CircleShape2D" id=1]

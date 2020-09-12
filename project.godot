@@ -17,13 +17,13 @@ _global_script_class_icons={
 
 config/name="MPEVMVP"
 config/description="Can EV mechanics work in a multiplayer game?"
-run/main_scene="res://MainMenu.tscn"
+run/main_scene="res://interface/MainMenu.tscn"
 config/icon="res://icon.png"
 
 [autoload]
 
 Main="*res://main.gd"
-ServerTracker="*res://server_tracker.gd"
+ServerTracker="*res://lib/server_tracker.gd"
 Game="*res://game.gd"
 Server="*res://server.gd"
 Client="*res://client.gd"
@@ -37,4 +37,3 @@ Client="*res://client.gd"
 
 quality/2d/use_pixel_snap=true
 environment/default_clear_color=Color( 0, 0, 0, 1 )
-environment/default_environment="res://default_env.tres"

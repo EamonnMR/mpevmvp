@@ -41,7 +41,7 @@ func _client_connected(id):
 	print("Server: Client_Connected: ", id)
 	players[id] = {"ship": 0, "team": 0, "name": id}
 	
-	var player_input = preload("res://PlayerInput.tscn").instance()
+	var player_input = preload("res://gameplay/PlayerInput.tscn").instance()
 	player_input.set_name(str(id))
 	player_input.set_network_master(id)
 	net_players.add_child(player_input)

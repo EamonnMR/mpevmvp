@@ -1,7 +1,7 @@
 extends Node
 
 const SHIP_TYPES = {
-	0: {"name": "Ringer", "scene": preload("res://player.tscn")},
+	0: {"name": "Ringer", "scene": preload("res://gameplay/player.tscn")},
 }
 
 const INPUT = "input_nodes"
