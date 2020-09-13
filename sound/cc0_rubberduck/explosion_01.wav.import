@@ -1,0 +1,21 @@
+[remap]
+
+importer="wav"
+type="AudioStreamSample"
+path="res://.import/explosion_01.wav-e78c98a0ac24b37f7c8f4ed0bb88054c.sample"
+
+[deps]
+
+source_file="res://sound/cc0_rubberduck/explosion_01.wav"
+dest_files=[ "res://.import/explosion_01.wav-e78c98a0ac24b37f7c8f4ed0bb88054c.sample" ]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop=false
+compress/mode=0

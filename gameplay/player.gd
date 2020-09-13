@@ -124,9 +124,9 @@ func server_destroyed():
 	rpc("destroyed")
 
 sync func destroyed():
-	# TODO: Explosion
+	if not is_network_master():
+		explosion_effect()
 	queue_free()
-	print("Ship destroyed: ", name)
 
 func get_level():
 	# What universe are we in?
@@ -170,3 +170,8 @@ func rset_ex_cond(puppet_var, value):
 		print("Values differ: Rsetting")
 		self[puppet_var] = value
 		rset_ex(puppet_var, value)
+
+func explosion_effect():
+	var explosion = preload("res://effects/explosion.tscn").instance()
+	explosion.position = position
+	get_level().get_node("world").add_effect(explosion)

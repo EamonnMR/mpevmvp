@@ -46,3 +46,6 @@ func get_player_ids():
 	for node in $players.get_children():
 		ids.append(int(node.name))
 	return ids
+
+func add_effect( effect ):
+	$effects.add_child(effect)
