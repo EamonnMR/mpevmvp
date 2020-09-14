@@ -121,11 +121,17 @@ func take_damage(damage):
 func server_destroyed():
 	print("Server Destroyed")
 	Server.set_respawn_timer(int(name))
-	rpc("destroyed")
+	for id in get_level().get_node("world").get_player_ids():
+		rpc_id(id, "destroyed")
 
 sync func destroyed():
 	if not is_network_master():
 		explosion_effect()
+	var parent = get_node("../")
+	parent.remove_child(self)
+	var ghost = preload("res://gameplay/ghost.tscn").instance()
+	ghost.name = name
+	parent.add_child(ghost)
 	queue_free()
 
 func get_level():
@@ -164,6 +170,7 @@ func rset_ex(puppet_var, value):
 	# and a whole lot of "Invalid packet received. Requested node was not found."
 	for id in get_level().get_node("world").get_player_ids():
 		rset_id(id, puppet_var, value)
+		
 
 func rset_ex_cond(puppet_var, value):
 	if self[puppet_var] != value:

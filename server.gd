@@ -39,7 +39,7 @@ func _setup_server_nodes(game_name):
 
 func _client_connected(id):
 	print("Server: Client_Connected: ", id)
-	players[id] = {"ship": 0, "team": 0, "name": id}
+	players[id] = {"name": id}
 	
 	var player_input = preload("res://gameplay/PlayerInput.tscn").instance()
 	player_input.set_name(str(id))
@@ -52,7 +52,7 @@ func _client_connected(id):
 	
 func _client_disconnected(id):
 	print("Server._client_disconnected: ", id)
-	# TODO remove player input and entity
+	_remove_player_entity_by_id(id)
 	players.erase(id)
 	net_players.remove_child(net_players.get_node(str(id)))
 
@@ -68,7 +68,12 @@ func send_entity(level, destination, entity):
 			"state": entity.serialize()
 		})
 
-func remove_entity(level, destination, entity_name):
+func remove_entity(level, destination, entity_name, remove_on_server=false):
+	if remove_on_server:
+		print("Also removing entity on server")
+		var old_node = level.get_node(destination).get_node(entity_name)
+		level.get_node(destination).remove_child(old_node)
+		old_node.queue_free()
 	print('remove entity: ', entity_name, 'from level: ', level.get_node('../').name)
 	for id in level.get_player_ids():
 		print("Remove entity: ", destination, "/", entity_name, " from client: ", id)
@@ -76,6 +81,9 @@ func remove_entity(level, destination, entity_name):
 	
 func get_level(level):
 	return get_multiverse().get_level(level)
+
+func get_level_for_player(player_id):
+	return get_level(players[player_id]["level"])
 	
 func get_multiverse():
 	return get_tree().get_root().get_node("Multiverse")
@@ -90,12 +98,15 @@ func set_respawn_timer(player_id):
 	timer.start()
 	
 func _respawn_player(player_id, timer):
+	# Remove ghost
+	_remove_player_entity_by_id(player_id)
 	remove_child(timer)
 	spawn_player(player_id)
 
 func spawn_player(player_id):
 	print("Server.spawn_player: ", player_id)
 	var SPAWN_LEVEL = "level1"
+	players[player_id]["level"] = SPAWN_LEVEL
 	print("level: ", SPAWN_LEVEL, " (", get_level(SPAWN_LEVEL), ")")
 	send_level(player_id, SPAWN_LEVEL, get_level(SPAWN_LEVEL))
 	var ship = create_ship(player_id, Vector2(0.0, 0.0), SPAWN_LEVEL)
@@ -129,6 +140,10 @@ func switch_player_universe(player):
 	get_multiverse().switch_player_level(player, new_level_name)
 	send_level(int(player.name), new_level_name, new_level)
 	remove_entity(old_level, "players", player.name)
+
+func _remove_player_entity_by_id(id, remove_on_server=true):
+	print("Removing player entity by ID")
+	remove_entity(get_level_for_player(id), "players", str(id), remove_on_server)
 
 func tmp_get_other_level(old_level_name):
 	# This assumes that we've got a world with exactly two levels.
