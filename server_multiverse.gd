@@ -1,5 +1,11 @@
 extends Node2D
 
+func _ready():
+	print("Load Galaxy: ")
+	Game.load_galaxy()
+	print("Galaxy Load Complete")
+	
+
 func get_level(level_name):
 	return get_node(level_name).get_node("world")
 
