@@ -6,12 +6,24 @@ const DEFAULT_PORT = 26000
 signal post_completed()
 signal get_completed(games)
 
-func register_game(game_name):
+var game_name = null
+
+func register_game(gname):
+	game_name = gname
+
+	# TODO: Stick this right into world.tscn and show/hide it?
+	var timer = Timer.new()
+	timer.connect("timeout", self, "_post_to_tracker")
+	add_child(timer)
+	timer.set_wait_time(5)
+	timer.start()
+	
+func _post_to_tracker():
 	# Put a game up on the server tracker
 	# See: https://github.com/eamonnmr/server-tracker
 	var query = JSON.print({
 		"port": DEFAULT_PORT,
-		"name": game_name,
+		"name": game_name),
 		"type": GAMETYPE
 	})
 	
