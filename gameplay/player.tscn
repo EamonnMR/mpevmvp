@@ -1,8 +1,9 @@
-[gd_scene load_steps=42 format=2]
+[gd_scene load_steps=43 format=2]
 
 [ext_resource path="res://gameplay/player.gd" type="Script" id=1]
 [ext_resource path="res://gameplay/RotationSprite.tscn" type="PackedScene" id=2]
 [ext_resource path="res://sprites/onyx_cc_nc/pheonix.png" type="Texture" id=3]
+[ext_resource path="res://sound/cc0_rubberduck/synth_laser_02.ogg" type="AudioStream" id=4]
 
 [sub_resource type="CircleShape2D" id=1]
 radius = 22.8913
@@ -228,5 +229,9 @@ custom_colors/font_color = Color( 1, 1, 1, 1 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
+
+[node name="shot_sfx" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource( 4 )
 [connection signal="timeout" from="ShotTimer" to="." method="_on_ShotTimer_timeout"]
 [connection signal="timeout" from="JumpTimer" to="." method="_on_JumpTimer_timeout"]
+[connection signal="finished" from="shot_sfx" to="." method="_on_shot_sfx_finished"]

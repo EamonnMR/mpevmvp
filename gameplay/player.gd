@@ -111,6 +111,8 @@ func get_shot():
 	var shot = preload("res://gameplay/bullet.tscn").instance()
 	shot.team_set = team_set
 	shot.init(direction, position)
+	if not is_network_master():
+		shot_effects()
 	return shot
 
 func take_damage(damage):
@@ -182,3 +184,6 @@ func explosion_effect():
 	var explosion = preload("res://effects/explosion.tscn").instance()
 	explosion.position = position
 	get_level().get_node("world").add_effect(explosion)
+	
+func shot_effects():
+	$shot_sfx.play()

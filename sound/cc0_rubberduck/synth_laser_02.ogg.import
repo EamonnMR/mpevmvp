@@ -1,0 +1,15 @@
+[remap]
+
+importer="ogg_vorbis"
+type="AudioStreamOGGVorbis"
+path="res://.import/synth_laser_02.ogg-2f8f2aa76040ef1d0821f26bb91835e2.oggstr"
+
+[deps]
+
+source_file="res://sound/cc0_rubberduck/synth_laser_02.ogg"
+dest_files=[ "res://.import/synth_laser_02.ogg-2f8f2aa76040ef1d0821f26bb91835e2.oggstr" ]
+
+[params]
+
+loop=false
+loop_offset=0
