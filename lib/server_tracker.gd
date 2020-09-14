@@ -23,7 +23,7 @@ func _post_to_tracker():
 	# See: https://github.com/eamonnmr/server-tracker
 	var query = JSON.print({
 		"port": DEFAULT_PORT,
-		"name": game_name),
+		"name": game_name,
 		"type": GAMETYPE
 	})
 	
