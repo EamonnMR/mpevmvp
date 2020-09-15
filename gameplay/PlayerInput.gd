@@ -54,8 +54,10 @@ func _handle_show_map():
 func _toggle_map():
 	var root = get_tree().get_root()
 	if map.is_inside_tree():
+		set_process_input(true)
 		root.remove_child(map)
 	else:
+		set_process_input(false)
 		root.add_child(map)
 
 func _on_MapDebounce_timeout():

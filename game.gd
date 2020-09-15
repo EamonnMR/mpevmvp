@@ -1,4 +1,5 @@
 extends Node
+var systems = null
 
 const SHIP_TYPES = {
 	0: {"name": "Ringer", "scene": preload("res://gameplay/player.tscn")},
@@ -6,15 +7,16 @@ const SHIP_TYPES = {
 
 const INPUT = "input_nodes"
 
+func _ready():
+	load_galaxy()
+
 func get_ship(ship_type, player_id):
 	var ship = SHIP_TYPES[ship_type]["scene"].instance()
 	ship.set_name(str(player_id))
 	return ship
 
 func load_galaxy():
-	var galaxy = load_csv("res://data/tc_galaxy_generator_output.csv")
-	print(galaxy)
-	return galaxy
+	systems = load_csv("res://data/galaxy.csv")
 
 func load_csv(csv):
 	print("Loading Galaxy")

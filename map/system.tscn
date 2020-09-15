@@ -8,11 +8,11 @@ script/source = "extends Area2D
 
 func _input_event(viewport, event, shape_idx):
 	print(\"Input Event\")
-	if event.type == InputEvent.MOUSE_BUTTON \\
-	and event.button_index == BUTTON_LEFT \\
-	and event.pressed:
-		get_node(\"../\").clicked()
-		return(self) 
+	#if event.type == InputEvent.MOUSE_BUTTON \\
+	#and event.button_index == BUTTON_LEFT \\
+	#and event.pressed:
+	#	get_node(\"../\").clicked()
+	#	return(self) 
 "
 
 [sub_resource type="CircleShape2D" id=2]
@@ -25,10 +25,10 @@ script = ExtResource( 2 )
 script = ExtResource( 1 )
 
 [node name="Label" type="Label" parent="."]
-margin_left = 17.0
-margin_top = -5.0
-margin_right = 57.0
-margin_bottom = 9.0
+margin_left = 12.2295
+margin_top = -6.68369
+margin_right = 52.2295
+margin_bottom = 7.31631
 __meta__ = {
 "_edit_use_anchors_": false
 }

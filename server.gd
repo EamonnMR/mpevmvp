@@ -105,7 +105,7 @@ func _respawn_player(player_id, timer):
 
 func spawn_player(player_id):
 	print("Server.spawn_player: ", player_id)
-	var SPAWN_LEVEL = "level1"
+	var SPAWN_LEVEL = "128"
 	players[player_id]["level"] = SPAWN_LEVEL
 	print("level: ", SPAWN_LEVEL, " (", get_level(SPAWN_LEVEL), ")")
 	send_level(player_id, SPAWN_LEVEL, get_level(SPAWN_LEVEL))
@@ -148,6 +148,6 @@ func _remove_player_entity_by_id(id, remove_on_server=true):
 func tmp_get_other_level(old_level_name):
 	# This assumes that we've got a world with exactly two levels.
 	# Replace this with an overworld map, doors, etc.
-	var new_level_name = "level2" if old_level_name == "level1" else "level1" # TODO: Specify destination universe
+	var new_level_name = "128" if old_level_name == "129" else "128" # TODO: Specify destination universe
 	assert(new_level_name != old_level_name)
 	return new_level_name

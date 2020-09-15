@@ -5,6 +5,6 @@ type="TextFile"
 
 [deps]
 
-source_file="res://data/tc_galaxy_generator_output.csv"
+source_file="res://data/galaxy.csv"
 [params]
 

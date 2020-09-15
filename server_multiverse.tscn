@@ -1,8 +1,9 @@
 [gd_scene load_steps=6 format=2]
 
-[ext_resource path="res://levels/level1.tscn" type="PackedScene" id=1]
+[ext_resource path="res://levels/128.tscn" type="PackedScene" id=1]
 [ext_resource path="res://server_multiverse.gd" type="Script" id=2]
 [ext_resource path="res://levels/level2.tscn" type="PackedScene" id=3]
+
 
 [sub_resource type="World" id=1]
 
