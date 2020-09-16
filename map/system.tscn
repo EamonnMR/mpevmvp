@@ -7,7 +7,7 @@
 script/source = "extends Area2D
 
 func _input_event(viewport, event, shape_idx):
-	print(\"Input Event\")
+	get_node(\"../\").clicked()
 "
 
 [sub_resource type="CircleShape2D" id=2]

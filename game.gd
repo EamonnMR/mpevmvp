@@ -43,4 +43,5 @@ func get_level(level_name):
 		return _level_from_data(systems[level_name])
 
 func _level_from_data(level_data_dict):
+	# TODO: Examine the data and spawn some stuff
 	return preload("res://gameplay/level.tscn").instance()
