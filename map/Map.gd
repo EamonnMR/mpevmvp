@@ -10,6 +10,7 @@ func _ready():
 		var sys = Game.systems[system_id]
 		var system = system_scene.instance()
 		system.system_name = sys["System Name"]
+		system.system_id = system_id
 		system.position = Vector2(sys["System X"], sys["System Y"]) * 2  # TODO: Proper Scaling
 		$Panel/systems.add_child(system)
 
@@ -18,3 +19,7 @@ func _input(event):
 		dragging = event.pressed
 	elif event is InputEventMouseMotion and dragging:
 		$Panel/systems.position += event.relative
+
+func update():
+	for system in $Panel/systems.get_children():
+		system.get_node("circle").update()

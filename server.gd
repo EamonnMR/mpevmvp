@@ -133,21 +133,15 @@ func switch_player_universe(player):
 	var old_level = player.get_level().get_node("world")
 	var old_level_name = player.get_level().name
 	
-	var new_level_name = tmp_get_other_level(old_level_name)
-	print("server switch player level from ", old_level_name, " to ", new_level_name)
-	var new_level = get_level(new_level_name)
-	send_entity(new_level, "players", player)
-	get_multiverse().switch_player_level(player, new_level_name)
-	send_level(int(player.name), new_level_name, new_level)
-	remove_entity(old_level, "players", player.name)
+	var new_level_name = player.get_input_state().puppet_selected_system
+	print("Impulse: ", new_level_name, " --> ", old_level_name)
+	if new_level_name != old_level_name:
+		var new_level = get_level(new_level_name)
+		send_entity(new_level, "players", player)
+		get_multiverse().switch_player_level(player, new_level_name)
+		send_level(int(player.name), new_level_name, new_level)
+		remove_entity(old_level, "players", player.name)
 
 func _remove_player_entity_by_id(id, remove_on_server=true):
 	print("Removing player entity by ID")
 	remove_entity(get_level_for_player(id), "players", str(id), remove_on_server)
-
-func tmp_get_other_level(old_level_name):
-	# This assumes that we've got a world with exactly two levels.
-	# Replace this with an overworld map, doors, etc.
-	var new_level_name = "128" if old_level_name == "130" else "130" # TODO: Specify destination universe
-	assert(new_level_name != old_level_name)
-	return new_level_name
