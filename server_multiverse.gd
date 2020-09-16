@@ -7,7 +7,7 @@ func _ready():
 func create_level(level_name):
 	var level = Viewport.new()
 	level.name = level_name
-	var world = Game.get_level("level_name")
+	var world = Game.get_level(level_name)
 	world.name = "world"
 	level.add_child(world)
 	add_child(level)
