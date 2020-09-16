@@ -1,4 +1,5 @@
 extends Node
+var systems = null
 
 const SHIP_TYPES = {
 	0: {"name": "Ringer", "scene": preload("res://gameplay/player.tscn")},
@@ -6,15 +7,16 @@ const SHIP_TYPES = {
 
 const INPUT = "input_nodes"
 
+func _ready():
+	load_galaxy()
+
 func get_ship(ship_type, player_id):
 	var ship = SHIP_TYPES[ship_type]["scene"].instance()
 	ship.set_name(str(player_id))
 	return ship
 
 func load_galaxy():
-	var galaxy = load_csv("res://data/tc_galaxy_generator_output.csv")
-	print(galaxy)
-	return galaxy
+	systems = load_csv("res://data/galaxy.csv")
 
 func load_csv(csv):
 	print("Loading Galaxy")
@@ -31,3 +33,15 @@ func load_csv(csv):
 			parsed_line[headers[column]] = line[column]
 		parsed_file[line[0]] = parsed_line
 	return parsed_file
+	
+func get_level(level_name):
+	var directory = Directory.new();
+	var file_path = "res://levels/" + level_name + ".tscn"
+	if directory.file_exists(file_path):
+		return load(file_path).instance()
+	else:
+		return _level_from_data(systems[level_name])
+
+func _level_from_data(level_data_dict):
+	# TODO: Examine the data and spawn some stuff
+	return preload("res://gameplay/level.tscn").instance()

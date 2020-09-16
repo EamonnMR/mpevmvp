@@ -6,6 +6,7 @@ puppet var puppet_direction_change: int = 0
 puppet var puppet_shooting = false
 puppet var puppet_thrusting = false
 puppet var puppet_jumping = false
+puppet var puppet_selected_system: String = ""
 
 var direction_change: int = 0
 var shooting = false
@@ -13,6 +14,7 @@ var thrusting = false
 var jumping = false
 var map_debounce = true
 var map = null
+var selected_system: String = ""
 
 func _ready():
 	if is_network_master():
@@ -54,9 +56,16 @@ func _handle_show_map():
 func _toggle_map():
 	var root = get_tree().get_root()
 	if map.is_inside_tree():
+		set_process_input(true)
 		root.remove_child(map)
 	else:
+		set_process_input(false)
 		root.add_child(map)
 
 func _on_MapDebounce_timeout():
 	map_debounce = true
+
+func map_select_system(system_id):
+	selected_system = system_id
+	rset_id(1, "puppet_selected_system", system_id)
+	map.update()

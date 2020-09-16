@@ -10,7 +10,7 @@ var player_name
 func _ready():
 	var args = OS.get_cmdline_args()
 	var kwargs = parse_args({
-		"server-name": "Just Another EV MP",
+		"server-name": "EV MP Server",
 		"max_players": "6"
 	})
 	if OS.has_feature("Server") or "--server" in args:

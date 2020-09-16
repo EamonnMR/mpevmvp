@@ -1,10 +1,16 @@
 extends Node2D
 
 func _ready():
-	print("Load Galaxy: ")
-	Game.load_galaxy()
-	print("Galaxy Load Complete")
-	
+	for system_id in Game.systems:
+		create_level(str(system_id))
+
+func create_level(level_name):
+	var level = Viewport.new()
+	level.name = level_name
+	var world = Game.get_level("level_name")
+	world.name = "world"
+	level.add_child(world)
+	add_child(level)
 
 func get_level(level_name):
 	return get_node(level_name).get_node("world")

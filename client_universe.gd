@@ -18,7 +18,7 @@ func switch_level(new_level_name, level_data):
 		old_level.queue_free()
 		_get_universe().remove_child(old_level)
 	_get_universe().name = new_level_name
-	var new_level = load("res://levels/" + new_level_name + ".tscn").instance()
+	var new_level = Game.get_level(new_level_name)
 	new_level.deserialize(level_data)
 	new_level.name = "world"
 	_get_universe().add_child(new_level)
