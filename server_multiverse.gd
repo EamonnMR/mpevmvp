@@ -2,12 +2,12 @@ extends Node2D
 
 func _ready():
 	for system_id in Game.systems:
-		create_level(str(system_id), Game.systems[system_id])
+		create_level(str(system_id))
 
-func create_level(level_name, _level_data):
+func create_level(level_name):
 	var level = Viewport.new()
 	level.name = level_name
-	var world = preload("levels/128.tscn").instance()
+	var world = Game.get_level("level_name")
 	world.name = "world"
 	level.add_child(world)
 	add_child(level)

@@ -148,6 +148,6 @@ func _remove_player_entity_by_id(id, remove_on_server=true):
 func tmp_get_other_level(old_level_name):
 	# This assumes that we've got a world with exactly two levels.
 	# Replace this with an overworld map, doors, etc.
-	var new_level_name = "128" if old_level_name == "129" else "128" # TODO: Specify destination universe
+	var new_level_name = "128" if old_level_name == "130" else "130" # TODO: Specify destination universe
 	assert(new_level_name != old_level_name)
 	return new_level_name

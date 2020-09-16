@@ -33,3 +33,14 @@ func load_csv(csv):
 			parsed_line[headers[column]] = line[column]
 		parsed_file[line[0]] = parsed_line
 	return parsed_file
+	
+func get_level(level_name):
+	var directory = Directory.new();
+	var file_path = "res://levels/" + level_name + ".tscn"
+	if directory.file_exists(file_path):
+		return load(file_path).instance()
+	else:
+		return _level_from_data(systems[level_name])
+
+func _level_from_data(level_data_dict):
+	return preload("res://gameplay/level.tscn").instance()

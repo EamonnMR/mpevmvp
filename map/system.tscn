@@ -8,11 +8,6 @@ script/source = "extends Area2D
 
 func _input_event(viewport, event, shape_idx):
 	print(\"Input Event\")
-	#if event.type == InputEvent.MOUSE_BUTTON \\
-	#and event.button_index == BUTTON_LEFT \\
-	#and event.pressed:
-	#	get_node(\"../\").clicked()
-	#	return(self) 
 "
 
 [sub_resource type="CircleShape2D" id=2]
