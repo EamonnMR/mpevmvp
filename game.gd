@@ -1,22 +1,27 @@
 extends Node
 var systems = null
-
-const SHIP_TYPES = {
-	0: {"name": "Ringer", "scene": preload("res://gameplay/player.tscn")},
-}
+var ships = null
 
 const INPUT = "input_nodes"
 
 func _ready():
-	load_galaxy()
+	call_deferred("load_galaxy")  # This prevents a bug where load_ships will break subsequent calls
+	
+	load_ships()
+	
+func load_ships():
+	ships = {
+		0: {"name": "Ringer", "scene": preload("res://gameplay/player.tscn")},
+	}
 
 func get_ship(ship_type, player_id):
-	var ship = SHIP_TYPES[ship_type]["scene"].instance()
+	print("Get Ship")
+	var ship = ships[ship_type]["scene"].instance()
 	ship.set_name(str(player_id))
 	return ship
 
 func load_galaxy():
-	systems = load_csv("res://data/galaxy.csv")
+	systems = load_csv("res://data/galaxy.csv.txt")
 
 func load_csv(csv):
 	print("Loading Galaxy")
