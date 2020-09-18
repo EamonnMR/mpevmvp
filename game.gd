@@ -5,28 +5,29 @@ var ships = null
 const INPUT = "input_nodes"
 
 func _ready():
-	call_deferred("load_galaxy")  # This prevents a bug where load_ships will break subsequent calls
-	
-	load_ships()
+	# Call Deferred prevents a bug where loads get interrupted.
+	call_deferred("load_galaxy")
+	call_deferred("load_ships")
 	
 func load_ships():
-	ships = {
-		0: {"name": "Ringer", "scene": preload("res://gameplay/player.tscn")},
-	}
+	ships = load_csv("res://data/ships.csv")
+	for i in ships:
+		ships[i]["scene"] = load("res://gameplay/ships/" + ships[i]["scene"] + ".tscn")
 
 func get_ship(ship_type, player_id):
-	print("Get Ship")
-	var ship = ships[ship_type]["scene"].instance()
+	var type = str(ship_type)
+	var ship = ships[type]["scene"].instance()
+	ship.type = type
 	ship.set_name(str(player_id))
 	return ship
 
 func load_galaxy():
-	systems = load_csv("res://data/galaxy.csv.txt")
+	systems = load_csv("res://data/galaxy.csv")
 
 func load_csv(csv):
 	print("Loading Galaxy")
 	var file = File.new()
-	file.open(csv, File.READ)
+	file.open(csv + ".txt", File.READ) # Simlink *csv.txt this to your *.csv to dodge export badness
 	var headers = file.get_csv_line()
 	var parsed_file = {}
 	while true:

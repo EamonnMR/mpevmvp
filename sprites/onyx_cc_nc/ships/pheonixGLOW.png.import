@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/pheonix.png-5bc8997d2c89e629a6cc48ac814abce1.stex"
+path="res://.import/pheonixGLOW.png-1909ba9294868e5bd9e13166964fbcf1.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://sprites/onyx_cc_nc/pheonix.png"
-dest_files=[ "res://.import/pheonix.png-5bc8997d2c89e629a6cc48ac814abce1.stex" ]
+source_file="res://sprites/onyx_cc_nc/ships/pheonixGLOW.png"
+dest_files=[ "res://.import/pheonixGLOW.png-1909ba9294868e5bd9e13166964fbcf1.stex" ]
 
 [params]
 

@@ -1,0 +1,29 @@
+[gd_scene format=2]
+
+[node name="Store" type="CanvasLayer"]
+
+[node name="Panel" type="Panel" parent="."]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -387.0
+margin_top = -232.5
+margin_right = 387.0
+margin_bottom = 232.5
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Panel" type="Panel" parent="Panel"]
+margin_left = 22.0
+margin_top = 23.0
+margin_right = 399.0
+margin_bottom = 431.0
+
+[node name="GridContainer" type="GridContainer" parent="Panel/Panel"]
+margin_right = 385.0
+margin_bottom = 412.0
+__meta__ = {
+"_edit_use_anchors_": false
+}

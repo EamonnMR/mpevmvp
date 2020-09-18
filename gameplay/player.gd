@@ -1,8 +1,17 @@
 extends RigidBody2D
 
-const ACCEL = 350.0 #100.00
 const BULLET_VELOCITY = 500.0 #300
-const ROTATION_SPEED = 1.0
+
+# Values loaded directly from ships.csv
+const FLOAT_SHIP_STATS = [
+	"max_speed",
+	"turn",
+	"accel"
+]
+
+var max_speed: float
+var turn: float
+var accel: float
 
 puppet var puppet_pos = Vector2(0,0)
 puppet var puppet_dir: float = 0
@@ -20,6 +29,8 @@ var health = 20
 var puppet_health = 20
 var input_state: Node
 
+var type: String
+
 var team_set = []
 
 func _ready():
@@ -29,6 +40,14 @@ func _ready():
 		input_state = get_input_state()
 	$RotationSprite.set_direction(direction)
 	# _show_debug_info()
+	_apply_stats()
+	
+func _apply_stats():
+	for stat in FLOAT_SHIP_STATS:
+		set(stat, _data()[stat])
+
+func _data():
+	return Game.ships[type]
 	
 func _show_debug_info():
 	if(OS.is_debug_build()):
@@ -77,14 +96,20 @@ func _physics_process(delta):
 		# puppet_dir = direction
 		
 	$RotationSprite.set_direction(direction)
+	$EngineGlowSprite.set_direction(direction)
+	
+	if thrusting:
+		$EngineGlowSprite.show()
+	else:
+		$EngineGlowSprite.hide()
 
 func handle_rotation(delta):
 	if input_state.puppet_direction_change:
-		direction = anglemod(((ROTATION_SPEED  * input_state.puppet_direction_change * delta) + direction))
+		direction = anglemod(((turn  * input_state.puppet_direction_change * delta) + direction))
 		
 func handle_thrust(delta):
 	if thrusting:
-		apply_impulse(Vector2(0,0), Vector2(delta * ACCEL, 0).rotated(direction))
+		apply_impulse(Vector2(0,0), Vector2(delta * accel, 0).rotated(direction))
 		
 
 func get_input_state():
@@ -158,12 +183,16 @@ func serialize():
 		"position": position,
 		"direction": direction,
 		"team_set": team_set,
+		"type": type,
 	}
 
 func deserialize(data):
 	position = data["position"]
+	puppet_pos = position
 	direction = data["direction"]
+	puppet_dir = direction
 	team_set = data["team_set"]
+	type = data["type"]
 
 # TODO: Move to superclass
 
