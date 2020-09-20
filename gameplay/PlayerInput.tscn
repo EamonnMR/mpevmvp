@@ -10,4 +10,9 @@ visible = false
 
 [node name="MapDebounce" type="Timer" parent="."]
 autostart = true
+
+[node name="LandDebounce" type="Timer" parent="."]
+wait_time = 5.0
+autostart = true
 [connection signal="timeout" from="MapDebounce" to="." method="_on_MapDebounce_timeout"]
+[connection signal="timeout" from="LandDebounce" to="." method="_on_LandDebounce_timeout"]

@@ -7,6 +7,7 @@ puppet var puppet_shooting = false
 puppet var puppet_thrusting = false
 puppet var puppet_jumping = false
 puppet var puppet_selected_system: String = ""
+puppet var puppet_landing = false
 
 var direction_change: int = 0
 var shooting = false
@@ -16,10 +17,14 @@ var map_debounce = true
 var map = null
 var selected_system: String = ""
 
+var landing = null
+var land_debounce = true
+
 func _ready():
 	if is_network_master():
 		map = preload("res://map/Map.tscn").instance()
-
+		landing = preload("res://interface/landing/landing_main.tscn").instance()
+		landing.bind(self)
 func _get_entity():
 	# TODO: Ungross this
 	var root = get_tree().get_root()
@@ -34,6 +39,7 @@ func _physics_process(delta):
 		jumping = Input.is_action_pressed("jump")
 		thrusting = Input.is_action_pressed("thrust")
 		_handle_show_map()
+		_handle_show_landing_menu()
 		
 		rset_id(1, "puppet_direction_change", direction_change)
 		rset_id(1, "puppet_shooting", shooting)
@@ -47,6 +53,27 @@ func _get_direction_change():
 	if Input.is_action_pressed("turn_right"):
 		dc += 1
 	return dc
+	
+	
+func _handle_show_landing_menu():
+	if Input.is_action_pressed("land"):
+		land_debounce = false
+		if not landing.is_inside_tree():
+			toggle_landing()
+
+func toggle_landing():
+	var root = get_tree().get_root()
+	if landing.is_inside_tree():
+		rset_id(1, "puppet_landing", false)
+		set_process_input(true)
+		root.remove_child(landing)
+	else:
+		rset_id(1, "puppet_landing", true)
+		set_process_input(false)
+		root.add_child(landing)
+
+func _on_LandDebounce_timeout():
+	land_debounce = true
 
 func _handle_show_map():
 	if Input.is_action_pressed("show_map") and map_debounce:

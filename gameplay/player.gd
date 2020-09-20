@@ -28,6 +28,7 @@ var thrusting = false
 var health = 20
 var puppet_health = 20
 var input_state: Node
+var landing = false
 
 var type: String
 
@@ -71,6 +72,7 @@ func _physics_process(delta):
 		shooting = input_state.puppet_shooting
 		jumping = input_state.puppet_jumping
 		thrusting = input_state.puppet_thrusting
+		landing = input_state.puppet_landing
 		
 		handle_rotation(delta)
 		# handle_thrust(delta)
@@ -119,6 +121,11 @@ func get_input_state():
 	return get_tree().get_root().get_node(Game.INPUT).get_node(name)
 
 func get_limited_velocity_with_thrust():
+	
+	# TODO: Slowly slow down for landing
+	if landing:
+		return Vector2(0,0)
+	
 	var vel = get_linear_velocity()
 	if thrusting:
 		vel += Vector2(accel, 0).rotated(direction)
