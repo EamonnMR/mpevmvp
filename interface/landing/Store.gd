@@ -6,15 +6,14 @@ var selected = null
 
 func _ready():	
 	var button_class = preload("res://interface/landing/IconButton.tscn")
+	
+	for child in $Left/IconGrid.get_children():
+		child.queue_free()
 	for ship_type in Game.ships:
 		var button = button_class.instance()
 		button.ship_data = Game.ships[ship_type]
 		button.connect("pressed", self, "on_grid_button_pressed", [ship_type])
 		$Left/IconGrid.add_child( button )
-
-func _exit_tree():
-	for child in $Left/IconGrid.get_children():
-		child.queue_free()
 
 func on_grid_button_pressed(id):
 	update_selection(id)
@@ -24,6 +23,7 @@ func update_selection(id):
 	selected = id
 	$ShipName.text = data["name"]
 	$desc.text = data["desc"]
+	print("Selected item: ", id)
 
 func _on_leave_pressed():
 	hide()

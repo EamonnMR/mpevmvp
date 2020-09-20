@@ -78,3 +78,8 @@ remote func remove_entity(destination, ent_name):
 remote func send_entity(destination, entity_data):
 	print("client.send_entity: ", destination, "/", entity_data)
 	get_level().receive_entity(destination, entity_data)
+
+remote func replace_entity(destination, entity_data):
+	var entity_to_remove = get_level().get_node(destination + "/" + entity_data["name"])
+	get_level().get_node(destination).remove_child(entity_to_remove)
+	get_level().receive_entity(destination, entity_data)

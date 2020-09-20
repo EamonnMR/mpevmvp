@@ -117,7 +117,6 @@ func handle_rotation(delta):
 		direction = anglemod(((turn  * input_state.puppet_direction_change * delta) + direction))
 
 func get_input_state():
-	print(get_tree().get_root().print_tree_pretty())
 	return get_tree().get_root().get_node(Game.INPUT).get_node(name)
 
 func get_limited_velocity_with_thrust():

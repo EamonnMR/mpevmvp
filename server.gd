@@ -39,7 +39,7 @@ func _setup_server_nodes(game_name):
 
 func _client_connected(id):
 	print("Server: Client_Connected: ", id)
-	players[id] = {"name": id}
+	players[id] = {"name": id, "ship_type": 0}
 	
 	var player_input = preload("res://gameplay/PlayerInput.tscn").instance()
 	player_input.set_name(str(id))
@@ -47,8 +47,6 @@ func _client_connected(id):
 	net_players.add_child(player_input)
 	
 	spawn_player(id)
-	
-	get_tree().get_root().print_tree_pretty()
 	
 func _client_disconnected(id):
 	print("Server._client_disconnected: ", id)
@@ -67,6 +65,21 @@ func send_entity(level, destination, entity):
 			"scene": entity.filename,
 			"state": entity.serialize()
 		})
+
+func replace_entity(level, destination, entity, replace_on_server=false):
+	for id in level.get_player_ids():
+		Client.rpc_id(id, "replace_entity", destination, {
+			"name": entity.name,
+			"scene": entity.filename,
+			"state": entity.serialize()
+		})
+	if replace_on_server:
+		print("Also removing entity on server")
+		var dest = level.get_node(destination)
+		var old_node = dest.get_node(entity.name)
+		dest.remove_child(old_node)
+		old_node.queue_free()
+		dest.add_child(entity)
 
 func remove_entity(level, destination, entity_name, remove_on_server=false):
 	if remove_on_server:
@@ -98,27 +111,36 @@ func set_respawn_timer(player_id):
 	timer.start()
 	
 func _respawn_player(player_id, timer):
-	# Remove ghost
 	_remove_player_entity_by_id(player_id)
 	remove_child(timer)
 	spawn_player(player_id)
+	
+remote func purchase_ship(id):
+	var player_id = get_tree().get_rpc_sender_id()
+	players[player_id]["ship_type"] = id
+	var level = get_level_for_player(player_id)
+	var player = level.get_node("players/" + str(player_id))
+	var new_player = create_ship(player_id, id, player.position)
+	print("Player purchased ship! New Ship type: ", id)
+	print("New Ship Data:" )
+	print(new_player.serialize())
+	replace_entity(level, "players", new_player, true)
 
-func spawn_player(player_id):
+func spawn_player(player_id, level="128"):
 	print("Server.spawn_player: ", player_id)
 	var SPAWN_LEVEL = "128"
 	players[player_id]["level"] = SPAWN_LEVEL
 	print("level: ", SPAWN_LEVEL, " (", get_level(SPAWN_LEVEL), ")")
 	send_level(player_id, SPAWN_LEVEL, get_level(SPAWN_LEVEL))
-	var ship = create_ship(player_id, Vector2(0.0, 0.0), SPAWN_LEVEL)
+	var ship = create_ship(player_id, players[player_id]["ship_type"], Vector2(0.0, 0.0), SPAWN_LEVEL)
 	send_entity(get_level(SPAWN_LEVEL), "players", ship)
 
-func create_ship(player_id, position, level):
+func create_ship(player_id, type, position, level=null):
 	print("Server Spawn Ship on level: ", level)
-	var ship_type = 3
-	var ship = Game.get_ship(ship_type, player_id)
+	var ship = Game.get_ship(type, player_id)
 	ship.team_set = [player_id]
-	print("Get level/players: ", get_level(level).get_node("players"))
-	get_level(level).get_node("players").add_child(ship)
+	if level:
+		get_level(level).get_node("players").add_child(ship)
 	ship.position = position
 	return ship
 	
@@ -144,7 +166,6 @@ func switch_player_universe(player):
 
 func _remove_player_entity_by_id(id, remove_on_server=true):
 	print("Removing player entity by ID")
-	remove_entity(get_level_for_player(id), "players", str(id), remove_on_server)
-	
-remote func purchase_ship(id):
-	print("Player ", get_tree().get_rpc_sender_id(), " wants to purchase ship: ", id)
+	var level = get_level_for_player(id)
+	remove_entity(level, "players", str(id), remove_on_server)
+	return level
