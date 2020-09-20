@@ -30,9 +30,9 @@ func _get_entity():
 func _physics_process(delta):
 	if (is_network_master()):
 		direction_change = _get_direction_change()
-		shooting = Input.is_key_pressed(KEY_SPACE)
-		jumping = Input.is_key_pressed(KEY_J)
-		thrusting = Input.is_key_pressed(KEY_W)
+		shooting = Input.is_action_pressed("fire_primary")
+		jumping = Input.is_action_pressed("jump")
+		thrusting = Input.is_action_pressed("thrust")
 		_handle_show_map()
 		
 		rset_id(1, "puppet_direction_change", direction_change)
@@ -42,14 +42,14 @@ func _physics_process(delta):
 
 func _get_direction_change():
 	var dc = 0
-	if Input.is_key_pressed(KEY_A):
+	if Input.is_action_pressed("turn_left"):
 		dc -= 1
-	if Input.is_key_pressed(KEY_D):
+	if Input.is_action_pressed("turn_right"):
 		dc += 1
 	return dc
 
 func _handle_show_map():
-	if Input.is_key_pressed(KEY_M) and map_debounce:
+	if Input.is_action_pressed("show_map") and map_debounce:
 		map_debounce = false
 		_toggle_map()
 
