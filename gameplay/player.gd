@@ -143,7 +143,7 @@ func _on_ShotTimer_timeout():
 func get_shot():
 	var shot = preload("res://gameplay/bullet.tscn").instance()
 	shot.team_set = team_set
-	shot.init(direction, position)
+	shot.init(direction, position, get_linear_velocity())
 	if not is_network_master():
 		shot_effects()
 	return shot

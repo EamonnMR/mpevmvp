@@ -3,7 +3,7 @@ extends RigidBody2D
 # The position of bullets isn't sent over the network except at init
 # We use dead reckoning (via the physics engine) to get the position.
 
-var SPEED = 75
+var SPEED = 200
 
 var DAMAGE = 10
 
@@ -11,10 +11,10 @@ var direction: float = 0.0
 
 var team_set = []
 
-func init(start_angle, new_position):
+func init(start_angle, new_position, new_velocity):
 	print("Start angle: ", start_angle)
 	$RotationSprite.set_direction(start_angle)
-	set_linear_velocity(Vector2(SPEED, 0).rotated(start_angle))
+	set_linear_velocity(Vector2(SPEED, 0).rotated(start_angle) + new_velocity)
 	position = new_position
 	direction = start_angle
 	#_show_debug_info()

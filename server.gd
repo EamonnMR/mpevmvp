@@ -114,7 +114,7 @@ func spawn_player(player_id):
 
 func create_ship(player_id, position, level):
 	print("Server Spawn Ship on level: ", level)
-	var ship_type = 0
+	var ship_type = 3
 	var ship = Game.get_ship(ship_type, player_id)
 	ship.team_set = [player_id]
 	print("Get level/players: ", get_level(level).get_node("players"))
