@@ -1,7 +1,8 @@
-[gd_scene load_steps=3 format=2]
+[gd_scene load_steps=4 format=2]
 
 [ext_resource path="res://sprites/onyx_cc_nc/landing/15.png" type="Texture" id=1]
 [ext_resource path="res://interface/landing/landing_main.gd" type="Script" id=2]
+[ext_resource path="res://interface/landing/Store.tscn" type="PackedScene" id=3]
 
 [node name="CanvasLayer" type="CanvasLayer"]
 layer = 5
@@ -63,3 +64,7 @@ text = "Leave"
 __meta__ = {
 "_edit_use_anchors_": false
 }
+
+[node name="Store" parent="." instance=ExtResource( 3 )]
+visible = false
+[connection signal="pressed" from="Panel/ShipyardButton" to="." method="_on_ShipyardButton_pressed"]
