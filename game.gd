@@ -25,7 +25,6 @@ func load_galaxy():
 	systems = load_csv("res://data/galaxy.csv")
 
 func load_csv(csv):
-	print("Loading Galaxy")
 	var file = File.new()
 	file.open(csv + ".txt", File.READ) # Simlink *csv.txt this to your *.csv to dodge export badness
 	var headers = file.get_csv_line()
@@ -38,6 +37,7 @@ func load_csv(csv):
 		for column in range(line.size()):
 			parsed_line[headers[column]] = line[column]
 		parsed_file[line[0]] = parsed_line
+	print("Parsed ", csv + ".txt ", "got ", parsed_file.size(), " rows")
 	return parsed_file
 	
 func get_level(level_name):

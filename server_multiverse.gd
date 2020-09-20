@@ -1,6 +1,11 @@
 extends Node2D
 
 func _ready():
+	call_deferred("_create_systems")
+
+func _create_systems():
+	# Call deferred to avoid a race where we haven't loaded the data yet.
+	print("Creating systems")
 	for system_id in Game.systems:
 		create_level(str(system_id))
 
