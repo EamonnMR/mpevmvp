@@ -39,6 +39,12 @@ func _ready():
 	if(is_network_master()):
 		input_state = get_input_state()
 	$RotationSprite.set_direction(direction)
+	
+	# TODO: Handle ships with no engine glow
+	if not $EngineGlowSprite.get_sprite_frames():
+		var removed = $EngineGlowSprite
+		remove_child(removed)
+		removed.queue_free()
 	# _show_debug_info()
 	_apply_stats()
 	
@@ -96,12 +102,13 @@ func _physics_process(delta):
 		# puppet_dir = direction
 		
 	$RotationSprite.set_direction(direction)
-	$EngineGlowSprite.set_direction(direction)
 	
-	if thrusting:
-		$EngineGlowSprite.show()
-	else:
-		$EngineGlowSprite.hide()
+	if $EngineGlowSprite:
+		$EngineGlowSprite.set_direction(direction)
+		if thrusting:
+			$EngineGlowSprite.show()
+		else:
+			$EngineGlowSprite.hide()
 
 func handle_rotation(delta):
 	if input_state.puppet_direction_change:
