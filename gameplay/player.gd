@@ -73,7 +73,7 @@ func _physics_process(delta):
 		thrusting = input_state.puppet_thrusting
 		
 		handle_rotation(delta)
-		handle_thrust(delta)
+		# handle_thrust(delta)
 		
 		rset_ex("puppet_dir", direction)
 		rset_ex("puppet_pos", position)
@@ -113,25 +113,26 @@ func _physics_process(delta):
 func handle_rotation(delta):
 	if input_state.puppet_direction_change:
 		direction = anglemod(((turn  * input_state.puppet_direction_change * delta) + direction))
-		
-func handle_thrust(delta):
-	if thrusting:
-		apply_impulse(Vector2(0,0), Vector2(delta * accel, 0).rotated(direction))
-		
 
 func get_input_state():
 	print(get_tree().get_root().print_tree_pretty())
 	return get_tree().get_root().get_node(Game.INPUT).get_node(name)
 
-func get_limited_velocity():
-	return get_linear_velocity()
+func get_limited_velocity_with_thrust():
+	var vel = get_linear_velocity()
+	if thrusting:
+		vel += Vector2(accel, 0).rotated(direction)
+	
+	if vel.length() > max_speed:
+		return Vector2(max_speed, 0).rotated(vel.angle())
+	else:
+		return vel
 
 func _integrate_forces(state):
 	set_applied_torque(0)  # No rotation component
 	rotation = 0.0
 	if (is_network_master()):
-		pass
-		# set_linear_velocity(get_limited_velocity())
+		set_linear_velocity(get_limited_velocity_with_thrust())
 	else:
 		position = puppet_pos
 		set_linear_velocity(puppet_velocity)
@@ -208,11 +209,11 @@ func rset_ex(puppet_var, value):
 	# and a whole lot of "Invalid packet received. Requested node was not found."
 	for id in get_level().get_node("world").get_player_ids():
 		rset_id(id, puppet_var, value)
-		
+	set(puppet_var, value)
+
 
 func rset_ex_cond(puppet_var, value):
 	if self[puppet_var] != value:
-		print("Values differ: Rsetting")
 		self[puppet_var] = value
 		rset_ex(puppet_var, value)
 
