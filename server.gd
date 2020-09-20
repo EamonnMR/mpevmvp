@@ -145,3 +145,6 @@ func switch_player_universe(player):
 func _remove_player_entity_by_id(id, remove_on_server=true):
 	print("Removing player entity by ID")
 	remove_entity(get_level_for_player(id), "players", str(id), remove_on_server)
+	
+remote func purchase_ship(id):
+	print("Player ", get_tree().get_rpc_sender_id(), " wants to purchase ship: ", id)

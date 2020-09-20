@@ -96,3 +96,6 @@ func map_select_system(system_id):
 	selected_system = system_id
 	rset_id(1, "puppet_selected_system", system_id)
 	map.update()
+	
+func handle_gui_player_ship_purchase(id):
+	Server.rpc_id(1, "purchase_ship", id)
