@@ -12,7 +12,11 @@ func _ready():
 func load_ships():
 	ships = load_csv("res://data/ships.csv")
 	for i in ships:
-		ships[i]["scene"] = load("res://gameplay/ships/" + ships[i]["scene"] + ".tscn")
+		# When everything looks like a nail...
+		call_deferred("deferred_load_ship_tscn", i)
+
+func deferred_load_ship_tscn(ship_data):
+	ships[ship_data]["scene"] = load("res://gameplay/ships/" + ships[ship_data]["scene"] + ".tscn")
 
 func get_ship(ship_type, player_id):
 	var type = str(ship_type)
