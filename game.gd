@@ -3,6 +3,7 @@ var systems = null
 var ships = null
 
 const INPUT = "input_nodes"
+const PLAY_AREA_RADIUS = 800
 
 func _ready():
 	# Call Deferred prevents a bug where loads get interrupted.

@@ -75,7 +75,6 @@ func _physics_process(delta):
 		landing = input_state.puppet_landing
 		
 		handle_rotation(delta)
-		# handle_thrust(delta)
 		
 		rset_ex("puppet_dir", direction)
 		rset_ex("puppet_pos", position)
@@ -134,15 +133,22 @@ func get_limited_velocity_with_thrust():
 	else:
 		return vel
 
+func wrap_position_with_transform(state):
+	var transform = state.get_transform()
+	if transform.origin.length() > Game.PLAY_AREA_RADIUS:
+		transform.origin = Vector2(Game.PLAY_AREA_RADIUS / 2, 0).rotated(anglemod(transform.origin.angle() + PI))
+		state.set_transform(transform)
+
 func _integrate_forces(state):
 	set_applied_torque(0)  # No rotation component
 	rotation = 0.0
 	if (is_network_master()):
+		wrap_position_with_transform(state)
 		set_linear_velocity(get_limited_velocity_with_thrust())
 	else:
-		position = puppet_pos
+		state.transform.origin = puppet_pos
 		set_linear_velocity(puppet_velocity)
-
+	
 func _on_ShotTimer_timeout():
 	shot_cooldown = true
 
