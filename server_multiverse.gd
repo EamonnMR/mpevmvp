@@ -11,6 +11,8 @@ func _create_systems():
 
 func create_level(level_name):
 	var level = Viewport.new()
+	level.world_2d = World2D.new()
+	level.own_world = true
 	level.name = level_name
 	var world = Game.get_level(level_name)
 	world.name = "world"

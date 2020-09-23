@@ -1,7 +1,10 @@
-[gd_scene load_steps=3 format=2]
+[gd_scene load_steps=4 format=2]
 
-[ext_resource path="res://map/Map.gd" type="Script" id=1]
-[ext_resource path="res://map/Panel.gd" type="Script" id=2]
+[ext_resource path="res://interface/map/Map.gd" type="Script" id=1]
+[ext_resource path="res://interface/map/Panel.gd" type="Script" id=2]
+
+[sub_resource type="StyleBoxFlat" id=1]
+bg_color = Color( 0.0784314, 0.0784314, 0.0784314, 1 )
 
 [node name="Map" type="CanvasLayer"]
 script = ExtResource( 1 )
@@ -15,6 +18,7 @@ margin_left = -512.0
 margin_top = -299.0
 margin_right = 512.0
 margin_bottom = 299.0
+custom_styles/panel = SubResource( 1 )
 script = ExtResource( 2 )
 __meta__ = {
 "_edit_use_anchors_": false

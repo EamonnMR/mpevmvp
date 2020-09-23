@@ -24,6 +24,22 @@ func get_ship(ship_type, player_id):
 
 func load_galaxy():
 	systems = load_csv("res://data/galaxy.csv")
+	for system in systems:
+		preprocess_system(systems[system])
+
+func preprocess_system(system):
+	system["links"] = []
+	for possible_link in [
+		"Link South (Down)",
+		"Link East (Left)",
+		"Link West (Right)",
+		"Link North (Up)"
+	]:
+		if system[possible_link]:
+			system["links"].append(system[possible_link])
+	
+	# TODO: Scale factor in the map
+	system["position"] = Vector2(system["System X"], system["System Y"]) * 2
 
 func load_csv(csv):
 	var file = File.new()

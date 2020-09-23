@@ -5,7 +5,6 @@ func get_color():
 	return Color(0,0,1)
 
 func _draw():
-	print("Selected: ", get_node("../").get_input().selected_system, " but I am ", get_node("../").system_id)
 	if get_node("../").get_input().selected_system == get_node("../").system_id:
 		draw_circle(Vector2(0,0), 9, Color(0,1,0))
 	

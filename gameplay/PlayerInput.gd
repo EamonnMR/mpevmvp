@@ -22,7 +22,7 @@ var land_debounce = true
 
 func _ready():
 	if is_network_master():
-		map = preload("res://map/Map.tscn").instance()
+		map = preload("res://interface/map/Map.tscn").instance()
 		landing = preload("res://interface/landing/landing_main.tscn").instance()
 		landing.bind(self)
 func _get_entity():

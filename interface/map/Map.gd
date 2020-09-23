@@ -3,7 +3,16 @@ extends CanvasLayer
 var dragging = false
 
 func _ready():
-	var system_scene = preload("res://map/system.tscn")
+	var system_scene = preload("res://interface/map/system.tscn")
+	var line_scene = preload("res://interface/map/line.tscn")
+	for system_id in Game.systems:
+		for destination in Game.systems[system_id]["links"]:
+			print(Game.systems[system_id]["links"])
+			var line = line_scene.instance()
+			line.start = system_id
+			line.end = destination
+			print("start: ", system_id, "end: ", destination)
+			$Panel/systems.add_child(line)
 	for system_id in Game.systems:
 		# TODO: Tons of stuff, including:
 		# show hide systems based on discovery
@@ -11,7 +20,7 @@ func _ready():
 		var system = system_scene.instance()
 		system.system_name = sys["System Name"]
 		system.system_id = system_id
-		system.position = Vector2(sys["System X"], sys["System Y"]) * 2  # TODO: Proper Scaling
+		system.position = sys["position"]  # TODO: Proper Scaling
 		$Panel/systems.add_child(system)
 
 func _input(event):
@@ -22,4 +31,5 @@ func _input(event):
 
 func update():
 	for system in $Panel/systems.get_children():
-		system.get_node("circle").update()
+		if system.get_node("circle"):
+			system.get_node("circle").update()
