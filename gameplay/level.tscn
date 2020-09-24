@@ -9,6 +9,8 @@ script = ExtResource( 1 )
 
 [node name="shots" type="Node2D" parent="."]
 
+[node name="npcs" type="Node2D" parent="."]
+
 [node name="players" type="Node2D" parent="."]
 
 [node name="effects" type="Node2D" parent="."]

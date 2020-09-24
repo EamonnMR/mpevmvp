@@ -1,7 +1,9 @@
-[gd_scene load_steps=3 format=2]
+[gd_scene load_steps=5 format=2]
 
 [ext_resource path="res://sprites/onyx_cc_nc/spobs/Q.png" type="Texture" id=1]
 [ext_resource path="res://gameplay/level.tscn" type="PackedScene" id=2]
+[ext_resource path="res://gameplay/AI.tscn" type="PackedScene" id=3]
+[ext_resource path="res://gameplay/ships/anvil.tscn" type="PackedScene" id=4]
 
 [node name="world" instance=ExtResource( 2 )]
 
@@ -11,3 +13,11 @@
 
 [node name="Sprite" type="Sprite" parent="spobs/Volta" index="0"]
 texture = ExtResource( 1 )
+
+[node name="ship" parent="npcs" index="0" instance=ExtResource( 4 )]
+position = Vector2( 100, 100 )
+type = "2"
+
+[node name="AI" parent="npcs/ship" index="0" instance=ExtResource( 3 )]
+
+[editable path="npcs/ship"]

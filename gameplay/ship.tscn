@@ -1,10 +1,10 @@
 [gd_scene load_steps=4 format=2]
 
-[ext_resource path="res://gameplay/player.gd" type="Script" id=1]
+[ext_resource path="res://gameplay/ship.gd" type="Script" id=1]
 [ext_resource path="res://gameplay/RotationSprite.tscn" type="PackedScene" id=2]
-[ext_resource path="res://sound/cc0_rubberduck/synth_laser_02.ogg" type="AudioStream" id=4]
+[ext_resource path="res://sound/cc0_rubberduck/synth_laser_02.ogg" type="AudioStream" id=3]
 
-[node name="player" type="RigidBody2D"]
+[node name="ship" type="RigidBody2D"]
 collision_mask = 2147483648
 contacts_reported = 1
 contact_monitor = true
@@ -39,7 +39,7 @@ __meta__ = {
 }
 
 [node name="shot_sfx" type="AudioStreamPlayer2D" parent="."]
-stream = ExtResource( 4 )
+stream = ExtResource( 3 )
 [connection signal="timeout" from="ShotTimer" to="." method="_on_ShotTimer_timeout"]
 [connection signal="timeout" from="JumpTimer" to="." method="_on_JumpTimer_timeout"]
 [connection signal="finished" from="shot_sfx" to="." method="_on_shot_sfx_finished"]

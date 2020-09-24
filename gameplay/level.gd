@@ -4,12 +4,15 @@ func get_player_entity(player_id):
 	return $players.get_node(str(player_id))
 
 func serialize():
-	return {
-		"items": get_each_serialized($items),
-		"shots": get_each_serialized($shots),
-		"players": get_each_serialized($players),
-		# ... etc
-	}
+	var children = {}
+	for child in [
+		"items",
+		"shots",
+		"players",
+		"npcs"
+	]:
+		children[child] = get_each_serialized(get_node(child))
+	return children
 	
 func get_each_serialized(node):
 	var list = []
