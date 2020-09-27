@@ -3,7 +3,7 @@ extends RigidBody2D
 # The position of bullets isn't sent over the network except at init
 # We use dead reckoning (via the physics engine) to get the position.
 
-var SPEED = 200
+var SPEED = 400
 
 var DAMAGE = 10
 
@@ -12,7 +12,7 @@ var direction: float = 0.0
 var team_set = []
 
 func init(start_angle, new_position, new_velocity):
-	print("Start angle: ", start_angle)
+	# print("Start angle: ", start_angle)
 	$RotationSprite.set_direction(start_angle)
 	set_linear_velocity(Vector2(SPEED, 0).rotated(start_angle) + new_velocity)
 	position = new_position
@@ -32,11 +32,11 @@ func _show_team_set():
 func _on_shot_body_entered(body):
 	for team_flag in team_set:
 		if body.team_set.has(team_flag):
-			print("Ignoring friendly fire")
-			print("Shot Flags: ", team_set, " Target Flags: ", body.team_set)
+			#print("Ignoring friendly fire")
+			#print("Shot Flags: ", team_set, " Target Flags: ", body.team_set)
 			return
-	print("Shot Hit")
-	print("Shot Flags: ", team_set, " Target Flags: ", body.team_set)
+	#print("Shot Hit")
+	#print("Shot Flags: ", team_set, " Target Flags: ", body.team_set)
 	if( body.has_method("take_damage") ):
 		body.take_damage(DAMAGE)
 	queue_free()

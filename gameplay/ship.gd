@@ -30,9 +30,9 @@ var puppet_health = 20
 var input_state: Node
 var landing = false
 
-var type: String
+export var type: String
 
-var team_set = []
+export var team_set = []
 
 func _ready():
 	if (name == str(Client.client_id)):
@@ -48,7 +48,10 @@ func _ready():
 		removed.queue_free()
 	# _show_debug_info()
 	_apply_stats()
-	
+
+func is_alive():
+	return true
+
 func _apply_stats():
 	for stat in FLOAT_SHIP_STATS:
 		set(stat, _data()[stat])
@@ -116,7 +119,10 @@ func handle_rotation(delta):
 		direction = anglemod(((turn  * input_state.puppet_direction_change * delta) + direction))
 
 func get_input_state():
-	return get_tree().get_root().get_node(Game.INPUT).get_node(name)
+	if has_node("AI"):
+		return get_node("AI")
+	else:
+		return get_tree().get_root().get_node(Game.INPUT).get_node(name)
 
 func get_limited_velocity_with_thrust():
 	
@@ -167,19 +173,28 @@ func take_damage(damage):
 
 func server_destroyed():
 	print("Server Destroyed")
-	Server.set_respawn_timer(int(name))
+	if is_player():
+		print(name, " is considered a player because it does not have an AI node")
+		Server.set_respawn_timer(int(name))
 	for id in get_level().get_node("world").get_player_ids():
 		rpc_id(id, "destroyed")
+	destroyed()
 
 sync func destroyed():
 	if not is_network_master():
 		explosion_effect()
 	var parent = get_node("../")
 	parent.remove_child(self)
-	var ghost = preload("res://gameplay/ghost.tscn").instance()
-	ghost.name = name
-	parent.add_child(ghost)
+	if is_player():
+		var ghost = preload("res://gameplay/ghost.tscn").instance()
+		ghost.name = name
+		parent.add_child(ghost)
+		ghost.position = position
 	queue_free()
+	print("Destroyed: ", name)
+	
+func is_player():
+	return not has_node("AI")
 
 func get_level():
 	# What universe are we in?

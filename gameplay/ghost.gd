@@ -1,5 +1,8 @@
 extends Node2D
 
-# This is a placeholder so that we know
-# what system respawning players are
-# observing.
+func _ready():
+	if (name == str(Client.client_id)):
+		$Camera2D.make_current()
+
+func is_alive():
+	return false
