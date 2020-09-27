@@ -42,4 +42,3 @@ __meta__ = {
 stream = ExtResource( 3 )
 [connection signal="timeout" from="ShotTimer" to="." method="_on_ShotTimer_timeout"]
 [connection signal="timeout" from="JumpTimer" to="." method="_on_JumpTimer_timeout"]
-[connection signal="finished" from="shot_sfx" to="." method="_on_shot_sfx_finished"]

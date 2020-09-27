@@ -109,11 +109,16 @@ func set_respawn_timer(player_id):
 	timer.set_wait_time(WAIT_TIME)
 	timer.one_shot = true
 	timer.start()
+	print("Set respawn timer for player")
 	
 func _respawn_player(player_id, timer):
-	_remove_player_entity_by_id(player_id)
+	if not _is_player_alive(player_id):
+		_remove_player_entity_by_id(player_id)
+		spawn_player(player_id)
+	else:
+		print("Tried to respawn already spawned player: ", player_id)
 	remove_child(timer)
-	spawn_player(player_id)
+	timer.queue_free()
 	
 remote func purchase_ship(id):
 	var player_id = get_tree().get_rpc_sender_id()
@@ -162,7 +167,7 @@ func create_npc(type, position, level=null):
 	return ship
 	
 func fire_shot(ship):
-	print("Server.fire_shot")
+	# print("Server.fire_shot")
 	var shot = ship.get_shot()
 	shot.set_network_master(1)
 	ship.get_level().get_node("world/shots").add_child(shot)
@@ -186,3 +191,10 @@ func _remove_player_entity_by_id(id, remove_on_server=true):
 	var level = get_level_for_player(id)
 	remove_entity(level, "players", str(id), remove_on_server)
 	return level
+
+func _is_player_alive(id):
+	return _get_player_node(id).is_alive()
+
+func _get_player_node(id):
+	var level = get_level_for_player(id)
+	return level.get_node("players/" + str(id))

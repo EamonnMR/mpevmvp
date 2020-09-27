@@ -48,7 +48,10 @@ func _ready():
 		removed.queue_free()
 	# _show_debug_info()
 	_apply_stats()
-	
+
+func is_alive():
+	return true
+
 func _apply_stats():
 	for stat in FLOAT_SHIP_STATS:
 		set(stat, _data()[stat])
@@ -175,6 +178,7 @@ func server_destroyed():
 		Server.set_respawn_timer(int(name))
 	for id in get_level().get_node("world").get_player_ids():
 		rpc_id(id, "destroyed")
+	destroyed()
 
 sync func destroyed():
 	if not is_network_master():
@@ -187,6 +191,7 @@ sync func destroyed():
 		parent.add_child(ghost)
 		ghost.position = position
 	queue_free()
+	print("Destroyed: ", name)
 	
 func is_player():
 	return not has_node("AI")
