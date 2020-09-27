@@ -1,5 +1,22 @@
 extends Node2D
 
+var WAIT_TIME = 5
+
+# handle NPC spawning and despawning
+# TODO: Maybe handle this in enter/exit system funcs on the server?
+# Maybe despawn empty systems?
+func _physics_process(delta):
+	# TODO: This belongs in a timer
+	if is_network_master():
+		if $players.get_children().size() > 0:
+			if $npcs.get_children().size() < 1:
+				print("System: ", get_node("../").name, " needs an NPC, spawning it")
+				Server.spawn_npc(get_node("../").name)
+		else:
+			for child in $npcs.get_children():
+				$npcs.remove_child(child)
+				child.queue_free()
+
 func get_player_entity(player_id):
 	return $players.get_node(str(player_id))
 
@@ -52,3 +69,4 @@ func get_player_ids():
 
 func add_effect( effect ):
 	$effects.add_child(effect)
+

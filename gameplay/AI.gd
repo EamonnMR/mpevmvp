@@ -28,7 +28,8 @@ func _physics_process(delta):
 		var impulse = _constrained_point(get_node("../"), target, get_node("../").direction, get_node("../").turn * delta, target.position)
 		puppet_direction_change = _flatten_to_sign(impulse[0])
 		ideal_face = impulse[1]
-		# puppet_shooting = _should_shoot()
+		puppet_shooting = _should_shoot()
+		puppet_thrusting = _should_thrust()
 
 func distance_comparitor(lval, rval):
 	# For sorting other nodes by how close they are
@@ -39,7 +40,7 @@ func distance_comparitor(lval, rval):
 
 func _constrained_point(subject, target, current_rotation, max_turn, position):
 	# For finding the right direction and amount to turn when your rotation speed is limited
-	var ideal_face = fmod(subject.get_angle_to(target.position) + PI / 2, PI * 2) # TODO: Global Position?
+	var ideal_face = fmod(subject.get_angle_to(target.position), PI * 2)
 	var ideal_turn = fmod(ideal_face - current_rotation, PI * 2)
 	if(ideal_turn > PI):
 		ideal_turn = fmod(ideal_turn - 2 * PI, 2 * PI)
@@ -80,13 +81,14 @@ func _flatten_to_sign(value):
 		return -1
 	return 0
 
-func _handle_acceleration(delta):
-	if(target):
-		if(ideal_face):
-			if(_facing_right_way_to_accel() and _far_enough_to_accel()):
-				puppet_thrusting = true
-				return
-	puppet_thrusting = false
+func _should_thrust():
+	return (
+		target
+		and ideal_face
+		and _facing_right_way_to_accel()
+		and _far_enough_to_accel()
+	)
+					
 
 func _facing_right_way_to_accel():
 	return _facing_within_margin(accel_margin)

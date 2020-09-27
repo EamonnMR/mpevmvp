@@ -22,6 +22,13 @@ func get_ship(ship_type, player_id):
 	ship.set_name(str(player_id))
 	return ship
 
+# TODO: Refactor obv.
+func get_npc_ship(ship_type):
+	var type = str(ship_type)
+	var ship = ships[type]["scene"].instance()
+	ship.type = type
+	return ship
+
 func load_galaxy():
 	systems = load_csv("res://data/galaxy.csv")
 	for system in systems:

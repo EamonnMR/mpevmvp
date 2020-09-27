@@ -59,9 +59,9 @@ func get_level():
 func get_multiverse():
 	return get_tree().get_root().get_node("Multiverse")
 
-remote func fire_shot(player_id, shot_name):
-	print("Client.fire_shot", player_id)
-	var shot = get_level().get_player_entity(player_id).get_shot()
+remote func fire_shot(entity_name, destination, shot_name):
+	print("Client.fire_shot", entity_name)
+	var shot = get_level().get_node(destination + "/" + entity_name).get_shot()
 	shot.set_name(shot_name)
 	get_level().get_node("shots").add_child(shot)
 

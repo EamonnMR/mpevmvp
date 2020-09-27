@@ -134,22 +134,39 @@ func spawn_player(player_id, level="128"):
 	send_level(player_id, SPAWN_LEVEL, get_level(SPAWN_LEVEL))
 	var ship = create_ship(player_id, players[player_id]["ship_type"], Vector2(0.0, 0.0), SPAWN_LEVEL)
 	send_entity(get_level(SPAWN_LEVEL), "players", ship)
+	
+func spawn_npc(level):
+	print("Server.spawn: ")
+	print("level: ", level, " (", get_level(level), ")")
+	var ship = create_npc("0", Vector2(0.0, 0.0), level)
+	ship.team_set = ["pirates"]
+	send_entity(get_level(level), "npcs", ship)
 
 func create_ship(player_id, type, position, level=null):
 	print("Server Spawn Ship on level: ", level)
 	var ship = Game.get_ship(type, player_id)
-	ship.team_set = [player_id]
 	if level:
 		get_level(level).get_node("players").add_child(ship)
 	ship.position = position
+	ship.team_set = [player_id]
 	return ship
 	
-func fire_shot(player):
+func create_npc(type, position, level=null):
+	print("Server Spawn Ship on level: ", level)
+	var ship = Game.get_npc_ship(type)
+	ship.add_child(preload("res://gameplay/AI.tscn").instance())
+	ship.team_set = ["pirates"]
+	if level:
+		get_level(level).get_node("npcs").add_child(ship)
+	ship.position = position
+	return ship
+	
+func fire_shot(ship):
 	print("Server.fire_shot")
-	var shot = player.get_shot()
+	var shot = ship.get_shot()
 	shot.set_network_master(1)
-	player.get_level().get_node("world/shots").add_child(shot)
-	Client.rpc("fire_shot", int(player.name), shot.name)
+	ship.get_level().get_node("world/shots").add_child(shot)
+	Client.rpc("fire_shot", ship.name, ship.get_node("../").name, shot.name)
 
 func switch_player_universe(player):
 	var old_level = player.get_level().get_node("world")

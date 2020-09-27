@@ -32,7 +32,7 @@ var landing = false
 
 export var type: String
 
-var team_set = []
+export var team_set = []
 
 func _ready():
 	if (name == str(Client.client_id)):
@@ -185,6 +185,7 @@ sync func destroyed():
 		var ghost = preload("res://gameplay/ghost.tscn").instance()
 		ghost.name = name
 		parent.add_child(ghost)
+		ghost.position = position
 	queue_free()
 	
 func is_player():
