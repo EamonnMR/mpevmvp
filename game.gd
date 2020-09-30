@@ -1,15 +1,39 @@
 extends Node
 var systems = null
 var ships = null
+var spob_types = null
 
 const INPUT = "input_nodes"
-const PLAY_AREA_RADIUS = 800
+const PLAY_AREA_RADIUS = 2000
+
+const SPOB_TYPES_MAP = {
+	"Gas Giant": "Gas_Giant",
+	"Rocky Planet": "Planet",
+	"Large Asteroid": "Moon",
+	"Moon": "Moon",
+	"Rock Ring": "Moon",
+	"Ice Ring": "Moon"
+}
+
+var spob_types_grouped = {}
 
 func _ready():
+	
 	# Call Deferred prevents a bug where loads get interrupted.
+	load_spob_types()
 	call_deferred("load_galaxy")
 	call_deferred("load_ships")
-	
+
+func load_spob_types():
+	spob_types = load_csv("res://data/spob_types.csv")
+	for spob_type_id in spob_types:
+		var spob_type = spob_types[spob_type_id]
+		spob_type["sprite"] = load(spob_type["sprite"]) if spob_type["sprite"] else null
+		spob_type["landing"] = load(spob_type["landing"]) if spob_type["landing"] else null
+		if spob_type["kind"] in spob_types_grouped:
+			spob_types_grouped[spob_type["kind"]].append(spob_type_id)
+		else:
+			spob_types_grouped[spob_type["kind"]] = [spob_type_id]
 func load_ships():
 	ships = load_csv("res://data/ships.csv")
 	for i in ships:
@@ -72,6 +96,45 @@ func get_level(level_name):
 	else:
 		return _level_from_data(systems[level_name])
 
-func _level_from_data(level_data_dict):
-	# TODO: Examine the data and spawn some stuff
-	return preload("res://gameplay/level.tscn").instance()
+func _is_moon(moon_type):
+	# We can't use "Category" for reasons I don't understand; it fails to load from the csv
+	# So we get this hack
+	return ("Moon" in moon_type) or ("moon" in moon_type)
+
+func _select_spob_type(id, basic_type):
+	var rng_value = rand_seed(int(id))[0]
+	var mapped_type = SPOB_TYPES_MAP[basic_type]
+	var spob_type_group = spob_types_grouped[mapped_type]
+	return spob_type_group[abs(rng_value % spob_type_group.size())]
+
+func _level_from_data(dat):
+	var SCALE = 1
+	var level = preload("res://gameplay/level.tscn").instance()
+	var planet_type = preload("res://environment/spob.tscn")
+	for planet_num in [1,2,3]:
+		var prfx = "Planet %s " % str(planet_num)
+		if dat[prfx + "Exists?"] == "Exists":
+			var spob = planet_type.instance()
+			spob.spob_id = dat[prfx + "ID"]
+			var basic_type = dat[prfx + "Basic Type"]
+			spob.spob_type = _select_spob_type(spob.spob_id, basic_type)
+			spob.position = SCALE * Vector2(
+				dat[prfx + "X"],
+				dat[prfx + "Y"]
+			)
+			spob.name = dat[prfx + "Name"]
+			level.get_node("spobs").add_child(spob)
+	for moon_num in [1,2]:
+		var prfx = "Moon %d " % moon_num
+		if dat[prfx + "Exists?"] == "Exists" and _is_moon(dat[prfx + "Type"]):
+			var spob = planet_type.instance()
+			spob.spob_id = dat[prfx + "ID"]
+			spob.spob_type = _select_spob_type(spob.spob_id, "Moon")
+			spob.position = SCALE * Vector2(
+				dat[prfx + "X"],
+				dat[prfx + "Y"]
+			)
+			spob.name = dat[prfx + "Name"]
+			level.get_node("spobs").add_child(spob)
+	
+	return level

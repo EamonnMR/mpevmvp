@@ -23,7 +23,6 @@ func get_player_entity(player_id):
 func serialize():
 	var children = {}
 	for child in [
-		"items",
 		"shots",
 		"players",
 		"npcs"

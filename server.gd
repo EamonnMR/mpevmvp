@@ -96,6 +96,8 @@ func get_level(level):
 	return get_multiverse().get_level(level)
 
 func get_level_for_player(player_id):
+	if not player_id in players:
+		return null
 	return get_level(players[player_id]["level"])
 	
 func get_multiverse():
