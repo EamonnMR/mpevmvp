@@ -195,7 +195,9 @@ func _remove_player_entity_by_id(id, remove_on_server=true):
 	return level
 
 func _is_player_alive(id):
-	return _get_player_node(id).is_alive()
+	var player_node = _get_player_node(id)
+	
+	return player_node and player_node.is_alive()
 
 func _get_player_node(id):
 	var level = get_level_for_player(id)
