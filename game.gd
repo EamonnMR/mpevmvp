@@ -4,7 +4,7 @@ var ships = null
 var spob_types = null
 
 const INPUT = "input_nodes"
-const PLAY_AREA_RADIUS = 800
+const PLAY_AREA_RADIUS = 2000
 
 const SPOB_TYPES_MAP = {
 	"Gas Giant": "Gas_Giant",
@@ -96,6 +96,10 @@ func get_level(level_name):
 	else:
 		return _level_from_data(systems[level_name])
 
+func _is_moon(moon_type):
+	# We can't use "Category" for reasons I don't understand; it fails to load from the csv
+	# So we get this hack
+	return ("Moon" in moon_type) or ("moon" in moon_type)
 
 func _select_spob_type(id, basic_type):
 	var rng_value = rand_seed(int(id))[0]
@@ -122,7 +126,7 @@ func _level_from_data(dat):
 			level.get_node("spobs").add_child(spob)
 	for moon_num in [1,2]:
 		var prfx = "Moon %d " % moon_num
-		if dat[prfx + "Exists?"] == "Exists":
+		if dat[prfx + "Exists?"] == "Exists" and _is_moon(dat[prfx + "Type"]):
 			var spob = planet_type.instance()
 			spob.spob_id = dat[prfx + "ID"]
 			spob.spob_type = _select_spob_type(spob.spob_id, "Moon")
