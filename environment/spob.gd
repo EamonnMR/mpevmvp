@@ -1,16 +1,17 @@
 extends Node2D
 
-export var spob_name: String
+export var spob_id: String
 export var landing: String
 export var spob_type: String
 export var kind: String
 export var biome: String
 export var desc: String
 
+# Things it gets from the corresponding spob_type directly (if available)
 var SPOB_STATS = [
 	"kind",
 	"biome",
-	"desc"
+	# "desc"
 ]
 
 func _ready():
@@ -23,5 +24,5 @@ func _apply_stats():
 	for stat in SPOB_STATS:
 		if _data()[stat] and not get(stat):
 			set(stat, _data()[stat])
-	if not $sprite.texture:
-		$sprite.texture = _data()["sprite"]
+	if not $Sprite.texture:
+		$Sprite.texture = _data()["sprite"]
