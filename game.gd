@@ -69,8 +69,7 @@ func preprocess_system(system):
 		if system[possible_link]:
 			system["links"].append(system[possible_link])
 	
-	# TODO: Scale factor in the map
-	system["position"] = Vector2(system["System X"], system["System Y"]) * 2
+	system["position"] = Vector2(system["System X"], system["System Y"])
 
 func load_csv(csv):
 	var file = File.new()
