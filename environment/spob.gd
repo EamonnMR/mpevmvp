@@ -26,3 +26,10 @@ func _apply_stats():
 			set(stat, _data()[stat])
 	if not $Sprite.texture:
 		$Sprite.texture = _data()["sprite"]
+
+func add_selection():
+	$Sprite.add_child(preload("res://interface/hud/Selection.tscn").instance())
+
+func remove_selection():
+	if $Sprite/Selection:
+		$Sprite.remove_child($Sprite/Selection)

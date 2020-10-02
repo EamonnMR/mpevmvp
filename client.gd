@@ -4,6 +4,7 @@ var client
 var client_id
 var player_name
 var map
+var player_scene
 
 func start(ip, port, new_player_name):
 	get_tree().connect("connected_to_server", self, "_client_connected")
@@ -35,7 +36,7 @@ func _player_connected_client(id):
 	print("Client: Player Connected: ", id)
 
 func _client_connected():
-	var player_scene = preload("res://gameplay/PlayerInput.tscn").instance()
+	player_scene = preload("res://gameplay/PlayerInput.tscn").instance()
 	player_scene.set_name(str(client_id))
 	player_scene.set_network_master(client_id)
 	var net_players = Node.new()
@@ -69,6 +70,7 @@ remote func switch_level(new_level_name, level_data):
 	print("client switch universe")
 	print(level_data)
 	get_multiverse().switch_level(new_level_name, level_data)
+	player_scene.switch_system()
 
 remote func remove_entity(destination, ent_name):
 	print("client.remove_entity; ", destination, "/", ent_name)

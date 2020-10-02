@@ -17,6 +17,9 @@ const SPOB_TYPES_MAP = {
 
 var spob_types_grouped = {}
 
+func get_multiverse():
+	return get_tree().get_root().get_node("Multiverse")
+
 func _ready():
 	
 	# Call Deferred prevents a bug where loads get interrupted.
