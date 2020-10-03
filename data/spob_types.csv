@@ -31,5 +31,5 @@ id,sprite,landing,kind,biome,noland
 29,res://sprites/onyx_cc_nc/spobs/Moon8.png,res://sprites/onyx_cc_nc/landing/30.png,Moon,Metallic,
 30,res://sprites/onyx_cc_nc/spobs/Moon9.png,res://sprites/onyx_cc_nc/landing/31.png,Moon,Rocky,
 31,res://sprites/onyx_cc_nc/spobs/Rings.png,res://sprites/onyx_cc_nc/landing/21.png,Planetary System,Ringed,
-32,res://sprites/gas_world_3.png,,Gas_Giant,,TRUE
+32,res://sprites/gas_world_3.png,res://sprites/misc_pd/summer_above_the_clouds.png,Gas_Giant,,TRUE
 33,res://sprites/gas_world_4.png,,Gas_Giant,,TRUE
