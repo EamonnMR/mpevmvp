@@ -6,7 +6,6 @@ var WAIT_TIME = 5
 # TODO: Maybe handle this in enter/exit system funcs on the server?
 # Maybe despawn empty systems?
 func _physics_process(delta):
-	return
 	# TODO: This belongs in a timer
 	if is_network_master():
 		if $players.get_children().size() > 0:

@@ -1,7 +1,7 @@
 extends Node2D
 
 export var spob_id: String
-export var landing: String
+var landing
 export var spob_type: String
 export var kind: String
 export var biome: String
@@ -11,7 +11,7 @@ export var desc: String
 var SPOB_STATS = [
 	"kind",
 	"biome",
-	# "desc"
+	"landing"
 ]
 
 func _ready():

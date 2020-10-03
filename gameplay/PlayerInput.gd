@@ -27,7 +27,7 @@ func _ready():
 	if is_network_master():
 		map = preload("res://interface/map/Map.tscn").instance()
 		landing = preload("res://interface/landing/landing_main.tscn").instance()
-		landing.bind(self)
+		# landing.bind(self)
 		spobs = _get_spobs()
 
 func switch_system():
@@ -78,7 +78,7 @@ func _get_spobs():
 		return []
 
 func _handle_spob_select():
-	var i = 1
+	var i = 0
 	for spob in spobs:
 		i += 1
 		if Input.is_action_pressed("spob_" + str(i)):
