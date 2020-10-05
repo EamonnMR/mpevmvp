@@ -2,9 +2,14 @@ extends Node
 var systems = null
 var ships = null
 var spob_types = null
+var commodities = null
 
 const INPUT = "input_nodes"
 const PLAY_AREA_RADIUS = 2000
+
+# Commodity price factors
+const PRICE_HIGH = 125
+const PRICE_LOW = 75
 
 const SPOB_TYPES_MAP = {
 	"Gas Giant": "Gas_Giant",
@@ -24,6 +29,7 @@ func _ready():
 	
 	# Call Deferred prevents a bug where loads get interrupted.
 	load_spob_types()
+	load_commodities()
 	call_deferred("load_galaxy")
 	call_deferred("load_ships")
 
@@ -37,6 +43,15 @@ func load_spob_types():
 			spob_types_grouped[spob_type["kind"]].append(spob_type_id)
 		else:
 			spob_types_grouped[spob_type["kind"]] = [spob_type_id]
+			
+func load_commodities():
+	commodities = load_csv("res://data/trade.csv")
+	for commodity_id in commodities:
+		var commodity = commodities[commodity_id]
+		commodity["price"] = int(commodity["price"])
+		commodity["price_high"] = int(commodity["price"] * PRICE_HIGH)
+		commodity["price_low"] = int(commodity["price"] * PRICE_LOW)
+
 func load_ships():
 	ships = load_csv("res://data/ships.csv")
 	for i in ships:
@@ -57,9 +72,11 @@ func get_npc_ship(ship_type):
 	return ship
 
 func load_galaxy():
+	print("Loading Galaxy")
 	systems = load_csv("res://data/galaxy.csv")
 	for system in systems:
 		preprocess_system(systems[system])
+	print("Galaxy Loaded")
 
 func preprocess_system(system):
 	system["links"] = []

@@ -1,0 +1,7 @@
+id,name,type,price,abbreviation
+0,Food,basic,100,Food
+1,Industrial,basic,300,Ind
+2,Medical Supplies,basic,700,Med
+3,Luxury Goods,basic,800,Lux
+4,Metal,basic,200,Met
+5,Equipment,basic,600,Equ
