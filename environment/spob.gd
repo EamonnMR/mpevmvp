@@ -6,6 +6,7 @@ export var spob_type: String
 export var kind: String
 export var biome: String
 export var desc: String
+export var commodities: Dictionary
 
 # Things it gets from the corresponding spob_type directly (if available)
 var SPOB_STATS = [
