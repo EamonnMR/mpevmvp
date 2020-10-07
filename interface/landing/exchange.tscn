@@ -1,0 +1,73 @@
+[gd_scene load_steps=2 format=2]
+
+[ext_resource path="res://interface/landing/exchange.gd" type="Script" id=2]
+
+[node name="Exchange" type="Panel"]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -251.0
+margin_top = -94.0
+margin_right = 231.0
+margin_bottom = 150.0
+script = ExtResource( 2 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label" type="Label" parent="."]
+margin_left = 50.0
+margin_top = 19.0
+margin_right = 191.0
+margin_bottom = 33.0
+text = "Commodity Exchange"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="leave" type="Button" parent="."]
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = -46.0
+margin_top = -20.0
+text = "leave"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="cargo_bay" type="Label" parent="."]
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+margin_left = -47.5
+margin_top = -14.0
+margin_right = 47.5
+text = "Total Cargo n/n"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Cash" type="Label" parent="."]
+anchor_top = 1.0
+anchor_bottom = 1.0
+margin_top = -14.0
+margin_right = 95.0
+text = "Cash"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Rows" type="GridContainer" parent="."]
+margin_left = 115.691
+margin_top = 48.1458
+margin_right = 378.691
+margin_bottom = 217.146
+columns = 6
+__meta__ = {
+"_edit_use_anchors_": false
+}
+[connection signal="pressed" from="leave" to="." method="_on_leave_pressed"]

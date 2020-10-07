@@ -8,13 +8,20 @@ const INPUT = "input_nodes"
 const PLAY_AREA_RADIUS = 2000
 
 # Commodity price factors
-const PRICE_HIGH = 125
-const PRICE_LOW = 75
+# Maybe pull this out into its own spreadsheet
+const PRICE_HIGH = 1.25
+const PRICE_LOW = 0.75
 
 enum price_factors {
 	LOW
 	MED
 	HIGH
+}
+
+var comodity_price_factor_names = {
+	price_factors.LOW: "low",
+	price_factors.MED: "med",
+	price_factors.HIGH: "high"
 }
 
 const SPOB_TYPES_MAP = {
