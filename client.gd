@@ -1,5 +1,7 @@
 extends Node
 
+var player_ship
+
 var client
 var client_id
 var player_name

@@ -126,12 +126,32 @@ remote func purchase_ship(id):
 	var player_id = get_tree().get_rpc_sender_id()
 	players[player_id]["ship_type"] = id
 	var level = get_level_for_player(player_id)
+	level.print_tree_pretty()
 	var player = level.get_node("players/" + str(player_id))
 	var new_player = create_ship(player_id, id, player.position)
 	print("Player purchased ship! New Ship type: ", id)
 	print("New Ship Data:" )
 	print(new_player.serialize())
 	replace_entity(level, "players", new_player, true)
+	
+
+remote func purchase_commodity(commodity_id, quantity, trading_partner_path):
+	var player_id = get_tree().get_rpc_sender_id()
+	if _is_player_alive(player_id):
+		var player = _get_player_node(player_id)
+		var trading_partner = player.get_level().get_node("world/" + trading_partner_path)
+
+		var price_factor = trading_partner.commodities[commodity_id]
+		var type_data = Game.commodities[commodity_id]
+		var price = type_data["prices"][price_factor] * quantity
+		
+		# TODO: Probably move this to ship?
+		
+		player.purchase_commodity(commodity_id, quantity, price)
+		
+remote func sell_commodity(commodity_id, quantity, trading_partner):
+	var player_id = get_tree().get_rpc_sender_id()
+	Server.rpc_id(1, "sell", commodity_id, quantity, trading_partner)
 
 func spawn_player(player_id, level="128"):
 	print("Server.spawn_player: ", player_id)
@@ -187,6 +207,7 @@ func switch_player_universe(player):
 		get_multiverse().switch_player_level(player, new_level_name)
 		send_level(int(player.name), new_level_name, new_level)
 		remove_entity(old_level, "players", player.name)
+		players[int(player.name)]["level"] = new_level_name
 
 func _remove_player_entity_by_id(id, remove_on_server=true):
 	print("Removing player entity by ID")
@@ -202,3 +223,5 @@ func _is_player_alive(id):
 func _get_player_node(id):
 	var level = get_level_for_player(id)
 	return level.get_node("players/" + str(id))
+
+

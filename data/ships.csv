@@ -1,5 +1,5 @@
-id,name,turn,accel,max_speed,armor,parent,scene,icon,desc
-0,Shuttle,3,1,100,10,,shuttle,sprites/onyx_cc_nc/icons/0.bmp,The shortest path between you and intergalactic travel. 
-1,Ringer,2.7,0.8,120,20,,ringer,sprites/onyx_cc_nc/icons/1.bmp,"Unconventional, uncompromising design."
-2,Anvil,0.7,0.5,75,45,,anvil,sprites/onyx_cc_nc/icons/2.bmp,This reliable old workhorse was conquering planets while you learned to walk
-3,Vespid,4,1.5,135,15,,vespid,sprites/onyx_cc_nc/icons/3.bmp,Renowed first-string fighter of the Galactic Guard
+id,name,turn,accel,max_speed,armor,parent,scene,icon,max_cargo,desc
+0,Shuttle,3,1,100,10,,shuttle,sprites/onyx_cc_nc/icons/0.bmp,10,The shortest path between you and intergalactic travel. 
+1,Ringer,2.7,0.8,120,20,,ringer,sprites/onyx_cc_nc/icons/1.bmp,40,"Unconventional, uncompromising design."
+2,Anvil,0.7,0.5,75,45,,anvil,sprites/onyx_cc_nc/icons/2.bmp,100,This reliable old workhorse was conquering planets while you learned to walk
+3,Vespid,4,1.5,135,15,,vespid,sprites/onyx_cc_nc/icons/3.bmp,15,Renowed first-string fighter of the Galactic Guard

@@ -3,15 +3,17 @@ extends RigidBody2D
 const BULLET_VELOCITY = 500.0 #300
 
 # Values loaded directly from ships.csv
-const FLOAT_SHIP_STATS = [
+const SHIP_STATS = [
 	"max_speed",
 	"turn",
-	"accel"
+	"accel",
+	"max_cargo"
 ]
 
 var max_speed: float
 var turn: float
 var accel: float
+var max_cargo: int
 
 puppet var puppet_pos = Vector2(0,0)
 puppet var puppet_dir: float = 0
@@ -30,13 +32,20 @@ var puppet_health = 20
 var input_state: Node
 var landing = false
 
+export var bulk_cargo = {}
+export var money = 0
+
 export var type: String
 
 export var team_set = []
 
+signal destroyed
+signal cargo_updated
+
 func _ready():
 	if (name == str(Client.client_id)):
 		$Camera2D.make_current()
+		Client.player_ship = self
 	if(is_network_master()):
 		input_state = get_input_state()
 	$RotationSprite.set_direction(direction)
@@ -53,7 +62,7 @@ func is_alive():
 	return true
 
 func _apply_stats():
-	for stat in FLOAT_SHIP_STATS:
+	for stat in SHIP_STATS:
 		set(stat, _data()[stat])
 
 func _data():
@@ -109,6 +118,7 @@ func _physics_process(delta):
 	
 	if $EngineGlowSprite:
 		$EngineGlowSprite.set_direction(direction)
+		# TODO: Fade in/out to avoid AI jitter (and just generally look better)
 		if thrusting:
 			$EngineGlowSprite.show()
 		else:
@@ -125,7 +135,6 @@ func get_input_state():
 		return get_tree().get_root().get_node(Game.INPUT).get_node(name)
 
 func get_limited_velocity_with_thrust():
-	
 	# TODO: Slowly slow down for landing
 	if landing:
 		return Vector2(0,0)
@@ -183,6 +192,8 @@ func server_destroyed():
 sync func destroyed():
 	if not is_network_master():
 		explosion_effect()
+	emit_signal("destroyed")
+	
 	var parent = get_node("../")
 	parent.remove_child(self)
 	if is_player():
@@ -212,24 +223,35 @@ func anglemod(angle):
 # TODO: Fill these in
 # These get Rset anyway, but it should make the flash of wrongness go away
 
+func explosion_effect():
+	var explosion = preload("res://effects/explosion.tscn").instance()
+	explosion.position = position
+	get_level().get_node("world").add_effect(explosion)
+	
+func shot_effects():
+	$shot_sfx.play()
 
+# General purpose networking functions.
 func serialize():
 	return {
 		"position": position,
 		"direction": direction,
 		"team_set": team_set,
 		"type": type,
+		"money": money,
+		"bulk_cargo": bulk_cargo
 	}
 
 func deserialize(data):
+	# Maybe use 'set' and some reflection to simplify this?
 	position = data["position"]
 	puppet_pos = position
 	direction = data["direction"]
 	puppet_dir = direction
 	team_set = data["team_set"]
 	type = data["type"]
-
-# TODO: Move to superclass
+	money = data["money"]
+	bulk_cargo = data["bulk_cargo"]
 
 func rset_ex(puppet_var, value):
 	# This avoids a whole lot of extra network traffic...
@@ -238,16 +260,57 @@ func rset_ex(puppet_var, value):
 		rset_id(id, puppet_var, value)
 	set(puppet_var, value)
 
-
 func rset_ex_cond(puppet_var, value):
 	if self[puppet_var] != value:
 		self[puppet_var] = value
 		rset_ex(puppet_var, value)
 
-func explosion_effect():
-	var explosion = preload("res://effects/explosion.tscn").instance()
-	explosion.position = position
-	get_level().get_node("world").add_effect(explosion)
-	
-func shot_effects():
-	$shot_sfx.play()
+# Trade related functions:
+
+func bulk_cargo_amount(type):
+	if type in bulk_cargo:
+		return bulk_cargo[type]
+	else:
+		return 0
+
+func add_bulk_cargo(type, quantity):
+	print("TODO: Add bulk cargo")
+
+func remove_bulk_cargo(type, quantity):
+	print("TODO: Remove Bulk Cargo")
+
+func free_cargo():
+	print("TODO: Get total free cargo")
+	return 1
+
+func purchase_commodity(commodity_id, quantity, price):
+	if money >= price and free_cargo() > quantity:
+		money -= price
+		add_bulk_cargo(commodity_id, quantity)
+		push_update_cargo_and_money()
+
+func sell_commodity(commodity_id, quantity, price):
+	if commodity_id in bulk_cargo and bulk_cargo[commodity_id] >= quantity:
+		money += price
+		remove_bulk_cargo(commodity_id, quantity)
+		push_update_cargo_and_money()
+
+# One-off push functions for setting remote stuff.
+# We don't want to go through the puppet push/pull because
+# they're unlikley to be called many times per frame.
+
+func push_update_cargo_and_money():
+	for id in get_level().get_node("world").get_player_ids():
+		rpc_id(id, "client_set_cargo_and_money", bulk_cargo, money)
+
+remote func client_set_cargo_and_money(new_bulk_cargo, new_money):
+	bulk_cargo = new_bulk_cargo
+	new_money = new_money
+	emit_signal("cargo_updated")
+
+func push_update_money():
+	for id in get_level().get_node("world").get_player_ids():
+		rpc_id(id, "client_set_money", money)
+		
+remote func client_set_money(new_money):
+	new_money = new_money
