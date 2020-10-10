@@ -7,13 +7,15 @@ const SHIP_STATS = [
 	"max_speed",
 	"turn",
 	"accel",
-	"max_cargo"
+	"max_cargo",
+	"price"
 ]
 
 var max_speed: float
 var turn: float
 var accel: float
 var max_cargo: int
+var price: int
 
 puppet var puppet_pos = Vector2(0,0)
 puppet var puppet_dir: float = 0
@@ -185,6 +187,7 @@ func server_destroyed():
 	if is_player():
 		print(name, " is considered a player because it does not have an AI node")
 		Server.set_respawn_timer(int(name))
+		Server.players[int(self.name)]
 	for id in get_level().get_node("world").get_player_ids():
 		rpc_id(id, "destroyed")
 	destroyed()
@@ -220,8 +223,6 @@ func anglemod(angle):
 	# TODO: Recursive might be too slow
 	return fmod(angle + ARC, ARC)
 
-# TODO: Fill these in
-# These get Rset anyway, but it should make the flash of wrongness go away
 
 func explosion_effect():
 	var explosion = preload("res://effects/explosion.tscn").instance()
@@ -266,22 +267,36 @@ func rset_ex_cond(puppet_var, value):
 		rset_ex(puppet_var, value)
 
 # Trade related functions:
+	
+func get_npc_carried_money() -> int:
+	return RandomNumberGenerator.new().randi_range(int(price / 10), int(price / 5))
 
-func bulk_cargo_amount(type):
+func bulk_cargo_amount(type) -> int:
 	if type in bulk_cargo:
 		return bulk_cargo[type]
 	else:
 		return 0
 
 func add_bulk_cargo(type, quantity):
-	print("TODO: Add bulk cargo")
-
+	if type in bulk_cargo:
+		bulk_cargo[type] += quantity
+	else:
+		bulk_cargo[type] = quantity
+	
 func remove_bulk_cargo(type, quantity):
-	print("TODO: Remove Bulk Cargo")
+	if type in bulk_cargo:
+		bulk_cargo[type] -= quantity
+	if bulk_cargo[type] == 0:
+		bulk_cargo.erase(type)
 
-func free_cargo():
-	print("TODO: Get total free cargo")
-	return 1
+func free_cargo() -> int:
+	return max_cargo - total_cargo()
+
+func total_cargo() -> int:
+	var total: int = 0
+	for key in bulk_cargo:
+		total += bulk_cargo[key]
+	return total
 
 func purchase_commodity(commodity_id, quantity, price):
 	if money >= price and free_cargo() > quantity:

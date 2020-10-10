@@ -9,6 +9,8 @@ var WAIT_TIME = 5
 
 const MAX_PLAYERS = 6
 
+const STARTING_MONEY = 20000
+
 func start(game_name, max_players):
 	print("Starting Server: ", game_name, ", ", max_players)
 	
@@ -39,7 +41,11 @@ func _setup_server_nodes(game_name):
 
 func _client_connected(id):
 	print("Server: Client_Connected: ", id)
-	players[id] = {"name": id, "ship_type": 0}
+	players[id] = {
+		"name": id,
+		"ship_type": 0,
+		"money": STARTING_MONEY  # Really not in love with storing this here (only when the player is unspawned) 
+	}
 	
 	var player_input = preload("res://gameplay/PlayerInput.tscn").instance()
 	player_input.set_name(str(id))
@@ -129,6 +135,9 @@ remote func purchase_ship(id):
 	level.print_tree_pretty()
 	var player = level.get_node("players/" + str(player_id))
 	var new_player = create_ship(player_id, id, player.position)
+	new_player.bulk_cargo = player.bulk_cargo
+	new_player.money = player.money
+	
 	print("Player purchased ship! New Ship type: ", id)
 	print("New Ship Data:" )
 	print(new_player.serialize())
@@ -159,7 +168,7 @@ func spawn_player(player_id, level="128"):
 	players[player_id]["level"] = SPAWN_LEVEL
 	print("level: ", SPAWN_LEVEL, " (", get_level(SPAWN_LEVEL), ")")
 	send_level(player_id, SPAWN_LEVEL, get_level(SPAWN_LEVEL))
-	var ship = create_ship(player_id, players[player_id]["ship_type"], Vector2(0.0, 0.0), SPAWN_LEVEL)
+	var ship = create_ship(player_id, players[player_id]["ship_type"], Vector2(0.0, 0.0), SPAWN_LEVEL, players[player_id]["money"])
 	send_entity(get_level(SPAWN_LEVEL), "players", ship)
 	
 func spawn_npc(level):
@@ -167,15 +176,17 @@ func spawn_npc(level):
 	print("level: ", level, " (", get_level(level), ")")
 	var ship = create_npc("0", Vector2(0.0, 0.0), level)
 	ship.team_set = ["pirates"]
+	ship.money = ship.get_npc_carried_money()
 	send_entity(get_level(level), "npcs", ship)
 
-func create_ship(player_id, type, position, level=null):
+func create_ship(player_id, type, position, level=null, money=0):
 	print("Server Spawn Ship on level: ", level)
 	var ship = Game.get_ship(type, player_id)
 	if level:
 		get_level(level).get_node("players").add_child(ship)
 	ship.position = position
 	ship.team_set = [player_id]
+	ship.money = money
 	return ship
 	
 func create_npc(type, position, level=null):
