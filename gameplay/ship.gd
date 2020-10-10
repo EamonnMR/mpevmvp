@@ -299,7 +299,7 @@ func total_cargo() -> int:
 	return total
 
 func purchase_commodity(commodity_id, quantity, price):
-	if money >= price and free_cargo() > quantity:
+	if money >= price and free_cargo() >= quantity:
 		money -= price
 		add_bulk_cargo(commodity_id, quantity)
 		push_update_cargo_and_money()
