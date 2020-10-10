@@ -140,4 +140,4 @@ func purchase_commodity(commodity_id, quantity, trading_partner):
 	Server.rpc_id(1, "purchase_commodity", commodity_id, quantity, trading_partner)
 	
 func sell_commodity(commodity_id, quantity, trading_partner):
-	Server.rpc_id(1, "sell", commodity_id, quantity, trading_partner)
+	Server.rpc_id(1, "sell_commodity", commodity_id, quantity, trading_partner)

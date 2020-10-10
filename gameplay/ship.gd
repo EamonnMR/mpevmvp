@@ -320,7 +320,7 @@ func push_update_cargo_and_money():
 
 remote func client_set_cargo_and_money(new_bulk_cargo, new_money):
 	bulk_cargo = new_bulk_cargo
-	new_money = new_money
+	money = new_money
 	emit_signal("cargo_updated")
 
 func push_update_money():

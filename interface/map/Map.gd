@@ -11,7 +11,6 @@ func _ready():
 			var line = line_scene.instance()
 			line.start = system_id
 			line.end = destination
-			print("start: ", system_id, "end: ", destination)
 			$Panel/systems.add_child(line)
 	for system_id in Game.systems:
 		# TODO: Tons of stuff, including:

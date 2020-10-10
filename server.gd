@@ -158,9 +158,18 @@ remote func purchase_commodity(commodity_id, quantity, trading_partner_path):
 		
 		player.purchase_commodity(commodity_id, quantity, price)
 		
-remote func sell_commodity(commodity_id, quantity, trading_partner):
+remote func sell_commodity(commodity_id, quantity, trading_partner_path):
 	var player_id = get_tree().get_rpc_sender_id()
-	Server.rpc_id(1, "sell", commodity_id, quantity, trading_partner)
+	if _is_player_alive(player_id):
+		var player = _get_player_node(player_id)
+		var trading_partner = player.get_level().get_node("world/" + trading_partner_path)
+
+		var price_factor = trading_partner.commodities[commodity_id]
+		var type_data = Game.commodities[commodity_id]
+		var price = type_data["prices"][price_factor] * quantity
+		
+		# TODO: Probably move this to ship?
+		player.sell_commodity(commodity_id, quantity, price)
 
 func spawn_player(player_id, level="128"):
 	print("Server.spawn_player: ", player_id)
