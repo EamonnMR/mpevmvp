@@ -42,4 +42,5 @@ func update():
 
 
 func _on_Mode_item_selected(index):
+	print("New Mode: ", $Mode.selected)
 	update()

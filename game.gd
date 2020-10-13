@@ -71,6 +71,9 @@ func load_commodities():
 		
 func load_factions():
 	factions = load_csv("res://data/factions.csv")
+	for faction_id in factions:
+		var faction = factions[faction_id]
+		faction["color"] = parse_color(faction["color"])
 		
 func load_ships():
 	ships = load_csv("res://data/ships.csv")
@@ -112,6 +115,10 @@ func preprocess_system(system):
 			system["links"].append(system[possible_link])
 	
 	system["position"] = Vector2(system["System X"], system["System Y"])
+
+func parse_color(color_text):
+	var color_parsed = color_text.split(",")
+	return Color(color_parsed[0], color_parsed[1], color_parsed[2])
 
 func load_csv(csv):
 	var file = File.new()
