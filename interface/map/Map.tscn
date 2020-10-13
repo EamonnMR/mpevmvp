@@ -25,3 +25,13 @@ __meta__ = {
 }
 
 [node name="systems" type="Node2D" parent="Panel"]
+
+[node name="Mode" type="OptionButton" parent="."]
+margin_left = 21.819
+margin_top = 558.494
+margin_right = 50.819
+margin_bottom = 578.494
+__meta__ = {
+"_edit_use_anchors_": false
+}
+[connection signal="item_selected" from="Mode" to="." method="_on_Mode_item_selected"]
