@@ -3,6 +3,7 @@ var systems = null
 var ships = null
 var spob_types = null
 var commodities = null
+var factions = null
 
 const INPUT = "input_nodes"
 const PLAY_AREA_RADIUS = 2000
@@ -42,6 +43,7 @@ func _ready():
 	# Call Deferred prevents a bug where loads get interrupted.
 	load_spob_types()
 	load_commodities()
+	load_factions()
 	call_deferred("load_galaxy")
 	call_deferred("load_ships")
 
@@ -66,6 +68,9 @@ func load_commodities():
 			price_factors.MED: price,
 			price_factors.HIGH: int(PRICE_HIGH * price)
 		}
+		
+func load_factions():
+	factions = load_csv("res://data/factions.csv")
 		
 func load_ships():
 	ships = load_csv("res://data/ships.csv")
@@ -92,6 +97,8 @@ func load_galaxy():
 	for system in systems:
 		preprocess_system(systems[system])
 	print("Galaxy Loaded")
+	calculate_system_distances()
+	print("Galaxy Analyzed")
 
 func preprocess_system(system):
 	system["links"] = []
@@ -207,3 +214,24 @@ func _level_from_data(level_name, dat):
 			spob.commodities = random_comodities(int(spob.spob_id))
 			level.get_node("spobs").add_child(spob)
 	return level
+
+func calculate_system_distances():
+	var sum_position = Vector2(0,0)
+	var max_position = Vector2(0,0)
+	
+	for system_id in systems:
+		var system = systems[system_id]
+		sum_position += system["position"]
+		
+	var mean_position = sum_position / systems.size()
+
+	var max_distance = 0
+	for system_id in systems:
+		var system = systems[system_id]
+		system["distance"] = mean_position.distance_to(system["position"])
+		if system["distance"] > max_distance:
+			max_distance = system["distance"]
+		
+	for system_id in systems:
+		var system = systems[system_id]
+		system["distance_normalized"] = system["distance"] / max_distance
