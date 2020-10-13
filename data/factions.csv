@@ -1,0 +1,7 @@
+id,name,short,color,initial_disposition,is_default,core_systems_count,grow_jumps_count,priority,favor_galactic_center
+0,Independent,Ind,"0,0,1",0,TRUE,10,1,0,-1
+1,Trader,Trd,"0,0,1",0,FALSE,0,0,0,0
+2,Compact,Pct,"1,0,0",-1,FALSE,10,3,1,1
+3,Pirate,Pir,"0.3,0.3,0.3",-1,TRUE,4,1,-1,-1
+4,<green faction>,Grn,"0,1,0",0,FALSE,6,2,2,0
+5,<gold faction>,Gld,"0.5,0.5,0",0,FALSE,1,1,0,-1
