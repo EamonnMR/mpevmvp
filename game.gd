@@ -100,8 +100,50 @@ func load_galaxy():
 	for system in systems:
 		preprocess_system(systems[system])
 	print("Galaxy Loaded")
+	populate_galaxy()
+
+func system_distance_comparitor(l_id, r_id) -> bool:
+	var lval = systems[l_id]["distance"]
+	var rval = systems[r_id]["distance"]
+	return lval < rval
+
+func systems_sorted_by_distance() -> Array:
+	var system_ids = systems.keys()
+	system_ids.sort_custom(self, "system_distance_comparitor")
+	return system_ids
+
+func populate_galaxy():
+	print("Populating Galaxy")
 	calculate_system_distances()
-	print("Galaxy Analyzed")
+	var sorted = systems_sorted_by_distance()
+	var sorted_reverse = sorted.duplicate().invert()
+	var rng = RandomNumberGenerator.new()
+	rng.seed = sorted.hash()
+	var already_selected = []
+	for faction_id in factions:
+		var faction = factions[faction_id]
+		var i = 0
+		while i < int(faction["core_systems_count"]):
+			var rnd_result = abs(rng.randfn(0.0))
+			var scale = int(faction["favor_galactic_center"])
+			var scaled_rnd_result = 0
+			if scale:
+				scaled_rnd_result = int(rnd_result * (sorted.size() / scale))
+			else:
+				scaled_rnd_result = rng.randi_range(0, sorted.size())
+			if scaled_rnd_result > sorted.size():
+				print("Long tail too long: ", rnd_result, " (", scaled_rnd_result, ")")
+				continue
+			var system_id = sorted[scaled_rnd_result]
+			if system_id in already_selected:
+				print("Collision: ", system_id)
+				continue
+			else:
+				print("System: ", system_id, " Faction: ", faction_id)
+				systems[system_id]["faction"] = faction_id
+				already_selected.append(system_id)
+				i += 1
+	print("Galaxy populated")
 
 func preprocess_system(system):
 	system["links"] = []
