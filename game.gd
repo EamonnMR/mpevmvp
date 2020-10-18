@@ -70,10 +70,20 @@ func load_commodities():
 		}
 		
 func load_factions():
+	var boolean_fields = [
+		"is_default",
+		"spawn_anywhere",
+		"peninsula_bonus"
+	]
+	
 	factions = load_csv("res://data/factions.csv")
+	
 	for faction_id in factions:
 		var faction = factions[faction_id]
 		faction["color"] = parse_color(faction["color"])
+		
+		for field in boolean_fields:
+			faction[field] = parse_bool(faction[field])
 		
 func load_ships():
 	ships = load_csv("res://data/ships.csv")
@@ -99,6 +109,7 @@ func load_galaxy():
 	systems = load_csv("res://data/galaxy.csv")
 	for system in systems:
 		preprocess_system(systems[system])
+	ensure_link_reciprocity()
 	print("Galaxy Loaded")
 	populate_galaxy()
 
@@ -114,6 +125,13 @@ func systems_sorted_by_distance() -> Array:
 
 func populate_galaxy():
 	print("Populating Galaxy")
+	var core_worlds = randomly_assign_faction_core_worlds()
+	core_worlds += assign_peninsula_bonus_worlds()
+	grow_faction_influence_from_core_worlds()
+	print("Galaxy populated")
+	
+func randomly_assign_faction_core_worlds() -> Array:
+	print("Randomly Assigning core worlds ")
 	calculate_system_distances()
 	var sorted = systems_sorted_by_distance()
 	var sorted_reverse = sorted.duplicate().invert()
@@ -123,7 +141,7 @@ func populate_galaxy():
 	for faction_id in factions:
 		var faction = factions[faction_id]
 		var i = 0
-		while i < int(faction["core_systems_count"]):
+		while i < int(int(faction["core_systems_per_500"]) * (systems.size() / 500)):
 			var rnd_result = abs(rng.randfn(0.0))
 			var scale = int(faction["favor_galactic_center"])
 			var scaled_rnd_result = 0
@@ -139,11 +157,56 @@ func populate_galaxy():
 				print("Collision: ", system_id)
 				continue
 			else:
-				print("System: ", system_id, " Faction: ", faction_id)
 				systems[system_id]["faction"] = faction_id
+				systems[system_id]["core"] = true
 				already_selected.append(system_id)
 				i += 1
-	print("Galaxy populated")
+	print("Core worlds assigned")
+	return already_selected
+
+func assign_peninsula_bonus_worlds() -> Array:
+	# The 'peninsula bonus' field lets you add core worlds to systems with only one link.
+	# This adds a little flavor.
+	var peninsula_factions = []
+	var core_systems = []
+	for faction_id in factions:
+		var faction = factions[faction_id]
+		if faction["peninsula_bonus"]:
+			peninsula_factions.append(faction_id)
+	var i = 0
+	if peninsula_factions.size():
+		print("Assigning factions to systems with only one connection")
+		for system_id in systems:
+			var system = systems[system_id]
+			if system["links"].size() == 1 and not "faction" in system:
+				# TODO: Randomize, don't just iterate through
+				system["faction"] = peninsula_factions[i]
+				core_systems.append(system_id)
+				i += 1
+				if i == peninsula_factions.size():
+					i = 0
+	return core_systems
+
+func grow_faction_influence_from_core_worlds():
+	# TODO: This is obviously not optimal
+	print("Growing faction influence")
+	for faction_id in factions:
+		var faction = factions[faction_id]
+		for i in range(faction["systems_radius"]):
+			print("Full iteration: ", faction["name"], ", iteration: ", i)
+			var marked_systems = []
+			for system_id in systems:
+				var system = systems[system_id]
+				for link_id in system["links"]:
+					var link_system = systems[link_id]
+					if "faction" in link_system and link_system["faction"] == faction_id:
+						marked_systems.append(system_id)
+						break
+			for system_id in marked_systems:
+				var system = systems[system_id]
+				system["faction"] = faction_id
+				
+	print("Factions grown")
 
 func preprocess_system(system):
 	system["links"] = []
@@ -158,9 +221,20 @@ func preprocess_system(system):
 	
 	system["position"] = Vector2(system["System X"], system["System Y"])
 
+func ensure_link_reciprocity():
+	for system_id in systems:
+		var system = systems[system_id]
+		for link in system["links"]:
+			var link_sys = systems[link]
+			if not(system_id in link_sys["links"]):
+				link_sys["links"].append(system_id)
+
 func parse_color(color_text):
 	var color_parsed = color_text.split(",")
 	return Color(color_parsed[0], color_parsed[1], color_parsed[2])
+
+func parse_bool(caps_true_or_false):
+	return caps_true_or_false == "TRUE"
 
 func load_csv(csv):
 	var file = File.new()
