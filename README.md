@@ -12,4 +12,4 @@ Assets are [Onyx's old shipyard](https://archive.org/details/onyx_shipyard), CC 
 
 Uses the [TC Galaxy Generator](https://docs.google.com/spreadsheets/d/1kCABkT-AC6aOZoyEoub8jLrZgH8hXkeSQSwmnIXwMX8/edit#gid=1129594990) to generate galaxy.csv: 
 
-
+Contains a fork of Cyberfilth's [Fantasy Names Generator](https://github.com/cyberfilth/fantasy-names-generator)

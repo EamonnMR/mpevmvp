@@ -27,6 +27,7 @@ ServerTracker="*res://lib/server_tracker.gd"
 Game="*res://game.gd"
 Server="*res://server.gd"
 Client="*res://client.gd"
+Markov="*res://lib/markov.gd"
 
 [input]
 
