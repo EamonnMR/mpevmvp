@@ -348,7 +348,7 @@ func _level_from_data(level_name, dat):
 			)
 			spob.name = dat[prfx + "Name"]
 			if inhabited and not (spob_types[spob.spob_type]["uninhabited"] == "TRUE"):
-				spob.commodities = random_comodities(int(spob.spob_id))
+				spob.commodities = random_comodities(level_id)
 				spob.faction = dat["faction"]
 				inhabited_spob_found = true
 			level.get_node("spobs").add_child(spob)
@@ -356,10 +356,10 @@ func _level_from_data(level_name, dat):
 	# Stations for systems with no useful spobs
 	if inhabited and not inhabited_spob_found:
 		var spob = planet_type.instance()
-		spob.spob_type = _select_spob_type(spob.spob_id, "Station")
+		spob.spob_type = _select_spob_type(level_id, "Station")
 		spob.position = Vector2(0,0)
 		spob.name = dat["System Name"] + " Station"
-		spob.commodities = random_comodities(int(spob.spob_id))
+		spob.commodities = random_comodities(level_id)
 		spob.faction = dat["faction"]
 		level.get_node("spobs").add_child(spob)
 		print("Added station: ", spob.name, " for faction: ", factions[spob.faction]["name"])
