@@ -7,12 +7,14 @@ export var kind: String
 export var biome: String
 export var desc: String
 export var commodities: Dictionary
+export var faction: String
+export var landable: bool
 
 # Things it gets from the corresponding spob_type directly (if available)
 var SPOB_STATS = [
 	"kind",
 	"biome",
-	"landing"
+	"landing",
 ]
 
 func _ready():
@@ -27,6 +29,7 @@ func _apply_stats():
 			set(stat, _data()[stat])
 	if not $Sprite.texture:
 		$Sprite.texture = _data()["sprite"]
+	landable = not (_data()["noland"] == "TRUE")
 
 func add_selection():
 	$Sprite.add_child(preload("res://interface/hud/Selection.tscn").instance())

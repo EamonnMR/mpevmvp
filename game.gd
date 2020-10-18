@@ -4,6 +4,7 @@ var ships = null
 var spob_types = null
 var commodities = null
 var factions = null
+var spobs = {}
 
 const INPUT = "input_nodes"
 const PLAY_AREA_RADIUS = 2000
@@ -31,7 +32,8 @@ const SPOB_TYPES_MAP = {
 	"Large Asteroid": "Moon",
 	"Moon": "Moon",
 	"Rock Ring": "Moon",
-	"Ice Ring": "Moon"
+	"Ice Ring": "Moon",
+	"Station": "Station"
 }
 
 var spob_types_grouped = {}
@@ -294,6 +296,8 @@ func random_comodities(id):
 	return spob_commodities
 
 func _level_from_data(level_name, dat):
+	var inhabited = "faction" in dat
+	var inhabited_spob_found = false
 	var level_id = int(level_name)
 	var SCALE = 1
 	var level = preload("res://gameplay/level.tscn").instance()
@@ -301,6 +305,10 @@ func _level_from_data(level_name, dat):
 	# Hack to deal with a bug in the galaxy generator script
 	# (see the conditional on bad IDs below)
 	var spob_counter = 10 * level_id
+	
+	# TODO: Stars
+	
+	# Planets from spreadsheet
 	for planet_num in [1,2,3]:
 		var prfx = "Planet %s " % str(planet_num)
 		if dat[prfx + "Exists?"] == "Exists":
@@ -317,8 +325,13 @@ func _level_from_data(level_name, dat):
 				dat[prfx + "Y"]
 			)
 			spob.name = dat[prfx + "Name"]
-			spob.commodities = random_comodities(int(spob.spob_id))
+			if inhabited and not (spob_types[spob.spob_type]["uninhabited"] == "TRUE"):
+				spob.commodities = random_comodities(int(spob.spob_id))
+				spob.faction = dat["faction"]
+				inhabited_spob_found = true
 			level.get_node("spobs").add_child(spob)
+			
+	# Moons from spreadsheet
 	for moon_num in [1,2]:
 		var prfx = "Moon %d " % moon_num
 		if dat[prfx + "Exists?"] == "Exists" and _is_moon(dat[prfx + "Type"]):
@@ -334,8 +347,22 @@ func _level_from_data(level_name, dat):
 				dat[prfx + "Y"]
 			)
 			spob.name = dat[prfx + "Name"]
-			spob.commodities = random_comodities(int(spob.spob_id))
+			if inhabited and not (spob_types[spob.spob_type]["uninhabited"] == "TRUE"):
+				spob.commodities = random_comodities(int(spob.spob_id))
+				spob.faction = dat["faction"]
+				inhabited_spob_found = true
 			level.get_node("spobs").add_child(spob)
+	
+	# Stations for systems with no useful spobs
+	if inhabited and not inhabited_spob_found:
+		var spob = planet_type.instance()
+		spob.spob_type = _select_spob_type(spob.spob_id, "Station")
+		spob.position = Vector2(0,0)
+		spob.name = dat["System Name"] + " Station"
+		spob.commodities = random_comodities(int(spob.spob_id))
+		spob.faction = dat["faction"]
+		level.get_node("spobs").add_child(spob)
+		print("Added station: ", spob.name, " for faction: ", factions[spob.faction]["name"])
 	return level
 
 func calculate_system_distances():
