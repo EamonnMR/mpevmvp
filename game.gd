@@ -130,6 +130,7 @@ func populate_galaxy():
 	var core_worlds = randomly_assign_faction_core_worlds()
 	core_worlds += assign_peninsula_bonus_worlds()
 	grow_faction_influence_from_core_worlds()
+	assign_names_to_systems()
 	print("Galaxy populated")
 	
 func randomly_assign_faction_core_worlds() -> Array:
@@ -209,6 +210,14 @@ func grow_faction_influence_from_core_worlds():
 				system["faction"] = faction_id
 				
 	print("Factions grown")
+
+func assign_names_to_systems():
+	print("Assigning names to systems")
+	# Adding random names to systems
+	for system_id in systems:
+		var system = systems[system_id]
+		if "faction" in system:
+			system["System Name"] = Markov.get_random_name(factions[system["faction"]]["name"], int(system_id))
 
 func preprocess_system(system):
 	system["links"] = []

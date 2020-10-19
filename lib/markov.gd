@@ -1,3 +1,5 @@
+# Forked from From: https://github.com/cyberfilth/fantasy-names-generator/blob/master/Markov/Markov.gd
+
 #MIT License
 
 #Copyright (c) 2019 Chris Hawkins
@@ -12,21 +14,68 @@
 #The above copyright notice and this permission notice shall be included in all
 #copies or substantial portions of the Software.
 
-# From: https://github.com/cyberfilth/fantasy-names-generator/blob/master/Markov/Markov.gd
-
 extends Node
 
-var names = ['Adara', 'Adena', 'Adrianne', 'Alarice', 'Alvita', 'Amara', 'Ambika', 'Antonia', 'Araceli', 'Balandria', 'Basha',
-'Beryl', 'Bryn', 'Callia', 'Caryssa', 'Cassandra', 'Casondrah', 'Chatha', 'Ciara', 'Cynara', 'Cytheria', 'Dabria', 'Darcei',
-'Deandra', 'Deirdre', 'Delores', 'Desdomna', 'Devi', 'Dominique', 'Drucilla', 'Duvessa', 'Ebony', 'Ezzuh', 'Eohda', 'Fantine', 
-'Fuscienne', 'Farsha', 'Gabi', 'Gallia', 'Grokk', 'Hanna', 'Hedda', 'Jerica', 'Jetta', 'Joby', 'Kacila', 'Kagami', 'Kala', 'Kallie', 
-'Keelia', 'Kerry', 'Kimberly', 'Killian', 'Kory', 'Lilith', 'Lucretia', 'Lysha', 'Mercedes', 'Mia', 'Maura', 'Perdita', 'Quella',
-'Riona', 'Safiya', 'Salina', 'Severin', 'Sidonia', 'Sirena', 'Solita', 'Tempest', 'Thea', 'Treva', 'Trista', 'Vala', 'Winta', 'Xarka',
-'Xena', 'Yuzz', 'Yara', 'Zakarr']
+var names = [
+"Etobicoke",
+"Laconia",
+"Furuseth",
+"Sanstuba",
+"Nassau",
+"Levar",
+"Crozier",
+"Kirkham",
+"Battle",
+"Pierre",
+"Winston",
+"Hairston",
+"Felder",
+"Shreve",
+"Bialik",
+"Lydian",
+"Merrimack",
+"Laconia",
+"Lyrell",
+"Harkham",
+"Sweckard",
+"Kecksburg",
+"Paducah",
+"Poplar",
+"Fallingwater",
+"Frostridge",
+"Aundrel",
+"Cantwell",
+"Rivest",
+"Fairhaven",
+"Nashua",
+"Laramide",
+"Tuckahoe",
+"Hopmeadow",
+"Tuolumne",
+"Coldwater",
+"Nightside",
+"Brokenhill",
+"Courthope",
+"Courci",
+"Scanlon",
+"Dust",
+"Stavros",
+"Fonseca",
+"Inverness",
+"Holcomb",
+"Renbrook",
+"Quinten",
+"Zero",
+"Xavarian",
+"Yonkers",
+"Juniper"
+]
 
 var alphabet = ['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z']
 
 var markov = {}
+
+var rng = RandomNumberGenerator.new()
 
 func loadNames(markov, names):
 	for name in names:
@@ -50,7 +99,7 @@ func getName (firstChar, minLength, maxLength):
 	if firstChar:
 		name += firstChar
 	else:
-		var random_letter = alphabet[roll(0, alphabet.size()-1)]
+		var random_letter = alphabet[rng.randi_range(0, alphabet.size()-1)]
 		name += random_letter
 	while count < maxLength:
 		var new_last = name.length()-1
@@ -65,21 +114,14 @@ func getName (firstChar, minLength, maxLength):
 
 func getNextLetter(letter):
 	var thisList = markov[letter]
-	return thisList[roll(0, thisList.size()-1)]
-
-# Random number generator
-func roll(l,h):
-	return int(round(rand_range(l,h)))
+	return thisList[rng.randi_range(0, thisList.size()-1)]
 
 func _ready():
-	randomize()
 	loadNames(markov, names)
-	var populated_list = ""
-	var new_name = ""
-	for i in range(20):
-		var random_letter = alphabet[roll(0, alphabet.size()-1)]
-		new_name = getName(random_letter, 4, 7)
-		new_name = new_name.capitalize()
-		populated_list += new_name+"\n"
-	print("Markov Test: ")
-	print(populated_list)
+
+func get_random_name(_list: String, seed_value: int) -> String:
+	rng.seed = seed_value
+	var random_letter = alphabet[rng.randi_range(0, alphabet.size()-1)]
+	var new_name = getName(random_letter, 4, 7)
+	new_name = new_name.capitalize()
+	return new_name
