@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/gas_world_4.png-441801b46ed8cd267a91fa8e0d8d66e0.stex"
+path="res://.import/gas_giant_2.png-261abe711337de25ee3b8d1eaebb464b.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://sprites/gas_world_4.png"
-dest_files=[ "res://.import/gas_world_4.png-441801b46ed8cd267a91fa8e0d8d66e0.stex" ]
+source_file="res://sprites/emr_cc_by/gas_giant_2.png"
+dest_files=[ "res://.import/gas_giant_2.png-261abe711337de25ee3b8d1eaebb464b.stex" ]
 
 [params]
 

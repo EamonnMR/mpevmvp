@@ -31,10 +31,13 @@ id,sprite,landing,kind,biome,noland,uninhabited
 29,res://sprites/onyx_cc_nc/spobs/Moon8.png,res://sprites/onyx_cc_nc/landing/30.png,Moon,Metallic,,
 30,res://sprites/onyx_cc_nc/spobs/Moon9.png,res://sprites/onyx_cc_nc/landing/31.png,Moon,Rocky,,
 31,res://sprites/onyx_cc_nc/spobs/Rings.png,res://sprites/onyx_cc_nc/landing/21.png,Planetary System,Ringed,,
-32,res://sprites/gas_world_3.png,res://sprites/misc_pd/summer_above_the_clouds.png,Gas_Giant,Ammonia,TRUE,TRUE
-33,res://sprites/gas_world_4.png,res://sprites/misc_pd/above_the_clouds.png,Gas_Giant,Hydrosulfide,TRUE,TRUE
-34,res://sprites/onyx_cc_nc/spobs/onering.png,res://sprites/onyx_cc_nc/landing/22.png,Station,Habitat,,
-35,res://sprites/onyx_cc_nc/spobs/tworing.png,res://sprites/onyx_cc_nc/landing/23.png,Station,Habitat,,
-36,res://sprites/onyx_cc_nc/spobs/fouring.png,res://sprites/onyx_cc_nc/landing/24.png,Station,Habitat,,
-37,res://sprites/onyx_cc_nc/spobs/olstation.png,res://sprites/onyx_cc_nc/landing/25.png,Station,Battle,,
-38,res://sprites/onyx_cc_nc/spobs/medstation.png,res://sprites/onyx_cc_nc/landing/32.png,Station,Medical,,
+32,res://sprites/onyx_cc_nc/spobs/onering.png,res://sprites/onyx_cc_nc/landing/22.png,Station,Habitat,,
+33,res://sprites/onyx_cc_nc/spobs/tworing.png,res://sprites/onyx_cc_nc/landing/23.png,Station,Habitat,,
+34,res://sprites/onyx_cc_nc/spobs/fouring.png,res://sprites/onyx_cc_nc/landing/24.png,Station,Habitat,,
+35,res://sprites/onyx_cc_nc/spobs/olstation.png,res://sprites/onyx_cc_nc/landing/25.png,Station,Battle,,
+36,res://sprites/onyx_cc_nc/spobs/medstation.png,res://sprites/onyx_cc_nc/landing/32.png,Station,Medical,,
+37,res://sprites/emr_cc_by/gas_giant_1_other_side_2.png,res://sprites/misc_pd/summer_above_the_clouds.png,Gas_Giant,Ammonia,TRUE,TRUE
+38,res://sprites/emr_cc_by/gas_giant_2_view_2.png,res://sprites/misc_pd/above_the_clouds.png,Gas_Giant,Hydrosulfide,TRUE,TRUE
+39,res://sprites/emr_cc_by/gas_giant_2.png,res://sprites/misc_pd/summer_above_the_clouds.png,Gas_Giant,Ammonia,TRUE,TRUE
+40,res://sprites/emr_cc_by/gas_giant_3.png,res://sprites/misc_pd/above_the_clouds.png,Gas_Giant,Hydrosulfide,TRUE,TRUE
+40,res://sprites/emr_cc_by/gas_giant_4.png,res://sprites/misc_pd/above_the_clouds.png,Gas_Giant,Hydrosulfide,TRUE,TRUE
