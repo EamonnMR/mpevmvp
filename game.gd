@@ -75,6 +75,7 @@ func load_factions():
 	var boolean_fields = [
 		"is_default",
 		"spawn_anywhere",
+		"host_spawn_anywhere",
 		"peninsula_bonus"
 	]
 	
@@ -130,6 +131,7 @@ func populate_galaxy():
 	var core_worlds = randomly_assign_faction_core_worlds()
 	core_worlds += assign_peninsula_bonus_worlds()
 	grow_faction_influence_from_core_worlds()
+	grow_npc_spawns()
 	assign_names_to_systems()
 	print("Galaxy populated")
 	
@@ -162,6 +164,7 @@ func randomly_assign_faction_core_worlds() -> Array:
 			else:
 				systems[system_id]["faction"] = faction_id
 				systems[system_id]["core"] = true
+				add_npc_spawn(systems[system_id], faction_id)
 				already_selected.append(system_id)
 				i += 1
 	print("Core worlds assigned")
@@ -184,6 +187,7 @@ func assign_peninsula_bonus_worlds() -> Array:
 			if system["links"].size() == 1 and not "faction" in system:
 				# TODO: Randomize, don't just iterate through
 				system["faction"] = peninsula_factions[i]
+				add_npc_spawn(system, peninsula_factions[i])
 				core_systems.append(system_id)
 				i += 1
 				if i == peninsula_factions.size():
@@ -208,16 +212,60 @@ func grow_faction_influence_from_core_worlds():
 			for system_id in marked_systems:
 				var system = systems[system_id]
 				system["faction"] = faction_id
+				add_npc_spawn(system, faction_id)
 				
 	print("Factions grown")
+
+func add_npc_spawn(system, faction_id):
+	if "npc_spawns" in system:
+		if not (faction_id in system["npc_spawns"]):
+			system["npc_spawns"].append(faction_id)
+	else:
+		system["npc_spawns"] = [faction_id]
+
+func grow_npc_spawns():
+	# TODO: This is also obviously not optimal
+	print("Growing faction spawns")
+	for faction_id in factions:
+		var faction = factions[faction_id]
+		for i in range(faction["npc_radius"]):
+			var marked_systems = []
+			for system_id in systems:
+				var system = systems[system_id]
+				for link_id in system["links"]:
+					var link_system = systems[link_id]
+					if "npc_spawns" in link_system and faction_id in link_system["npc_spawns"]:
+						marked_systems.append(system_id)
+						break
+			for system_id in marked_systems:
+				add_npc_spawn(systems[system_id], faction_id)
+	
+	print("Adding 'spawn anywhere' spawns")
+	
+	var spawn_anywhere_factions = []
+	var spawn_anywhere_hosts = []
+	for faction_id in factions:
+		var faction = factions[faction_id]
+		if faction["spawn_anywhere"]:
+			spawn_anywhere_factions.append(faction_id)
+		if faction["host_spawn_anywhere"]:
+			spawn_anywhere_hosts.append(faction_id)
+	
+	for system_id in systems:
+		var system = systems[system_id]
+		if "npc_spawns" in system:
+			for faction_id in spawn_anywhere_hosts:
+				if faction_id in system["npc_spawns"]:
+					system["npc_spawns"] += spawn_anywhere_factions
+					break
 
 func assign_names_to_systems():
 	print("Assigning names to systems")
 	# Adding random names to systems
 	for system_id in systems:
 		var system = systems[system_id]
-		if "faction" in system:
-			system["System Name"] = Markov.get_random_name(factions[system["faction"]]["name"], int(system_id))
+		if "npc_spawns" in system:
+			system["System Name"] = Markov.get_random_name("", int(system_id))
 
 func preprocess_system(system):
 	system["links"] = []
@@ -371,7 +419,7 @@ func _level_from_data(level_name, dat):
 		spob.commodities = random_comodities(level_id)
 		spob.faction = dat["faction"]
 		level.get_node("spobs").add_child(spob)
-		print("Added station: ", spob.name, " for faction: ", factions[spob.faction]["name"])
+		# print("Added station: ", spob.name, " for faction: ", factions[spob.faction]["name"])
 	return level
 
 func calculate_system_distances():

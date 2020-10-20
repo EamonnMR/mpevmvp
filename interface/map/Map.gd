@@ -6,7 +6,8 @@ func _ready():
 	for item in [
 		"Disposition",
 		"Distance from core",
-		"Political"
+		"Political",
+		"Influence"
 	]:
 		$Mode.add_item(item)
 	
