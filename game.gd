@@ -5,6 +5,7 @@ var spob_types = null
 var commodities = null
 var factions = null
 var spobs = {}
+var ships_by_faction = {}
 
 const INPUT = "input_nodes"
 const PLAY_AREA_RADIUS = 2000
@@ -36,8 +37,6 @@ const SPOB_TYPES_MAP = {
 	"Station": "Station"
 }
 
-var spob_types_grouped = {}
-
 func get_multiverse():
 	return get_tree().get_root().get_node("Multiverse")
 
@@ -49,16 +48,19 @@ func _ready():
 	call_deferred("load_galaxy")
 	call_deferred("load_ships")
 
+func random_select(items: Array):
+	# Don't use this for procgen, because it is unseeded
+	randomize()
+	return items[randi() % items.size()]
+
 func load_spob_types():
 	spob_types = load_csv("res://data/spob_types.csv")
 	for spob_type_id in spob_types:
 		var spob_type = spob_types[spob_type_id]
 		spob_type["sprite"] = load(spob_type["sprite"]) if spob_type["sprite"] else null
 		spob_type["landing"] = load(spob_type["landing"]) if spob_type["landing"] else null
-		if spob_type["kind"] in spob_types_grouped:
-			spob_types_grouped[spob_type["kind"]].append(spob_type_id)
-		else:
-			spob_types_grouped[spob_type["kind"]] = [spob_type_id]
+	
+	Procgen.index_spob_types()
 			
 func load_commodities():
 	commodities = load_csv("res://data/trade.csv")
@@ -92,6 +94,12 @@ func load_ships():
 	ships = load_csv("res://data/ships.csv")
 	for i in ships:
 		ships[i]["scene"] = load("res://gameplay/ships/" + ships[i]["scene"] + ".tscn")
+		var faction = ships[i]["faction"]
+		if faction in ships_by_faction:
+			ships_by_faction[faction].append(ships[i]["id"])
+		else:
+			ships_by_faction[faction] = [ships[i]["id"]]
+	print(ships_by_faction)
 
 func get_ship(ship_type, player_id):
 	var type = str(ship_type)
@@ -101,7 +109,7 @@ func get_ship(ship_type, player_id):
 	return ship
 
 # TODO: Refactor obv.
-func get_npc_ship(ship_type):
+func get_npc_ship(ship_type, faction):
 	var type = str(ship_type)
 	var ship = ships[type]["scene"].instance()
 	ship.type = type
@@ -114,158 +122,7 @@ func load_galaxy():
 		preprocess_system(systems[system])
 	ensure_link_reciprocity()
 	print("Galaxy Loaded")
-	populate_galaxy()
-
-func system_distance_comparitor(l_id, r_id) -> bool:
-	var lval = systems[l_id]["distance"]
-	var rval = systems[r_id]["distance"]
-	return lval < rval
-
-func systems_sorted_by_distance() -> Array:
-	var system_ids = systems.keys()
-	system_ids.sort_custom(self, "system_distance_comparitor")
-	return system_ids
-
-func populate_galaxy():
-	print("Populating Galaxy")
-	var core_worlds = randomly_assign_faction_core_worlds()
-	core_worlds += assign_peninsula_bonus_worlds()
-	grow_faction_influence_from_core_worlds()
-	grow_npc_spawns()
-	assign_names_to_systems()
-	print("Galaxy populated")
-	
-func randomly_assign_faction_core_worlds() -> Array:
-	print("Randomly Assigning core worlds ")
-	calculate_system_distances()
-	var sorted = systems_sorted_by_distance()
-	var sorted_reverse = sorted.duplicate().invert()
-	var rng = RandomNumberGenerator.new()
-	rng.seed = sorted.hash()
-	var already_selected = []
-	for faction_id in factions:
-		var faction = factions[faction_id]
-		var i = 0
-		while i < int(int(faction["core_systems_per_500"]) * (systems.size() / 500)):
-			var rnd_result = abs(rng.randfn(0.0))
-			var scale = int(faction["favor_galactic_center"])
-			var scaled_rnd_result = 0
-			if scale:
-				scaled_rnd_result = int(rnd_result * (sorted.size() / scale))
-			else:
-				scaled_rnd_result = rng.randi_range(0, sorted.size())
-			if scaled_rnd_result > sorted.size():
-				print("Long tail too long: ", rnd_result, " (", scaled_rnd_result, ")")
-				continue
-			var system_id = sorted[scaled_rnd_result]
-			if system_id in already_selected:
-				print("Collision: ", system_id)
-				continue
-			else:
-				systems[system_id]["faction"] = faction_id
-				systems[system_id]["core"] = true
-				add_npc_spawn(systems[system_id], faction_id)
-				already_selected.append(system_id)
-				i += 1
-	print("Core worlds assigned")
-	return already_selected
-
-func assign_peninsula_bonus_worlds() -> Array:
-	# The 'peninsula bonus' field lets you add core worlds to systems with only one link.
-	# This adds a little flavor.
-	var peninsula_factions = []
-	var core_systems = []
-	for faction_id in factions:
-		var faction = factions[faction_id]
-		if faction["peninsula_bonus"]:
-			peninsula_factions.append(faction_id)
-	var i = 0
-	if peninsula_factions.size():
-		print("Assigning factions to systems with only one connection")
-		for system_id in systems:
-			var system = systems[system_id]
-			if system["links"].size() == 1 and not "faction" in system:
-				# TODO: Randomize, don't just iterate through
-				system["faction"] = peninsula_factions[i]
-				add_npc_spawn(system, peninsula_factions[i])
-				core_systems.append(system_id)
-				i += 1
-				if i == peninsula_factions.size():
-					i = 0
-	return core_systems
-
-func grow_faction_influence_from_core_worlds():
-	# TODO: This is obviously not optimal
-	print("Growing faction influence")
-	for faction_id in factions:
-		var faction = factions[faction_id]
-		for i in range(faction["systems_radius"]):
-			print("Full iteration: ", faction["name"], ", iteration: ", i)
-			var marked_systems = []
-			for system_id in systems:
-				var system = systems[system_id]
-				for link_id in system["links"]:
-					var link_system = systems[link_id]
-					if "faction" in link_system and link_system["faction"] == faction_id:
-						marked_systems.append(system_id)
-						break
-			for system_id in marked_systems:
-				var system = systems[system_id]
-				system["faction"] = faction_id
-				add_npc_spawn(system, faction_id)
-				
-	print("Factions grown")
-
-func add_npc_spawn(system, faction_id):
-	if "npc_spawns" in system:
-		if not (faction_id in system["npc_spawns"]):
-			system["npc_spawns"].append(faction_id)
-	else:
-		system["npc_spawns"] = [faction_id]
-
-func grow_npc_spawns():
-	# TODO: This is also obviously not optimal
-	print("Growing faction spawns")
-	for faction_id in factions:
-		var faction = factions[faction_id]
-		for i in range(faction["npc_radius"]):
-			var marked_systems = []
-			for system_id in systems:
-				var system = systems[system_id]
-				for link_id in system["links"]:
-					var link_system = systems[link_id]
-					if "npc_spawns" in link_system and faction_id in link_system["npc_spawns"]:
-						marked_systems.append(system_id)
-						break
-			for system_id in marked_systems:
-				add_npc_spawn(systems[system_id], faction_id)
-	
-	print("Adding 'spawn anywhere' spawns")
-	
-	var spawn_anywhere_factions = []
-	var spawn_anywhere_hosts = []
-	for faction_id in factions:
-		var faction = factions[faction_id]
-		if faction["spawn_anywhere"]:
-			spawn_anywhere_factions.append(faction_id)
-		if faction["host_spawn_anywhere"]:
-			spawn_anywhere_hosts.append(faction_id)
-	
-	for system_id in systems:
-		var system = systems[system_id]
-		if "npc_spawns" in system:
-			for faction_id in spawn_anywhere_hosts:
-				if faction_id in system["npc_spawns"]:
-					system["npc_spawns"] += spawn_anywhere_factions
-					break
-
-func assign_names_to_systems():
-	print("Assigning names to systems")
-	# Adding random names to systems
-	for system_id in systems:
-		var system = systems[system_id]
-		if "npc_spawns" in system:
-			system["System Name"] = Markov.get_random_name("", int(system_id))
+	Procgen.populate_galaxy()
 
 func preprocess_system(system):
 	system["links"] = []
@@ -324,40 +181,14 @@ func _is_moon(moon_type):
 	# So we get this hack
 	return ("Moon" in moon_type) or ("moon" in moon_type)
 
-func _select_spob_type(id, basic_type):
-	var rng_value = rand_seed(int(id))[0]
-	var mapped_type = SPOB_TYPES_MAP[basic_type]
-	var spob_type_group = spob_types_grouped[mapped_type]
-	return spob_type_group[abs(rng_value % spob_type_group.size())]
-	
-func random_comodities(id):
-	var spob_commodities = {}
-	var rng_seed = int(id)
-	for comodity_id in commodities:
-		# This code deals with making sure it's random, but also
-		# replicated exactly the same way on every start
-		var comodity = commodities[comodity_id]
-		var result = rand_seed(rng_seed)
-		var price_rng = result[0]
-		rng_seed = result[1]
-		result = rand_seed(rng_seed)
-		var presence_rng = result[0]
-		rng_seed = result[1]
-		
-		if abs(presence_rng % 2):
-			spob_commodities[comodity_id] = {
-				0: price_factors.LOW,
-				1: price_factors.MED,
-				2: price_factors.HIGH,
-			}[abs(price_rng % 3)]
-	return spob_commodities
-
 func _level_from_data(level_name, dat):
 	var inhabited = "faction" in dat
 	var inhabited_spob_found = false
 	var level_id = int(level_name)
 	var SCALE = 1
 	var level = preload("res://gameplay/level.tscn").instance()
+	level.dat = dat
+	level.level_id = level_id
 	var planet_type = preload("res://environment/spob.tscn")
 	# Hack to deal with a bug in the galaxy generator script
 	# (see the conditional on bad IDs below)
@@ -376,14 +207,14 @@ func _level_from_data(level_name, dat):
 				spob_counter += 1
 				spob.spob_id = str(spob_counter)
 			var basic_type = dat[prfx + "Basic Type"]
-			spob.spob_type = _select_spob_type(spob.spob_id, basic_type)
+			spob.spob_type = Procgen.select_spob_type(spob.spob_id, basic_type)
 			spob.position = SCALE * Vector2(
 				dat[prfx + "X"],
 				dat[prfx + "Y"]
 			)
 			spob.name = dat[prfx + "Name"]
 			if inhabited and not (spob_types[spob.spob_type]["uninhabited"] == "TRUE"):
-				spob.commodities = random_comodities(int(spob.spob_id))
+				spob.commodities = Procgen.random_comodities(int(spob.spob_id))
 				spob.faction = dat["faction"]
 				inhabited_spob_found = true
 			level.get_node("spobs").add_child(spob)
@@ -398,14 +229,14 @@ func _level_from_data(level_name, dat):
 			if spob.spob_id == "#NUM!":
 				spob_counter += 1
 				spob.spob_id = str(spob_counter)
-			spob.spob_type = _select_spob_type(spob.spob_id, "Moon")
+			spob.spob_type = Procgen.select_spob_type(spob.spob_id, "Moon")
 			spob.position = SCALE * Vector2(
 				dat[prfx + "X"],
 				dat[prfx + "Y"]
 			)
 			spob.name = dat[prfx + "Name"]
 			if inhabited and not (spob_types[spob.spob_type]["uninhabited"] == "TRUE"):
-				spob.commodities = random_comodities(level_id)
+				spob.commodities = Procgen.random_comodities(level_id)
 				spob.faction = dat["faction"]
 				inhabited_spob_found = true
 			level.get_node("spobs").add_child(spob)
@@ -413,32 +244,11 @@ func _level_from_data(level_name, dat):
 	# Stations for systems with no useful spobs
 	if inhabited and not inhabited_spob_found:
 		var spob = planet_type.instance()
-		spob.spob_type = _select_spob_type(level_id, "Station")
+		spob.spob_type = Procgen.select_spob_type(level_id, "Station")
 		spob.position = Vector2(0,0)
 		spob.name = dat["System Name"] + " Station"
-		spob.commodities = random_comodities(level_id)
+		spob.commodities = Procgen.random_comodities(level_id)
 		spob.faction = dat["faction"]
 		level.get_node("spobs").add_child(spob)
 		# print("Added station: ", spob.name, " for faction: ", factions[spob.faction]["name"])
 	return level
-
-func calculate_system_distances():
-	var sum_position = Vector2(0,0)
-	var max_position = Vector2(0,0)
-	
-	for system_id in systems:
-		var system = systems[system_id]
-		sum_position += system["position"]
-		
-	var mean_position = sum_position / systems.size()
-
-	var max_distance = 0
-	for system_id in systems:
-		var system = systems[system_id]
-		system["distance"] = mean_position.distance_to(system["position"])
-		if system["distance"] > max_distance:
-			max_distance = system["distance"]
-		
-	for system_id in systems:
-		var system = systems[system_id]
-		system["distance_normalized"] = system["distance"] / max_distance
