@@ -1,5 +1,7 @@
 extends Node2D
 
+export var level_id: String
+export var dat: Dictionary
 var WAIT_TIME = 5
 
 # handle NPC spawning and despawning
@@ -7,11 +9,19 @@ var WAIT_TIME = 5
 # Maybe despawn empty systems?
 func _physics_process(delta):
 	# TODO: This belongs in a timer
-	if is_network_master():
+	if is_network_master() and "npc_spawns" in dat:
 		if $players.get_children().size() > 0:
-			if $npcs.get_children().size() < 1:
-				print("System: ", get_node("../").name, " needs an NPC, spawning it")
-				Server.spawn_npc(get_node("../").name)
+			if $npcs.get_children().size() < 4:
+				randomize()
+				var faction_id = dat["npc_spawns"][randi() % dat["npc_spawns"].size()]
+				var faction = Game.factions[faction_id]
+				print("System: ", get_node("../").name, " needs an NPC, spawn a ", faction["name"])
+				var ship_type = Game.random_select(Game.ships_by_faction[faction_id])
+				randomize()
+				var x_pos = randi() % 20
+				randomize()
+				var y_pos = randi() % 20
+				Server.spawn_npc(get_node("../").name, ship_type, faction_id)
 		else:
 			for child in $npcs.get_children():
 				$npcs.remove_child(child)

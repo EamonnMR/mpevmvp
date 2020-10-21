@@ -24,7 +24,7 @@ func _setup_net_client(ip, port):
 	get_tree().set_network_peer(client)
 	client_id = get_tree().get_network_unique_id()
 	print("Your player ID is: ", client_id)
-	
+
 
 func _setup_client_world():
 	var root = get_tree().get_root()

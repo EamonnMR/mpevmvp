@@ -29,6 +29,7 @@ Server="*res://server.gd"
 Client="*res://client.gd"
 Markov="*res://lib/markov.gd"
 Procgen="*res://Procgen.gd"
+Uuid="*res://lib/uuid.gd"
 
 [input]
 

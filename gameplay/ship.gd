@@ -40,6 +40,7 @@ export var money = 0
 export var type: String
 
 export var team_set = []
+export var faction = ""
 
 signal destroyed
 signal cargo_updated

@@ -132,7 +132,6 @@ remote func purchase_ship(id):
 	var player_id = get_tree().get_rpc_sender_id()
 	players[player_id]["ship_type"] = id
 	var level = get_level_for_player(player_id)
-	level.print_tree_pretty()
 	var player = level.get_node("players/" + str(player_id))
 	var new_player = create_ship(player_id, id, player.position)
 	new_player.bulk_cargo = player.bulk_cargo
@@ -180,11 +179,12 @@ func spawn_player(player_id, level="128"):
 	var ship = create_ship(player_id, players[player_id]["ship_type"], Vector2(0.0, 0.0), SPAWN_LEVEL, players[player_id]["money"])
 	send_entity(get_level(SPAWN_LEVEL), "players", ship)
 	
-func spawn_npc(level):
+func spawn_npc(level, type, faction):
 	print("Server.spawn: ")
 	print("level: ", level, " (", get_level(level), ")")
-	var ship = create_npc("0", Vector2(0.0, 0.0), level)
-	ship.team_set = ["pirates"]
+	var ship = create_npc(type, faction, Vector2(rand_range(-500,500), rand_range(-500,500)), level)
+	ship.team_set = [faction]
+	ship.faction = faction
 	ship.money = ship.get_npc_carried_money()
 	send_entity(get_level(level), "npcs", ship)
 
@@ -197,19 +197,29 @@ func create_ship(player_id, type, position, level=null, money=0):
 	ship.team_set = [player_id]
 	ship.money = money
 	return ship
-	
-func create_npc(type, position, level=null):
+
+func create_npc(type, faction, position, level=null):
 	print("Server Spawn Ship on level: ", level)
-	var ship = Game.get_npc_ship(type)
+	var ship = Game.get_npc_ship(type, faction)
 	ship.add_child(preload("res://gameplay/AI.tscn").instance())
 	ship.team_set = ["pirates"]
+	# So, there's a bit of a story here.
+	# If you just let it auto assign a name, it will be something like
+	# @ship@nn@
+	# However, if you assign a name with `.name = ` that contains `@`
+	# the `@` will be ignored!
+	# The client name needs to match the server name, so we can't use the
+	# auto-assigned @ names.
+	# If this proves to be inefficient, it's probably fine to only generate th
+	# first two or three characters or so and verify that it does not already
+	# exist in the system.
+	ship.name = Uuid.v4()
 	if level:
 		get_level(level).get_node("npcs").add_child(ship)
 	ship.position = position
 	return ship
 	
 func fire_shot(ship):
-	# print("Server.fire_shot")
 	var shot = ship.get_shot()
 	shot.set_network_master(1)
 	ship.get_level().get_node("world/shots").add_child(shot)
@@ -243,5 +253,3 @@ func _is_player_alive(id):
 func _get_player_node(id):
 	var level = get_level_for_player(id)
 	return level.get_node("players/" + str(id))
-
-
