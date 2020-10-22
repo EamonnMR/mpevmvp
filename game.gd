@@ -183,6 +183,7 @@ func _is_moon(moon_type):
 
 func _level_from_data(level_name, dat):
 	var inhabited = "faction" in dat
+	var near_inhabited = inhabited or "npc_spawns" in dat
 	var inhabited_spob_found = false
 	var level_id = int(level_name)
 	var SCALE = 1
@@ -212,7 +213,9 @@ func _level_from_data(level_name, dat):
 				dat[prfx + "X"],
 				dat[prfx + "Y"]
 			)
-			spob.name = dat[prfx + "Name"]
+			spob.name = Markov.get_random_name( "",
+				systems.size() + (planet_num + 100 * int(level_name))
+			) if near_inhabited else dat[prfx + "Name"]
 			if inhabited and not (spob_types[spob.spob_type]["uninhabited"] == "TRUE"):
 				spob.commodities = Procgen.random_comodities(int(spob.spob_id))
 				spob.faction = dat["faction"]
@@ -234,7 +237,9 @@ func _level_from_data(level_name, dat):
 				dat[prfx + "X"],
 				dat[prfx + "Y"]
 			)
-			spob.name = dat[prfx + "Name"]
+			spob.name = Markov.get_random_name( "",
+				systems.size() + 3 + (moon_num + 100 * int(level_name))
+			) if near_inhabited else dat[prfx + "Name"]
 			if inhabited and not (spob_types[spob.spob_type]["uninhabited"] == "TRUE"):
 				spob.commodities = Procgen.random_comodities(level_id)
 				spob.faction = dat["faction"]

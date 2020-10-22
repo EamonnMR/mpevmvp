@@ -124,4 +124,5 @@ func get_random_name(_list: String, seed_value: int) -> String:
 	var random_letter = alphabet[rng.randi_range(0, alphabet.size()-1)]
 	var new_name = getName(random_letter, 4, 7)
 	new_name = new_name.capitalize()
+	# print("Seed: ", seed_value, " Result: ", new_name)
 	return new_name
