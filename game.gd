@@ -27,16 +27,6 @@ var comodity_price_factor_names = {
 	price_factors.HIGH: "high"
 }
 
-const SPOB_TYPES_MAP = {
-	"Gas Giant": "Gas_Giant",
-	"Rocky Planet": "Planet",
-	"Large Asteroid": "Moon",
-	"Moon": "Moon",
-	"Rock Ring": "Moon",
-	"Ice Ring": "Moon",
-	"Station": "Station"
-}
-
 func get_multiverse():
 	return get_tree().get_root().get_node("Multiverse")
 
@@ -74,11 +64,18 @@ func load_commodities():
 		}
 		
 func load_factions():
+	# TODO: Support this kind of parsing out of the box, in load_csv maybe
+	# as a template somehow?
 	var boolean_fields = [
 		"is_default",
 		"spawn_anywhere",
 		"host_spawn_anywhere",
 		"peninsula_bonus"
+	]
+	
+	var int_array_fields = [
+		"allies",
+		"enemies"
 	]
 	
 	factions = load_csv("res://data/factions.csv")
@@ -89,6 +86,9 @@ func load_factions():
 		
 		for field in boolean_fields:
 			faction[field] = parse_bool(faction[field])
+			
+		for field in int_array_fields:
+			faction[field] = parse_int_array(faction[field])
 		
 func load_ships():
 	ships = load_csv("res://data/ships.csv")
@@ -112,6 +112,7 @@ func get_ship(ship_type, player_id):
 func get_npc_ship(ship_type, faction):
 	var type = str(ship_type)
 	var ship = ships[type]["scene"].instance()
+	ship.faction = faction
 	ship.type = type
 	return ship
 
@@ -145,9 +146,15 @@ func ensure_link_reciprocity():
 			if not(system_id in link_sys["links"]):
 				link_sys["links"].append(system_id)
 
-func parse_color(color_text):
+func parse_color(color_text) -> Color:
 	var color_parsed = color_text.split(",")
 	return Color(color_parsed[0], color_parsed[1], color_parsed[2])
+	
+func parse_int_array(text: String) -> Array:
+	var int_array = []
+	for i in text.split(" "):
+		int_array.append(int(i))
+	return int_array
 
 func parse_bool(caps_true_or_false):
 	return caps_true_or_false == "TRUE"

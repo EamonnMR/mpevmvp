@@ -1,8 +1,30 @@
+# Class with utility functions for procedurally generating a universe.
+
+# Because this is run on both the client and server, ensure that any random
+# functions used are seeded, and that the seed isn't just, say, the ID of the
+# spob or system. The goal is to have a unique universe for each galaxy.csv
+# that the spreadsheet generates.
+
 extends Node
 
 var spob_types_grouped = {}
 
+# Left side: types as seen by the spreadsheet
+# Right side: types as seen in spob_types.csv.
+# (Except station, which is in there because
+# we add stations directly)
+const SPOB_TYPES_MAP = {
+	"Gas Giant": "Gas_Giant",
+	"Rocky Planet": "Planet",
+	"Large Asteroid": "Moon",
+	"Moon": "Moon",
+	"Rock Ring": "Moon",
+	"Ice Ring": "Moon",
+	"Station": "Station"
+}
+
 func index_spob_types():
+	# Maps spob types by 'kind' (planet, moon, station, etc)
 	for spob_type_id in Game.spob_types:
 		var spob_type = Game.spob_types[spob_type_id]
 		if spob_type["kind"] in spob_types_grouped:
@@ -34,14 +56,14 @@ func random_comodities(id):
 
 func select_spob_type(id, basic_type):
 	var rng_value = rand_seed(int(id))[0]
-	var mapped_type = Game.SPOB_TYPES_MAP[basic_type]
+	var mapped_type = SPOB_TYPES_MAP[basic_type]
 	var spob_type_group = spob_types_grouped[mapped_type]
 	return spob_type_group[abs(rng_value % spob_type_group.size())]
 
 func populate_galaxy():
 	print("Populating Galaxy")
-	var core_worlds = randomly_assign_faction_core_worlds()
-	core_worlds += assign_peninsula_bonus_worlds()
+	var _core_worlds = randomly_assign_faction_core_worlds()
+	_core_worlds += assign_peninsula_bonus_worlds()
 	grow_faction_influence_from_core_worlds()
 	grow_npc_spawns()
 	assign_names_to_systems()
@@ -196,12 +218,10 @@ func grow_npc_spawns():
 
 func assign_names_to_systems():
 	print("Assigning names to systems")
-	# Adding random names to systems
 	for system_id in Game.systems:
 		var system = Game.systems[system_id]
 		if "npc_spawns" in system:
 			system["System Name"] = Markov.get_random_name("", int(system_id))
-
 
 func system_distance_comparitor(l_id, r_id) -> bool:
 	var lval = Game.systems[l_id]["distance"]

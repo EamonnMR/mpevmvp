@@ -19,6 +19,13 @@ var puppet_jumping = false
 var puppet_selected_system: String = ""
 var puppet_landing = false
 
+var faction_dat = null
+func _ready():
+	var parent = get_node("../")
+	print(parent.faction)
+	print(Game.factions)
+	faction_dat = Game.factions[parent.faction]
+
 func _physics_process(delta):
 	if not target or not is_instance_valid(target):  # or target_is_default:
 		target = _find_target()

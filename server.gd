@@ -184,7 +184,6 @@ func spawn_npc(level, type, faction):
 	print("level: ", level, " (", get_level(level), ")")
 	var ship = create_npc(type, faction, Vector2(rand_range(-500,500), rand_range(-500,500)), level)
 	ship.team_set = [faction]
-	ship.faction = faction
 	ship.money = ship.get_npc_carried_money()
 	send_entity(get_level(level), "npcs", ship)
 
