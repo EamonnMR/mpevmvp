@@ -8,6 +8,7 @@ puppet var puppet_thrusting = false
 puppet var puppet_jumping = false
 puppet var puppet_selected_system: String = ""
 puppet var puppet_landing = false
+puppet var puppet_braking = false
 
 var direction_change: int = 0
 var shooting = false

@@ -8,7 +8,8 @@ const SHIP_STATS = [
 	"turn",
 	"accel",
 	"max_cargo",
-	"price"
+	"price",
+	"standoff"
 ]
 
 var max_speed: float
@@ -16,11 +17,13 @@ var turn: float
 var accel: float
 var max_cargo: int
 var price: int
+var standoff: bool
 
 puppet var puppet_pos = Vector2(0,0)
 puppet var puppet_dir: float = 0
 puppet var puppet_thrusting = false
 puppet var puppet_velocity = Vector2(0,0)
+puppet var puppet_braking = false
 
 var direction: float = 0
 
@@ -29,8 +32,9 @@ var shot_cooldown = false
 var jumping = false
 var jump_cooldown = false
 var thrusting = false
+var braking = false
 var health = 20
-var puppet_health = 20
+puppet var puppet_health = 20
 var input_state: Node
 var landing = false
 
@@ -86,14 +90,16 @@ func _physics_process(delta):
 		
 		shooting = input_state.puppet_shooting
 		jumping = input_state.puppet_jumping
-		thrusting = input_state.puppet_thrusting
+		thrusting = input_state.puppet_thrusting and not input_state.puppet_braking
 		landing = input_state.puppet_landing
+		braking = input_state.puppet_braking
 		
 		handle_rotation(delta)
 		
 		rset_ex("puppet_dir", direction)
 		rset_ex("puppet_pos", position)
 		rset_ex("puppet_thrusting", thrusting)
+		rset_ex("puppet_braking", braking)
 		rset_ex("puppet_velocity", get_linear_velocity())
 		rset_ex_cond("puppet_health", health)
 		
@@ -109,6 +115,7 @@ func _physics_process(delta):
 	else:
 		direction = puppet_dir
 		thrusting = puppet_thrusting
+		braking = puppet_braking
 		position = puppet_pos # This should be in integrate forces, but for some reason the puppet pos variable does not work there
 		health = puppet_health
 	if (not is_network_master()):
@@ -145,7 +152,8 @@ func get_limited_velocity_with_thrust():
 	var vel = get_linear_velocity()
 	if thrusting:
 		vel += Vector2(accel, 0).rotated(direction)
-	
+	if braking:
+		vel -= (Vector2(min(accel, vel.length()), 0).rotated(vel.angle()))
 	if vel.length() > max_speed:
 		return Vector2(max_speed, 0).rotated(vel.angle())
 	else:

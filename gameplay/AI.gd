@@ -13,6 +13,7 @@ var ideal_face
 var puppet_direction_change: int = 0
 var puppet_shooting = false
 var puppet_thrusting = false
+var puppet_braking = false
 
 # I don't think we'll need these
 var puppet_jumping = false
@@ -37,6 +38,7 @@ func _physics_process(delta):
 		ideal_face = impulse[1]
 		puppet_shooting = _should_shoot()
 		puppet_thrusting = _should_thrust()
+		puppet_braking = _should_brake()
 
 func distance_comparitor(lval, rval):
 	# For sorting other nodes by how close they are
@@ -63,19 +65,32 @@ func _constrained_point(subject, target, current_rotation, max_turn, position):
 		return [ideal_turn, ideal_face]
 
 func _find_target():
+	var level = get_node("../../../")
 	var possible_targets = []
-	var players = get_node("../../../players").get_children()
+	var players = level.get_node("players").get_children()
+	# TODO: Probably filter before sorting here
 	possible_targets += players
-	# var npcs = get_node("../../../npcs").get_children()
-	# nodes += npcs
-	possible_targets.sort_custom(self, "distance_comparitor")
+	var npcs = level.get_node("npcs").get_children()
+	possible_targets += npcs
+	# possible_targets.sort_custom(self, "distance_comparitor")
+	print(possible_targets)
 	for possible_target in possible_targets:
 		if get_node("../").position.distance_to(possible_target.position) > max_target_distance:
-			break
-		#if "team" in node and node.team != get_node("../").team and is_instance_valid(node):
+			continue
+		if not possible_target.is_alive():
+			return false
 		if is_instance_valid(possible_target):
-			return possible_target
+			if is_faction_enemy(possible_target) or is_player_enemy(possible_target):
+				print("Decided to attack: ", possible_target, "(is player = ", possible_target.is_player(), ")")
+				return possible_target
 	return null
+
+func is_faction_enemy(ship):
+	ship.faction != faction_dat["id"]
+	return true
+
+func is_player_enemy(ship):
+	return true
 
 # TODO: Add a timer for this
 func _on_ai_rethink_timer_timeout():
@@ -102,6 +117,9 @@ func _facing_right_way_to_accel():
 
 func _far_enough_to_accel():
 	return get_node("../").position.distance_to(target.position) > accel_distance
+
+func _should_brake():
+	return get_node("../").standoff and target and is_instance_valid(target) and get_node("../").position.distance_to(target.position) < shoot_distance
 
 func _facing_within_margin(margin):
 	return ideal_face and abs(fmod(ideal_face - get_node("../").direction, 2 * PI)) < margin

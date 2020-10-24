@@ -6,3 +6,6 @@ func _ready():
 
 func is_alive():
 	return false
+
+func is_player():
+	return true

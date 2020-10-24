@@ -94,12 +94,12 @@ func load_ships():
 	ships = load_csv("res://data/ships.csv")
 	for i in ships:
 		ships[i]["scene"] = load("res://gameplay/ships/" + ships[i]["scene"] + ".tscn")
+		ships[i]["standoff"] = parse_bool(ships[i]["standoff"])
 		var faction = ships[i]["faction"]
 		if faction in ships_by_faction:
 			ships_by_faction[faction].append(ships[i]["id"])
 		else:
 			ships_by_faction[faction] = [ships[i]["id"]]
-	print(ships_by_faction)
 
 func get_ship(ship_type, player_id):
 	var type = str(ship_type)
