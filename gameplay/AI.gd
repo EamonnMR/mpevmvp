@@ -28,7 +28,7 @@ func _ready():
 	faction_dat = Game.factions[parent.faction]
 
 func _physics_process(delta):
-	if not target or not is_instance_valid(target):  # or target_is_default:
+	if not target or not is_instance_valid(target):  # or is idling:
 		target = _find_target()
 	puppet_direction_change = 0
 	ideal_face = null
@@ -72,22 +72,22 @@ func _find_target():
 	possible_targets += players
 	var npcs = level.get_node("npcs").get_children()
 	possible_targets += npcs
-	# possible_targets.sort_custom(self, "distance_comparitor")
+	print(possible_targets)
+	possible_targets.sort_custom(self, "distance_comparitor")
 	print(possible_targets)
 	for possible_target in possible_targets:
 		if get_node("../").position.distance_to(possible_target.position) > max_target_distance:
 			continue
 		if not possible_target.is_alive():
-			return false
+			continue
 		if is_instance_valid(possible_target):
-			if is_faction_enemy(possible_target) or is_player_enemy(possible_target):
+			if is_faction_enemy(possible_target) or (possible_target.is_player() and is_player_enemy(possible_target)):
 				print("Decided to attack: ", possible_target, "(is player = ", possible_target.is_player(), ")")
 				return possible_target
 	return null
 
 func is_faction_enemy(ship):
-	ship.faction != faction_dat["id"]
-	return true
+	return ship.faction != faction_dat["id"]
 
 func is_player_enemy(ship):
 	return true
