@@ -78,11 +78,16 @@ func load_factions():
 		"enemies"
 	]
 	
+	var float_fields = [
+		
+	]
+	
 	factions = load_csv("res://data/factions.csv")
 	
 	for faction_id in factions:
 		var faction = factions[faction_id]
 		faction["color"] = parse_color(faction["color"])
+		faction["initial_disposition"] = int(faction["initial_disposition"])
 		
 		for field in boolean_fields:
 			faction[field] = parse_bool(faction[field])

@@ -72,9 +72,7 @@ func _find_target():
 	possible_targets += players
 	var npcs = level.get_node("npcs").get_children()
 	possible_targets += npcs
-	print(possible_targets)
 	possible_targets.sort_custom(self, "distance_comparitor")
-	print(possible_targets)
 	for possible_target in possible_targets:
 		if get_node("../").position.distance_to(possible_target.position) > max_target_distance:
 			continue
@@ -87,10 +85,11 @@ func _find_target():
 	return null
 
 func is_faction_enemy(ship):
-	return ship.faction != faction_dat["id"]
+	print("Checking faction enemy status. ship.faction: ", ship.faction, ", faction enemies: ", faction_dat["enemies"], ", result: ", ship.faction != faction_dat["id"] and ship.faction in faction_dat["enemies"])
+	return ship.faction != faction_dat["id"] and int(ship.faction) in faction_dat["enemies"]
 
 func is_player_enemy(ship):
-	return true
+	return faction_dat["initial_disposition"] < 0
 
 # TODO: Add a timer for this
 func _on_ai_rethink_timer_timeout():
