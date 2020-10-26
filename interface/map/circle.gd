@@ -3,7 +3,7 @@ extends Node2D
 var DISPOSITION_COLORS = {
 	"hostile": Color(1,0,0),
 	"neutral": Color(0,0,1),
-	"abandoned": Color(0.2,0.2,0.2)
+	"abandoned": Color(0.5, 0.5, 0.5)
 }
 
 func dat():
@@ -16,7 +16,15 @@ func get_map():
 func get_color():
 	var mode = get_map().get_node("Mode").selected
 	if mode == 0:
-		return DISPOSITION_COLORS["neutral"]
+		if "faction" in dat():
+			var faction = Game.factions[dat()["faction"]]
+			var disposition = faction["initial_disposition"]
+			if disposition < 0:
+				return DISPOSITION_COLORS["hostile"]
+			else:
+				return DISPOSITION_COLORS["neutral"]
+		else:
+			return DISPOSITION_COLORS["abandoned"]
 	if mode == 1:
 		var distance = dat()["distance_normalized"]
 		var brightness = 1 - ((distance * 0.9) + 0.1)
@@ -38,8 +46,8 @@ func get_color():
 					colors_count += 1
 			return sum_color / colors_count
 		else:
-			return Color(0.5, 0.5, 0.5)
-	return Color(0.5, 0.5, 0.5)
+			return DISPOSITION_COLORS["abandoned"]
+	return DISPOSITION_COLORS["abandoned"]
 
 func _draw():
 	if Client.player_input.selected_system == get_node("../").system_id:

@@ -23,8 +23,6 @@ var puppet_landing = false
 var faction_dat = null
 func _ready():
 	var parent = get_node("../")
-	print(parent.faction)
-	print(Game.factions)
 	faction_dat = Game.factions[parent.faction]
 
 func _physics_process(delta):
@@ -80,12 +78,10 @@ func _find_target():
 			continue
 		if is_instance_valid(possible_target):
 			if is_faction_enemy(possible_target) or (possible_target.is_player() and is_player_enemy(possible_target)):
-				print("Decided to attack: ", possible_target, "(is player = ", possible_target.is_player(), ")")
 				return possible_target
 	return null
 
 func is_faction_enemy(ship):
-	print("Checking faction enemy status. ship.faction: ", ship.faction, ", faction enemies: ", faction_dat["enemies"], ", result: ", ship.faction != faction_dat["id"] and ship.faction in faction_dat["enemies"])
 	return ship.faction != faction_dat["id"] and int(ship.faction) in faction_dat["enemies"]
 
 func is_player_enemy(ship):
