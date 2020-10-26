@@ -1,3 +1,8 @@
+# This is chiefly concerned with handling the follwing details:
+
+# How the various nodes interact
+# How CSV files are turned into nodes
+
 extends Node
 var systems = null
 var ships = null
@@ -186,86 +191,4 @@ func get_level(level_name):
 	if directory.file_exists(file_path):
 		return load(file_path).instance()
 	else:
-		return _level_from_data(level_name, systems[level_name])
-
-func _is_moon(moon_type):
-	# We can't use "Category" for reasons I don't understand; it fails to load from the csv
-	# So we get this hack
-	return ("Moon" in moon_type) or ("moon" in moon_type)
-
-func _level_from_data(level_name, dat):
-	var inhabited = "faction" in dat
-	var near_inhabited = inhabited or "npc_spawns" in dat
-	var inhabited_spob_found = false
-	var level_id = int(level_name)
-	var SCALE = 1
-	var level = preload("res://gameplay/level.tscn").instance()
-	level.dat = dat
-	level.level_id = level_id
-	var planet_type = preload("res://environment/spob.tscn")
-	# Hack to deal with a bug in the galaxy generator script
-	# (see the conditional on bad IDs below)
-	var spob_counter = 10 * level_id
-	
-	# TODO: Stars
-	
-	# Planets from spreadsheet
-	for planet_num in [1,2,3]:
-		var prfx = "Planet %s " % str(planet_num)
-		if dat[prfx + "Exists?"] == "Exists":
-			var spob = planet_type.instance()
-			spob.spob_id = dat[prfx + "ID"]
-			# Working around a bug in the spreadsheet
-			if spob.spob_id == "#NUM!":
-				spob_counter += 1
-				spob.spob_id = str(spob_counter)
-			var basic_type = dat[prfx + "Basic Type"]
-			spob.spob_type = Procgen.select_spob_type(spob.spob_id, basic_type)
-			spob.position = SCALE * Vector2(
-				dat[prfx + "X"],
-				dat[prfx + "Y"]
-			)
-			spob.name = Markov.get_random_name( "",
-				systems.size() + (planet_num + 100 * int(level_name))
-			) if near_inhabited else dat[prfx + "Name"]
-			if inhabited and not (spob_types[spob.spob_type]["uninhabited"] == "TRUE"):
-				spob.commodities = Procgen.random_comodities(int(spob.spob_id))
-				spob.faction = dat["faction"]
-				inhabited_spob_found = true
-			level.get_node("spobs").add_child(spob)
-			
-	# Moons from spreadsheet
-	for moon_num in [1,2]:
-		var prfx = "Moon %d " % moon_num
-		if dat[prfx + "Exists?"] == "Exists" and _is_moon(dat[prfx + "Type"]):
-			var spob = planet_type.instance()
-			spob.spob_id = dat[prfx + "ID"]
-			# Working around a bug in the spreadsheet
-			if spob.spob_id == "#NUM!":
-				spob_counter += 1
-				spob.spob_id = str(spob_counter)
-			spob.spob_type = Procgen.select_spob_type(spob.spob_id, "Moon")
-			spob.position = SCALE * Vector2(
-				dat[prfx + "X"],
-				dat[prfx + "Y"]
-			)
-			spob.name = Markov.get_random_name( "",
-				systems.size() + 3 + (moon_num + 100 * int(level_name))
-			) if near_inhabited else dat[prfx + "Name"]
-			if inhabited and not (spob_types[spob.spob_type]["uninhabited"] == "TRUE"):
-				spob.commodities = Procgen.random_comodities(level_id)
-				spob.faction = dat["faction"]
-				inhabited_spob_found = true
-			level.get_node("spobs").add_child(spob)
-	
-	# Stations for systems with no useful spobs
-	if inhabited and not inhabited_spob_found:
-		var spob = planet_type.instance()
-		spob.spob_type = Procgen.select_spob_type(level_id, "Station")
-		spob.position = Vector2(0,0)
-		spob.name = dat["System Name"] + " Station"
-		spob.commodities = Procgen.random_comodities(level_id)
-		spob.faction = dat["faction"]
-		level.get_node("spobs").add_child(spob)
-		# print("Added station: ", spob.name, " for faction: ", factions[spob.faction]["name"])
-	return level
+		return Procgen._level_from_data(level_name, systems[level_name])
