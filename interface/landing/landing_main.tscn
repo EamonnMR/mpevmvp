@@ -45,6 +45,9 @@ margin_right = 3.0
 margin_bottom = 80.0
 rect_scale = Vector2( 2, 2 )
 text = "PLANET NAME"
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="ShipyardButton" type="Button" parent="Panel"]
 margin_left = 15.0
@@ -72,6 +75,18 @@ margin_top = 319.0
 margin_right = 610.0
 margin_bottom = 339.0
 text = "Leave"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Info" type="Label" parent="Panel"]
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+margin_left = -165.5
+margin_top = -110.0
+margin_right = 165.5
 __meta__ = {
 "_edit_use_anchors_": false
 }
