@@ -14,13 +14,11 @@ var direction_change: int = 0
 var shooting = false
 var thrusting = false
 var jumping = false
-var map_debounce = true
 var map = null
 var selected_system: String = ""
 var spobs
 
 var landing = null
-var land_debounce = true
 
 var selected_spob = null
 
@@ -88,8 +86,7 @@ func _handle_spob_select():
 	
 
 func _handle_show_landing_menu():
-	if Input.is_action_pressed("land") and land_debounce:
-		land_debounce = false
+	if Input.is_action_just_pressed("land"):
 		if not selected_spob:
 			var spobs = _get_spobs()
 			if (spobs.size()):
@@ -109,12 +106,8 @@ func toggle_landing():
 		landing.set_spob(selected_spob)
 		root.add_child(landing)
 
-func _on_LandDebounce_timeout():
-	land_debounce = true
-
 func _handle_show_map():
-	if Input.is_action_pressed("show_map") and map_debounce:
-		map_debounce = false
+	if Input.is_action_just_pressed("show_map"):
 		_toggle_map()
 
 func _toggle_map():
@@ -125,9 +118,6 @@ func _toggle_map():
 	else:
 		set_process_input(false)
 		root.add_child(map)
-
-func _on_MapDebounce_timeout():
-	map_debounce = true
 
 func map_select_system(system_id):
 	selected_system = system_id
