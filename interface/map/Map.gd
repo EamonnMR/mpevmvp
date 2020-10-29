@@ -35,8 +35,6 @@ func _input(event):
 		dragging = event.pressed
 	elif event is InputEventMouseMotion and dragging:
 		$Panel/systems.position += event.relative
-		
-	Client.player_input.handle_map_toggle_events(event)
 
 func update():
 	for system in $Panel/systems.get_children():

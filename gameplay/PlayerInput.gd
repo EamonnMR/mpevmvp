@@ -30,9 +30,6 @@ func _ready():
 		landing = preload("res://interface/landing/landing_main.tscn").instance()
 		# landing.bind(self)
 		spobs = _get_spobs()
-		
-func _input(ev):
-	handle_map_toggle_events(ev)
 
 func switch_system():
 	spobs = _get_spobs()
@@ -50,7 +47,7 @@ func _physics_process(delta):
 		shooting = Input.is_action_pressed("fire_primary")
 		jumping = Input.is_action_pressed("jump")
 		thrusting = Input.is_action_pressed("thrust")
-		# _handle_show_map()
+		_handle_show_map()
 		_handle_show_landing_menu()
 		_handle_spob_select()
 		
@@ -115,9 +112,10 @@ func toggle_landing():
 func _on_LandDebounce_timeout():
 	land_debounce = true
 
-func handle_map_toggle_events(event):
-		if event is InputEventKey and event.scancode == KEY_M and event.pressed and not event.echo:
-			_toggle_map()
+func _handle_show_map():
+	if Input.is_action_pressed("show_map") and map_debounce:
+		map_debounce = false
+		_toggle_map()
 
 func _toggle_map():
 	var root = get_tree().get_root()
