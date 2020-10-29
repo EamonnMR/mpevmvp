@@ -56,5 +56,5 @@ func _draw():
 	draw_circle(Vector2(0,0), 7, get_color())
 	draw_circle(Vector2(0,0), 5, Color(0,0,0))
 	
-	if Client.get_level().name == get_node("../").system_id:
-		draw_circle(Vector2(0,0), 2, Color(0,1,0))
+	if Client.get_level().get_node("../").name == get_node("../").system_id:
+		draw_circle(Vector2(0,0), 3, Color(0,1,0))
