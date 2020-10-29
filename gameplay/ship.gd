@@ -1,6 +1,7 @@
 extends RigidBody2D
 
 const BULLET_VELOCITY = 500.0 #300
+const JUMP_DISTANCE = 1000
 
 # Values loaded directly from ships.csv
 const SHIP_STATS = [
@@ -30,7 +31,6 @@ var direction: float = 0
 var shooting = false
 var shot_cooldown = false
 var jumping = false
-var jump_cooldown = false
 var thrusting = false
 var braking = false
 var health = 20
@@ -107,11 +107,6 @@ func _physics_process(delta):
 			Server.fire_shot(self)
 			shot_cooldown = false
 			$ShotTimer.start()
-		
-		if jumping and jump_cooldown:
-			Server.switch_player_universe(self)
-			jump_cooldown = false
-			$JumpTimer.start()
 	else:
 		direction = puppet_dir
 		thrusting = puppet_thrusting
@@ -175,6 +170,9 @@ func _integrate_forces(state):
 		state.transform.origin = puppet_pos
 		set_linear_velocity(puppet_velocity)
 	
+func is_far_enough_to_jump():
+	return JUMP_DISTANCE < position.length()
+	
 func _on_ShotTimer_timeout():
 	shot_cooldown = true
 
@@ -224,14 +222,11 @@ func get_level():
 	#      players ->   world      -> level 
 	return get_parent().get_parent().get_parent()
 
-func _on_JumpTimer_timeout():
-	jump_cooldown = true
-
 func anglemod(angle):
+	"""I wish this was a builtin"""
 	var ARC = 2 * PI
 	# TODO: Recursive might be too slow
 	return fmod(angle + ARC, ARC)
-
 
 func explosion_effect():
 	var explosion = preload("res://effects/explosion.tscn").instance()
@@ -274,6 +269,18 @@ func rset_ex_cond(puppet_var, value):
 	if self[puppet_var] != value:
 		self[puppet_var] = value
 		rset_ex(puppet_var, value)
+		
+# Single-message moves:
+remote func try_jump():
+	print("Server ship.try_jump")
+	if is_far_enough_to_jump():
+		print("Far enough to jump: switching universe")
+		# TODO: Jump Effects
+		# TODO: if if get_input_state().puppet_selected_system in Systems[current_system].links
+		Server.switch_player_universe(self)
+	else:
+		print("Too close to jump")
+		Client.rpc_id(int(name), "complain", "Cannot enter hyperspace - too close to sytem center")
 
 # Trade related functions:
 	

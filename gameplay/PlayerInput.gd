@@ -43,16 +43,15 @@ func _physics_process(delta):
 	if (is_network_master()):
 		direction_change = _get_direction_change()
 		shooting = Input.is_action_pressed("fire_primary")
-		jumping = Input.is_action_pressed("jump")
 		thrusting = Input.is_action_pressed("thrust")
 		_handle_show_map()
 		_handle_show_landing_menu()
 		_handle_spob_select()
+		_handle_jump()
 		
 		rset_id(1, "puppet_direction_change", direction_change)
 		rset_id(1, "puppet_shooting", shooting)
 		rset_id(1, "puppet_thrusting", thrusting)
-		rset_id(1, "puppet_jumping", jumping)
 		
 func _select_spob(new_selected_spob):
 	print("Select Spob: ", new_selected_spob)
@@ -93,6 +92,11 @@ func _handle_show_landing_menu():
 				_select_spob(spobs[0])
 		elif is_instance_valid(selected_spob):
 			toggle_landing()
+			
+func _handle_jump():
+	if Input.is_action_just_pressed("jump"):
+		print("PlayerInput._handle_jump")
+		Client.player_ship.rpc_id(1, "try_jump")
 
 func toggle_landing():
 	var root = get_tree().get_root()

@@ -15,10 +15,6 @@ script = ExtResource( 1 )
 one_shot = true
 autostart = true
 
-[node name="JumpTimer" type="Timer" parent="."]
-one_shot = true
-autostart = true
-
 [node name="Camera2D" type="Camera2D" parent="."]
 editor_draw_screen = false
 
@@ -41,4 +37,3 @@ __meta__ = {
 [node name="shot_sfx" type="AudioStreamPlayer2D" parent="."]
 stream = ExtResource( 3 )
 [connection signal="timeout" from="ShotTimer" to="." method="_on_ShotTimer_timeout"]
-[connection signal="timeout" from="JumpTimer" to="." method="_on_JumpTimer_timeout"]
