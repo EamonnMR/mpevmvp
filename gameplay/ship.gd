@@ -1,7 +1,7 @@
 extends RigidBody2D
 
 const BULLET_VELOCITY = 500.0 #300
-const JUMP_DISTANCE = 1000
+const JUMP_DISTANCE = 600
 
 # Values loaded directly from ships.csv
 const SHIP_STATS = [
@@ -172,6 +172,12 @@ func _integrate_forces(state):
 	
 func is_far_enough_to_jump():
 	return JUMP_DISTANCE < position.length()
+
+func selected_valid_system_to_jump_to():
+	return get_input_state().puppet_selected_system in Game.systems[current_system()].links
+	
+func current_system():
+	return get_level().name
 	
 func _on_ShotTimer_timeout():
 	shot_cooldown = true
@@ -276,8 +282,11 @@ remote func try_jump():
 	if is_far_enough_to_jump():
 		print("Far enough to jump: switching universe")
 		# TODO: Jump Effects
-		# TODO: if if get_input_state().puppet_selected_system in Systems[current_system].links
-		Server.switch_player_universe(self)
+		if selected_valid_system_to_jump_to():
+			Server.switch_player_universe(self)
+		else:
+			print("Tried to jump to unconnected system. Current System %s has no hyperlane to selected (%s)" % [current_system(), get_input_state().puppet_selected_system])
+			Client.rpc_id(int(name), "complain", "Cannot enter hyperspace - Current System %s has no hyperlane to selected (%s)" % [current_system(), get_input_state().puppet_selected_system])
 	else:
 		print("Too close to jump")
 		Client.rpc_id(int(name), "complain", "Cannot enter hyperspace - too close to sytem center")

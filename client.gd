@@ -93,3 +93,5 @@ remote func complain(text):
 	# TODO: Play Sound
 	print("Complain: ", text)
 
+func current_system_id():
+	return get_level().get_node("../").name

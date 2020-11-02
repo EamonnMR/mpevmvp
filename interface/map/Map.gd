@@ -40,6 +40,8 @@ func update():
 	for system in $Panel/systems.get_children():
 		if system.get_node("circle"):
 			system.get_node("circle").update()
+		else:
+			system.update()
 
 
 func _on_Mode_item_selected(index):
