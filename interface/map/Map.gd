@@ -39,9 +39,9 @@ func _input(event):
 func update():
 	for system in $Panel/systems.get_children():
 		if system.get_node("circle"):
-			system.get_node("circle").update()
+			system.get_node("circle").call_deferred("update")
 		else:
-			system.update()
+			system.call_deferred("update")
 
 
 func _on_Mode_item_selected(index):
