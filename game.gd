@@ -11,6 +11,7 @@ var commodities = null
 var factions = null
 var spobs = {}
 var ships_by_faction = {}
+var weapons = {}
 
 const INPUT = "input_nodes"
 const PLAY_AREA_RADIUS = 2000
@@ -36,12 +37,36 @@ func get_multiverse():
 	return get_tree().get_root().get_node("Multiverse")
 
 func _ready():
-	# Call Deferred prevents a bug where loads get interrupted.
+	call_deferred("load_multiple_csvs", {
+		"spob_types": "res://data/spob_types.csv",
+		"commodities": "res://data/trade.csv",
+		"factions": "res://data/factions.csv",
+		"ships": "res://data/ships.csv",
+		"weapons": "res://data/weapons.csv"
+	}, "process_data")
+
+func process_data():
 	load_spob_types()
 	load_commodities()
 	load_factions()
-	call_deferred("load_galaxy")
-	call_deferred("load_ships")
+	load_weapons()
+	load_galaxy()
+	load_ships()
+	print("Game Ready")
+
+func load_multiple_csvs(csv_dict, callback):
+	# Load CSV wants to be called in a deferred fashon.
+	# This calls each in sequence deferred, then finally calls
+	# the callback function.
+	var keys = csv_dict.keys()
+	if keys.size():
+		var key = keys[0]
+		set(key, load_csv(csv_dict[key]))
+		csv_dict.erase(key)
+		call_deferred("load_multiple_csvs", csv_dict, callback)
+	else:
+		call_deferred(callback)
+	
 
 func random_select(items: Array):
 	# Don't use this for procgen, because it is unseeded
@@ -49,7 +74,6 @@ func random_select(items: Array):
 	return items[randi() % items.size()]
 
 func load_spob_types():
-	spob_types = load_csv("res://data/spob_types.csv")
 	for spob_type_id in spob_types:
 		var spob_type = spob_types[spob_type_id]
 		spob_type["sprite"] = load(spob_type["sprite"]) if spob_type["sprite"] else null
@@ -58,7 +82,6 @@ func load_spob_types():
 	Procgen.index_spob_types()
 			
 func load_commodities():
-	commodities = load_csv("res://data/trade.csv")
 	for commodity_id in commodities:
 		var commodity = commodities[commodity_id]
 		var price = int(commodity["price"])
@@ -87,8 +110,6 @@ func load_factions():
 		
 	]
 	
-	factions = load_csv("res://data/factions.csv")
-	
 	for faction_id in factions:
 		var faction = factions[faction_id]
 		faction["color"] = parse_color(faction["color"])
@@ -101,7 +122,6 @@ func load_factions():
 			faction[field] = parse_int_array(faction[field])
 		
 func load_ships():
-	ships = load_csv("res://data/ships.csv")
 	for i in ships:
 		ships[i]["scene"] = load("res://gameplay/ships/" + ships[i]["scene"] + ".tscn")
 		ships[i]["standoff"] = parse_bool(ships[i]["standoff"])
@@ -110,6 +130,9 @@ func load_ships():
 			ships_by_faction[faction].append(ships[i]["id"])
 		else:
 			ships_by_faction[faction] = [ships[i]["id"]]
+
+func load_weapons():
+	pass
 
 func get_ship(ship_type, player_id):
 	var type = str(ship_type)

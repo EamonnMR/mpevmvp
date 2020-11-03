@@ -1,0 +1,2 @@
+id,damage,projectile_velocity,projectile_lifetime,cooldown,projectile_scene,sound_effect
+0,10,400,1,1,res://gameplay/bullet.tscn,res://sound/cc0_rubberduck/synth_laser_02.ogg
