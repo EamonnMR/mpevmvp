@@ -218,11 +218,11 @@ func create_npc(type, faction, position, level=null):
 	ship.position = position
 	return ship
 	
-func fire_shot(ship):
-	var shot = ship.get_shot()
+func fire_shot(ship, weapon_id):
+	var shot = ship.get_shot(weapon_id)
 	shot.set_network_master(1)
 	ship.get_level().get_node("world/shots").add_child(shot)
-	Client.rpc("fire_shot", ship.name, ship.get_node("../").name, shot.name)
+	Client.rpc("fire_shot", ship.name, ship.get_node("../").name, weapon_id, shot.name)
 
 func switch_player_universe(player):
 	var old_level = player.get_level().get_node("world")

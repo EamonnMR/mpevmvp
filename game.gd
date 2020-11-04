@@ -132,7 +132,26 @@ func load_ships():
 			ships_by_faction[faction] = [ships[i]["id"]]
 
 func load_weapons():
-	pass
+	var int_fields = [
+		"damage"
+	]
+	
+	var float_fields = [
+		"projectile_lifetime",
+		"cooldown"
+	]
+	
+	var scene_fields = [
+		"projectile_scene"
+	]
+	for weapon_id in weapons:
+		var weapon = weapons[weapon_id]
+		for field in int_fields:
+			weapon[field] = int(weapon[field])
+		for field in float_fields:
+			weapon[field] = float(weapon[field])
+		for field in scene_fields:
+			weapon[field] = load(weapon[field])
 
 func get_ship(ship_type, player_id):
 	var type = str(ship_type)

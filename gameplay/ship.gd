@@ -103,10 +103,9 @@ func _physics_process(delta):
 		rset_ex("puppet_velocity", get_linear_velocity())
 		rset_ex_cond("puppet_health", health)
 		
-		if shooting and shot_cooldown:
-			Server.fire_shot(self)
-			shot_cooldown = false
-			$ShotTimer.start()
+		if shooting:
+			for weapon in $weapons.get_children():
+				weapon.try_shooting()
 	else:
 		direction = puppet_dir
 		thrusting = puppet_thrusting
@@ -182,13 +181,8 @@ func current_system():
 func _on_ShotTimer_timeout():
 	shot_cooldown = true
 
-func get_shot():
-	var shot = preload("res://gameplay/bullet.tscn").instance()
-	shot.team_set = team_set
-	shot.init(direction, position, get_linear_velocity())
-	if not is_network_master():
-		shot_effects()
-	return shot
+func get_shot(weapon_id):
+	return $weapons.get_node(weapon_id).get_shot()
 
 func take_damage(damage):
 	health -= damage
@@ -238,9 +232,6 @@ func explosion_effect():
 	var explosion = preload("res://effects/explosion.tscn").instance()
 	explosion.position = position
 	get_level().get_node("world").add_effect(explosion)
-	
-func shot_effects():
-	$shot_sfx.play()
 
 # General purpose networking functions.
 func serialize():
