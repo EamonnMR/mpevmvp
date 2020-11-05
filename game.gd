@@ -145,6 +145,10 @@ func load_weapons():
 	var scene_fields = [
 		"projectile_scene"
 	]
+	
+	var sound_fields = [
+		"sound_effect"
+	]
 	for weapon_id in weapons:
 		var weapon = weapons[weapon_id]
 		for field in int_fields:
@@ -153,6 +157,8 @@ func load_weapons():
 			weapon[field] = float(weapon[field])
 		for field in scene_fields:
 			weapon[field] = load(weapon[field])
+		for field in sound_fields:
+			weapon[field] = GdScriptAudioImport.loadfile(weapon[field])
 
 func get_ship(ship_type, player_id):
 	var type = str(ship_type)

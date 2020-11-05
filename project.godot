@@ -30,6 +30,7 @@ Client="*res://client.gd"
 Markov="*res://lib/markov.gd"
 Procgen="*res://Procgen.gd"
 Uuid="*res://lib/uuid.gd"
+GdScriptAudioImport="*res://lib/GDScriptAudioImport.gd"
 
 [input]
 

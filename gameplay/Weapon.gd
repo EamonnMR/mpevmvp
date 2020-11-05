@@ -23,6 +23,7 @@ func apply_stats():
 		set(stat, data[stat])
 	# Stacking weapons
 	$CooldownTimer.wait_time = data["cooldown"] / count
+	$shot_sfx.stream = data["sound_effect"]
 	
 
 func get_ship():
