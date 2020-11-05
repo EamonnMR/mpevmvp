@@ -1,9 +1,29 @@
 extends Node2D
 
-var cooldown = true
+# Rather than having a seperate 'type', these are keyed into Game.weapons by name.
 
-func _init():
-	pass
+var cooldown = true
+export var count: int = 1
+
+const STATS = [
+	"damage",
+	"projectile_velocity",
+	"projectile_lifetime",
+	"projectile_scene"
+]
+
+var damage: int
+var projectile_velocity: float
+var projectile_lifetime: float
+var projectile_scene: PackedScene
+
+func apply_stats():
+	var data = Game.weapons[name]
+	for stat in STATS:
+		set(stat, data[stat])
+	# Stacking weapons
+	$CooldownTimer.wait_time = data["cooldown"] / count
+	
 
 func get_ship():
 	return get_node("../../")
@@ -23,10 +43,17 @@ func shot_effects():
 
 func get_shot():
 	print("Get shot")
-	var shot = preload("res://gameplay/bullet.tscn").instance()
+	var shot = projectile_scene.instance()
 	var ship = get_ship()
 	shot.team_set = get_ship().team_set
-	shot.init(ship.direction, ship.position, ship.get_linear_velocity())
+	shot.init(
+		projectile_velocity,
+		damage,
+		projectile_lifetime,
+		ship.direction,
+		ship.position,
+		ship.get_linear_velocity()
+	)
 	if not ship.is_network_master():
 		shot_effects()
 	return shot

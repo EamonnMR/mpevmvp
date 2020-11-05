@@ -1,6 +1,5 @@
 extends RigidBody2D
 
-const BULLET_VELOCITY = 500.0 #300
 const JUMP_DISTANCE = 600
 
 # Values loaded directly from ships.csv
@@ -64,13 +63,25 @@ func _ready():
 		removed.queue_free()
 	# _show_debug_info()
 	_apply_stats()
-
+	_create_weapons()
+	
 func is_alive():
 	return true
 
 func _apply_stats():
 	for stat in SHIP_STATS:
 		set(stat, _data()[stat])
+		
+func _create_weapons():
+	# TODO: Iterate over weapon data
+	# for weapon_id in weapon_data:
+	#     var weapon = preload("res://gameplay/Weapon.tscn").instance()
+	#     weapon.name = weapon_id
+	#     weapon.count = weapon_data[weapon_id]
+	var weapon = $weapons/Weapon
+	weapon.name = "0"
+	weapon.count = 1
+	weapon.apply_stats()
 
 func _data():
 	return Game.ships[type]
