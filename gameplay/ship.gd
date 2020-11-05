@@ -73,7 +73,6 @@ func _apply_stats():
 		set(stat, _data()[stat])
 		
 func _create_weapons():
-	# TODO: Iterate over weapon data
 	for weapon_id in _data()["weapons"]:
 		var weapon = preload("res://gameplay/Weapon.tscn").instance()
 		weapon.name = weapon_id
