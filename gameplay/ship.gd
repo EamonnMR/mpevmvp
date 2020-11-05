@@ -74,14 +74,12 @@ func _apply_stats():
 		
 func _create_weapons():
 	# TODO: Iterate over weapon data
-	# for weapon_id in weapon_data:
-	#     var weapon = preload("res://gameplay/Weapon.tscn").instance()
-	#     weapon.name = weapon_id
-	#     weapon.count = weapon_data[weapon_id]
-	var weapon = $weapons/Weapon
-	weapon.name = "0"
-	weapon.count = 1
-	weapon.apply_stats()
+	for weapon_id in _data()["weapons"]:
+		var weapon = preload("res://gameplay/Weapon.tscn").instance()
+		weapon.name = weapon_id
+		weapon.count = _data()["weapons"][weapon_id]
+		weapon.apply_stats()
+		$weapons.add_child(weapon)
 
 func _data():
 	return Game.ships[type]

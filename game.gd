@@ -125,6 +125,7 @@ func load_ships():
 	for i in ships:
 		ships[i]["scene"] = load("res://gameplay/ships/" + ships[i]["scene"] + ".tscn")
 		ships[i]["standoff"] = parse_bool(ships[i]["standoff"])
+		ships[i]["weapons"] = parse_x_dict(ships[i]["weapons"])
 		var faction = ships[i]["faction"]
 		if faction in ships_by_faction:
 			ships_by_faction[faction].append(ships[i]["id"])
@@ -208,8 +209,21 @@ func parse_int_array(text: String) -> Array:
 		int_array.append(int(i))
 	return int_array
 
-func parse_bool(caps_true_or_false):
+func parse_bool(caps_true_or_false: String) -> bool:
 	return caps_true_or_false == "TRUE"
+	
+func parse_x_dict(x_dict: String) -> Dictionary:
+	""" Looks like: '1x4 0x3' and translates to:
+		{
+			"1": 4,
+			"0": 3
+		}
+	"""
+	var dict = {}
+	for i in x_dict.split(" "):
+		var key_count = i.split("x")
+		dict[key_count[0]] = int(key_count[1])
+	return dict
 
 func load_csv(csv):
 	var file = File.new()
