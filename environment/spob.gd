@@ -1,5 +1,7 @@
 extends Node2D
 
+class_name Spob
+
 export var spob_id: String
 var landing
 export var spob_type: String
@@ -20,6 +22,8 @@ var SPOB_STATS = [
 func _ready():
 	_apply_stats()
 	
+	$ClickArea/CollisionShape2D.shape.radius = $Sprite.texture.get_size().length() / 2
+	
 func _data():
 	return Game.spob_types[spob_type]
 
@@ -37,3 +41,8 @@ func add_selection():
 func remove_selection():
 	if $Sprite/Selection:
 		$Sprite.remove_child($Sprite/Selection)
+
+func _on_ClickArea_input_event(viewport, event, shape_idx):
+	if (event is InputEventMouseButton && event.pressed):
+		print("Clicked a spob")
+		Client.player_input.select_spob(self)

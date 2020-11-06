@@ -1,12 +1,11 @@
 extends Node
 
-var player_ship
+var player_ship: Node
 
 var client
 var client_id
 var player_name
-var map
-var player_input
+var player_input: PlayerInput
 
 func start(ip, port, new_player_name):
 	get_tree().connect("connected_to_server", self, "_client_connected")

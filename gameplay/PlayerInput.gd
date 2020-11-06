@@ -2,6 +2,8 @@ extends Node2D
 
 # This captures input and displays the cursor
 
+class_name PlayerInput
+
 puppet var puppet_direction_change: int = 0
 puppet var puppet_shooting = false
 puppet var puppet_thrusting = false
@@ -20,7 +22,7 @@ var spobs
 
 var landing = null
 
-var selected_spob = null
+var selected_spob: Spob
 
 func _ready():
 	if is_network_master():
@@ -53,7 +55,7 @@ func _physics_process(delta):
 		rset_id(1, "puppet_shooting", shooting)
 		rset_id(1, "puppet_thrusting", thrusting)
 		
-func _select_spob(new_selected_spob):
+func select_spob(new_selected_spob: Spob):
 	print("Select Spob: ", new_selected_spob)
 	if is_instance_valid(selected_spob):
 		selected_spob.remove_selection()
@@ -81,7 +83,7 @@ func _handle_spob_select():
 		i += 1
 		if Input.is_action_pressed("spob_" + str(i)):
 			print("Select pressed: ", i)
-			_select_spob(spob)
+			select_spob(spob)
 	
 
 func _handle_show_landing_menu():
@@ -89,7 +91,7 @@ func _handle_show_landing_menu():
 		if not selected_spob:
 			var spobs = _get_spobs()
 			if (spobs.size()):
-				_select_spob(spobs[0])
+				select_spob(spobs[0])
 		elif is_instance_valid(selected_spob):
 			toggle_landing()
 			
