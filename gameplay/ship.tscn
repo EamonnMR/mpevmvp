@@ -1,7 +1,10 @@
-[gd_scene load_steps=3 format=2]
+[gd_scene load_steps=4 format=2]
 
 [ext_resource path="res://gameplay/ship.gd" type="Script" id=1]
 [ext_resource path="res://gameplay/RotationSprite.tscn" type="PackedScene" id=2]
+
+[sub_resource type="CircleShape2D" id=1]
+radius = 19.5993
 
 [node name="ship" type="RigidBody2D"]
 collision_mask = 2147483648
@@ -30,3 +33,10 @@ __meta__ = {
 }
 
 [node name="weapons" type="Node2D" parent="."]
+
+[node name="ClickArea" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ClickArea"]
+shape = SubResource( 1 )
+[connection signal="input_event" from="." to="." method="_on_ship_input_event"]
+[connection signal="input_event" from="ClickArea" to="." method="_on_ClickArea_input_event"]

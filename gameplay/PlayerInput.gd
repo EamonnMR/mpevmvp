@@ -23,6 +23,7 @@ var spobs
 var landing = null
 
 var selected_spob: Spob
+var selected_ship: Ship
 
 func _ready():
 	if is_network_master():
@@ -61,6 +62,13 @@ func select_spob(new_selected_spob: Spob):
 		selected_spob.remove_selection()
 	selected_spob = new_selected_spob
 	selected_spob.add_selection()
+	
+func select_ship(new_selected_ship: Ship):
+	print("Select Spob: ", new_selected_ship)
+	if is_instance_valid(selected_ship):
+		selected_ship.remove_selection()
+	selected_ship = new_selected_ship
+	selected_ship.add_selection()
 
 func _get_direction_change():
 	var dc = 0

@@ -1,5 +1,7 @@
 extends RigidBody2D
 
+class_name Ship
+
 const JUMP_DISTANCE = 600
 
 # Values loaded directly from ships.csv
@@ -64,6 +66,8 @@ func _ready():
 	# _show_debug_info()
 	_apply_stats()
 	_create_weapons()
+	
+	# $ClickArea/CollisionShape2D.shape.radius = $RotationSprite.texture.get_size().length() / 2
 	
 func is_alive():
 	return true
@@ -353,3 +357,16 @@ func push_update_money():
 		
 remote func client_set_money(new_money):
 	new_money = new_money
+
+# Selection box stuff
+
+func add_selection():
+	$RotationSprite.add_child(preload("res://interface/hud/Selection.tscn").instance())
+
+func remove_selection():
+	if $RotationSprite/Selection:
+		$RotationSprite.remove_child($RotationSprite/Selection)
+
+func _on_ClickArea_input_event(viewport, event, shape_idx):
+	if (event is InputEventMouseButton && event.pressed):
+		Client.player_input.select_ship(self)
