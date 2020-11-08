@@ -8,6 +8,8 @@ var player_name
 var player_input: PlayerInput
 var hud: Hud
 
+signal system_changed
+
 func start(ip, port, new_player_name):
 	get_tree().connect("connected_to_server", self, "_client_connected")
 	get_tree().connect("network_peer_connected", self, "_player_connected_client")
@@ -75,6 +77,7 @@ remote func switch_level(new_level_name, level_data):
 	print(level_data)
 	get_multiverse().switch_level(new_level_name, level_data)
 	player_input.switch_system()
+	emit_signal("system_changed")
 
 remote func remove_entity(destination, ent_name):
 	print("client.remove_entity; ", destination, "/", ent_name)

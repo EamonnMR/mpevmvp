@@ -1,13 +1,15 @@
-[gd_scene load_steps=3 format=2]
+[gd_scene load_steps=4 format=2]
 
 [ext_resource path="res://interface/hud/Hud.gd" type="Script" id=1]
 [ext_resource path="res://interface/hud/Target.tscn" type="PackedScene" id=2]
+[ext_resource path="res://interface/hud/Navigation.gd" type="Script" id=3]
 
 [node name="Hud" type="CanvasLayer"]
 layer = 2
 script = ExtResource( 1 )
 
 [node name="Radar" type="Panel" parent="."]
+visible = false
 margin_left = 10.6426
 margin_top = 433.099
 margin_right = 162.643
@@ -24,22 +26,96 @@ margin_bottom = 63.4975
 text = "RADAR"
 
 [node name="Navigation" type="Panel" parent="."]
-margin_left = 864.57
-margin_top = 13.552
-margin_right = 1016.57
-margin_bottom = 157.552
+margin_left = 860.007
+margin_top = 11.4331
+margin_right = 1012.01
+margin_bottom = 155.433
+script = ExtResource( 3 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Label" type="Label" parent="Navigation"]
-margin_left = 38.0
-margin_top = 46.0
-margin_right = 122.0
-margin_bottom = 60.0
-text = "NAVIGATION"
+[node name="Local" type="Label" parent="Navigation"]
+margin_left = 8.0
+margin_top = 7.0
+margin_right = 50.0
+margin_bottom = 21.0
+rect_pivot_offset = Vector2( 73.6211, 19.2224 )
+text = "Spob:"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="SpobName" type="Label" parent="Navigation"]
+margin_left = 68.7338
+margin_top = 6.0
+margin_right = 141.734
+margin_bottom = 20.0
+rect_pivot_offset = Vector2( 23.618, 19.2224 )
+text = "spob_name"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="SpobType" type="Label" parent="Navigation"]
+visible = false
+margin_left = 13.0
+margin_top = 27.0
+margin_right = 131.0
+margin_bottom = 41.0
+rect_pivot_offset = Vector2( 23.618, 19.2224 )
+text = "Spob Type"
+align = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Destination" type="Label" parent="Navigation"]
+margin_left = 6.8252
+margin_top = 60.7653
+margin_right = 61.8252
+margin_bottom = 74.7653
+rect_pivot_offset = Vector2( 61.1149, 14 )
+text = "Dest:"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="DestSystem" type="Label" parent="Navigation"]
+margin_left = 67.9401
+margin_top = 60.7653
+margin_right = 140.94
+margin_bottom = 74.7653
+rect_pivot_offset = Vector2( 0, 14 )
+text = "sys_name"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Dest" type="Label" parent="Navigation"]
+margin_left = 6.8252
+margin_top = 32.1921
+margin_right = 61.8252
+margin_bottom = 46.1921
+rect_pivot_offset = Vector2( 61.1149, 14 )
+text = "System:"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="System" type="Label" parent="Navigation"]
+margin_left = 67.9401
+margin_top = 32.1921
+margin_right = 140.94
+margin_bottom = 46.1921
+rect_pivot_offset = Vector2( 0, 14 )
+text = "sys_name"
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="Status" type="Panel" parent="."]
+visible = false
 margin_left = 10.6425
 margin_top = 13.1066
 margin_right = 162.643

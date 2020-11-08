@@ -25,6 +25,9 @@ var landing = null
 var selected_spob: Spob
 var selected_ship: Ship
 
+signal navigation_updated()
+signal targeting_updated()
+
 func _ready():
 	if is_network_master():
 		map = preload("res://interface/map/Map.tscn").instance()
@@ -62,6 +65,7 @@ func select_spob(new_selected_spob: Spob):
 		selected_spob.remove_selection()
 	selected_spob = new_selected_spob
 	selected_spob.add_selection()
+	emit_signal("navigation_updated")
 	
 func select_ship(new_selected_ship: Ship):
 	print("Select Spob: ", new_selected_ship)
@@ -137,6 +141,7 @@ func map_select_system(system_id):
 	selected_system = system_id
 	rset_id(1, "puppet_selected_system", system_id)
 	map.update()
+	emit_signal("navigation_updated")
 	
 func handle_gui_player_ship_purchase(id):
 	Server.rpc_id(1, "purchase_ship", id)
