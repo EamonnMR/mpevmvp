@@ -1,0 +1,103 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://interface/hud/Hud.gd" type="Script" id=1]
+[ext_resource path="res://interface/hud/Target.tscn" type="PackedScene" id=2]
+
+[node name="Hud" type="CanvasLayer"]
+layer = 2
+script = ExtResource( 1 )
+
+[node name="Radar" type="Panel" parent="."]
+margin_left = 10.6426
+margin_top = 433.099
+margin_right = 162.643
+margin_bottom = 577.099
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label" type="Label" parent="Radar"]
+margin_left = 49.4975
+margin_top = 49.4975
+margin_right = 89.4975
+margin_bottom = 63.4975
+text = "RADAR"
+
+[node name="Navigation" type="Panel" parent="."]
+margin_left = 864.57
+margin_top = 13.552
+margin_right = 1016.57
+margin_bottom = 157.552
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label" type="Label" parent="Navigation"]
+margin_left = 38.0
+margin_top = 46.0
+margin_right = 122.0
+margin_bottom = 60.0
+text = "NAVIGATION"
+
+[node name="Status" type="Panel" parent="."]
+margin_left = 10.6425
+margin_top = 13.1066
+margin_right = 162.643
+margin_bottom = 157.107
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="ProgressBar" type="ProgressBar" parent="Status"]
+margin_left = 51.7818
+margin_top = 25.1362
+margin_right = 145.782
+margin_bottom = 39.1362
+
+[node name="Label" type="Label" parent="Status"]
+margin_left = 3.56359
+margin_top = 26.2815
+margin_right = 45.5636
+margin_bottom = 40.2815
+rect_pivot_offset = Vector2( 21, 7 )
+text = "Health"
+
+[node name="Label2" type="Label" parent="Status"]
+margin_left = 4.45448
+margin_top = 4.89995
+margin_right = 46.4545
+margin_bottom = 18.8999
+rect_pivot_offset = Vector2( 21, 7 )
+text = "Credits"
+
+[node name="Label3" type="Label" parent="Status"]
+margin_left = 57.0
+margin_top = 4.0
+margin_right = 104.0
+margin_bottom = 19.0
+rect_pivot_offset = Vector2( 21, 7 )
+text = "50000"
+
+[node name="ProgressBar2" type="ProgressBar" parent="Status"]
+margin_left = 52.6727
+margin_top = 46.9633
+margin_right = 146.673
+margin_bottom = 60.9633
+
+[node name="E" type="Label" parent="Status"]
+margin_left = 4.00903
+margin_top = 48.1085
+margin_right = 46.009
+margin_bottom = 62.1085
+text = "Energy"
+
+[node name="Target" parent="." instance=ExtResource( 2 )]
+
+[node name="messages" type="Label" parent="."]
+margin_left = 189.0
+margin_top = 500.0
+margin_right = 829.0
+margin_bottom = 576.0
+__meta__ = {
+"_edit_use_anchors_": false
+}

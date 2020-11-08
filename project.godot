@@ -9,6 +9,11 @@
 config_version=4
 
 _global_script_classes=[ {
+"base": "CanvasLayer",
+"class": "Hud",
+"language": "GDScript",
+"path": "res://interface/hud/Hud.gd"
+}, {
 "base": "Node2D",
 "class": "PlayerInput",
 "language": "GDScript",
@@ -30,6 +35,7 @@ _global_script_classes=[ {
 "path": "res://environment/spob.gd"
 } ]
 _global_script_class_icons={
+"Hud": "",
 "PlayerInput": "",
 "RotationSprite": "",
 "Ship": "",

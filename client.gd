@@ -6,6 +6,7 @@ var client
 var client_id
 var player_name
 var player_input: PlayerInput
+var hud: Hud
 
 func start(ip, port, new_player_name):
 	get_tree().connect("connected_to_server", self, "_client_connected")
@@ -38,12 +39,14 @@ func _player_connected_client(id):
 
 func _client_connected():
 	player_input = preload("res://gameplay/PlayerInput.tscn").instance()
+	hud = preload("res://interface/hud/Hud.tscn").instance()
 	player_input.set_name(str(client_id))
 	player_input.set_network_master(client_id)
 	var net_players = Node.new()
 	net_players.set_name(Game.INPUT)
 	net_players.add_child(player_input)
 	get_tree().get_root().add_child(net_players)
+	get_tree().get_root().add_child(hud)
 
 func disconnect_from_server():
 	print("Client trying to disconnect")
