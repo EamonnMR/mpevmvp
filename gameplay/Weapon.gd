@@ -24,7 +24,7 @@ func apply_stats():
 	# Stacking weapons
 	$CooldownTimer.wait_time = data["cooldown"] / count
 	$shot_sfx.stream = data["sound_effect"]
-	
+
 
 func get_ship():
 	return get_node("../../")
@@ -58,3 +58,4 @@ func get_shot():
 	if not ship.is_network_master():
 		shot_effects()
 	return shot
+

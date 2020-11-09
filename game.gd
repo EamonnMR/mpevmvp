@@ -126,6 +126,7 @@ func load_ships():
 		ships[i]["scene"] = load("res://gameplay/ships/" + ships[i]["scene"] + ".tscn")
 		ships[i]["standoff"] = parse_bool(ships[i]["standoff"])
 		ships[i]["weapons"] = parse_x_dict(ships[i]["weapons"])
+		ships[i]["readout"] = load("res://" + ships[i]["readout"])
 		var faction = ships[i]["faction"]
 		if faction in ships_by_faction:
 			ships_by_faction[faction].append(ships[i]["id"])
@@ -159,6 +160,7 @@ func load_weapons():
 			weapon[field] = load(weapon[field])
 		for field in sound_fields:
 			weapon[field] = GdScriptAudioImport.loadfile(weapon[field])
+			weapon[field].loop = false
 
 func get_ship(ship_type, player_id):
 	var type = str(ship_type)
