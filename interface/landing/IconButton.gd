@@ -10,5 +10,4 @@ export var ship_data: Dictionary = {}
 func _ready():
 	print("res://" + ship_data["icon"])
 	texture_normal = load("res://" + ship_data["icon"])
-	print(texture_normal)
 	$Label.text = ship_data["name"]

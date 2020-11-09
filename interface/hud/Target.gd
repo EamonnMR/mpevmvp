@@ -1,8 +1,11 @@
 extends Panel
 
+var empty_selection_texture = load("res://sprites/emr_cc_by/empty.png")
+
 func _ready():
 	Client.player_input.connect("targeting_updated", self, "_selection_changed")
 	Client.connect("system_changed", self, "_selection_changed")
+
 func _selection_changed():
 	var ship: Ship = Client.player_input.selected_ship
 	if is_instance_valid(ship):
@@ -16,12 +19,14 @@ func _update():
 	if is_instance_valid(ship):
 		$Name.text = ship.data()["name"]
 		$Subtitle.text = ship.data()["subtitle"]
-		# if ship.is_player():
-		$Faction.text = "player"
-		#else:
-		#$Faction.text = Game.factions[ship.faction]["name"]
-		
+		$Readout.texture = ship.data()["readout"]
+		if ship.is_player():
+			$Faction.text = "player"
+		else:
+			$Faction.text = "non-player"
+			#$Faction.text = Game.factions[ship.faction]["name"]
 	else:
 		$Name.text = "[no target]"
 		$Subtitle.text = "---"
 		$Faction.text = "---"
+		$Readout.texture = empty_selection_texture
