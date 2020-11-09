@@ -34,6 +34,7 @@ func _ready():
 		landing = preload("res://interface/landing/landing_main.tscn").instance()
 		# landing.bind(self)
 		spobs = _get_spobs()
+		$SelectionSound.stream.loop = false
 
 func switch_system():
 	spobs = _get_spobs()
@@ -65,6 +66,7 @@ func select_spob(new_selected_spob: Spob):
 		selected_spob.remove_selection()
 	selected_spob = new_selected_spob
 	selected_spob.add_selection()
+	$SelectionSound.play()
 	emit_signal("navigation_updated")
 	
 func select_ship(new_selected_ship: Ship):
@@ -73,6 +75,7 @@ func select_ship(new_selected_ship: Ship):
 		selected_ship.remove_selection()
 	selected_ship = new_selected_ship
 	selected_ship.add_selection()
+	$SelectionSound.play()
 	emit_signal("targeting_updated")
 
 func _get_direction_change():
