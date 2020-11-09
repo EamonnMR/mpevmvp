@@ -82,6 +82,10 @@ remote func switch_level(new_level_name, level_data):
 remote func remove_entity(destination, ent_name):
 	print("client.remove_entity; ", destination, "/", ent_name)
 	var entity_to_remove = get_level().get_node(destination + "/" + ent_name)
+	# Hacky.
+	if entity_to_remove is Ship:
+		# TODO: Does this need to be before or after?
+		entity_to_remove.emit_signal("removed")
 	get_level().get_node(destination).remove_child(entity_to_remove)
 	
 remote func send_entity(destination, entity_data):

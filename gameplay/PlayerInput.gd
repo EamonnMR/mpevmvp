@@ -73,6 +73,7 @@ func select_ship(new_selected_ship: Ship):
 		selected_ship.remove_selection()
 	selected_ship = new_selected_ship
 	selected_ship.add_selection()
+	emit_signal("targeting_updated")
 
 func _get_direction_change():
 	var dc = 0

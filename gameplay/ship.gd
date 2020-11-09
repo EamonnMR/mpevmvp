@@ -20,6 +20,7 @@ var accel: float
 var max_cargo: int
 var price: int
 var standoff: bool
+var subtitle: String
 
 puppet var puppet_pos = Vector2(0,0)
 puppet var puppet_dir: float = 0
@@ -49,6 +50,8 @@ export var faction = ""
 
 signal destroyed
 signal cargo_updated
+signal removed
+signal status_updated
 
 func _ready():
 	if (name == str(Client.client_id)):
@@ -74,17 +77,17 @@ func is_alive():
 
 func _apply_stats():
 	for stat in SHIP_STATS:
-		set(stat, _data()[stat])
+		set(stat, data()[stat])
 		
 func _create_weapons():
-	for weapon_id in _data()["weapons"]:
+	for weapon_id in data()["weapons"]:
 		var weapon = preload("res://gameplay/Weapon.tscn").instance()
 		weapon.name = weapon_id
-		weapon.count = _data()["weapons"][weapon_id]
+		weapon.count = data()["weapons"][weapon_id]
 		weapon.apply_stats()
 		$weapons.add_child(weapon)
 
-func _data():
+func data():
 	return Game.ships[type]
 	
 func _show_debug_info():
@@ -123,7 +126,10 @@ func _physics_process(delta):
 		thrusting = puppet_thrusting
 		braking = puppet_braking
 		position = puppet_pos # This should be in integrate forces, but for some reason the puppet pos variable does not work there
+		var old_health = health
 		health = puppet_health
+		if old_health != health:
+			emit_signal("status_updated")
 	if (not is_network_master()):
 		# To avoid jitter alledgedly
 		pass
