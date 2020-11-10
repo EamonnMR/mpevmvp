@@ -11,7 +11,8 @@ const SHIP_STATS = [
 	"accel",
 	"max_cargo",
 	"price",
-	"standoff"
+	"standoff",
+	"armor"
 ]
 
 var max_speed: float
@@ -21,6 +22,7 @@ var max_cargo: int
 var price: int
 var standoff: bool
 var subtitle: String
+var armor: float
 
 puppet var puppet_pos = Vector2(0,0)
 puppet var puppet_dir: float = 0
@@ -78,6 +80,9 @@ func is_alive():
 func _apply_stats():
 	for stat in SHIP_STATS:
 		set(stat, data()[stat])
+	
+	health = armor
+	puppet_health = armor
 		
 func _create_weapons():
 	for weapon_id in data()["weapons"]:
@@ -122,14 +127,14 @@ func _physics_process(delta):
 			for weapon in $weapons.get_children():
 				weapon.try_shooting()
 	else:
+		if puppet_health != health:
+			health = puppet_health
+			emit_signal("status_updated")
+			print("changed health")
 		direction = puppet_dir
 		thrusting = puppet_thrusting
 		braking = puppet_braking
 		position = puppet_pos # This should be in integrate forces, but for some reason the puppet pos variable does not work there
-		var old_health = health
-		health = puppet_health
-		if old_health != health:
-			emit_signal("status_updated")
 	if (not is_network_master()):
 		# To avoid jitter alledgedly
 		pass

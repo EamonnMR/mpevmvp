@@ -70,17 +70,20 @@ func select_spob(new_selected_spob: Spob):
 		$SelectionSound.play()
 		emit_signal("navigation_updated")
 	
-func select_ship(new_selected_ship: Ship):
+func select_ship(new_selected_ship: Ship, play_sound:bool = true):
 	if selected_ship != new_selected_ship:
 		print("Select Spob: ", new_selected_ship)
 		if is_instance_valid(selected_ship):
 			selected_ship.remove_selection()
 		if new_selected_ship != Client.player_ship:
 			selected_ship = new_selected_ship
-			selected_ship.add_selection()
+			if is_instance_valid(selected_ship):
+				selected_ship.add_selection()
+				selected_ship.connect("destroyed", self, "select_ship", [null, false])
 		else:
 			selected_ship = null
-		$SelectionSound.play()
+		if play_sound:
+			$SelectionSound.play()
 		emit_signal("targeting_updated")
 
 func _get_direction_change():

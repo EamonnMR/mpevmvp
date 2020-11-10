@@ -127,6 +127,7 @@ func load_ships():
 		ships[i]["standoff"] = parse_bool(ships[i]["standoff"])
 		ships[i]["weapons"] = parse_x_dict(ships[i]["weapons"])
 		ships[i]["readout"] = load("res://" + ships[i]["readout"])
+		ships[i]["armor"] = float(ships[i]["armor"])
 		var faction = ships[i]["faction"]
 		if faction in ships_by_faction:
 			ships_by_faction[faction].append(ships[i]["id"])

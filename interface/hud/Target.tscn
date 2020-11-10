@@ -56,7 +56,7 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="ProgressBar" type="ProgressBar" parent="."]
+[node name="Health" type="ProgressBar" parent="."]
 margin_left = 11.0
 margin_top = 118.5
 margin_right = 144.0
