@@ -1,0 +1,15 @@
+[remap]
+
+importer="ogg_vorbis"
+type="AudioStreamOGGVorbis"
+path="res://.import/sfx_18a.ogg-b872dc1f27a320342ac34f5bf1843d0e.oggstr"
+
+[deps]
+
+source_file="res://sound/cc0_rubberduck/sfx_18a.ogg"
+dest_files=[ "res://.import/sfx_18a.ogg-b872dc1f27a320342ac34f5bf1843d0e.oggstr" ]
+
+[params]
+
+loop=false
+loop_offset=0

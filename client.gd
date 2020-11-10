@@ -77,6 +77,7 @@ remote func switch_level(new_level_name, level_data):
 	print(level_data)
 	get_multiverse().switch_level(new_level_name, level_data)
 	player_input.switch_system()
+	
 	emit_signal("system_changed")
 
 remote func remove_entity(destination, ent_name):

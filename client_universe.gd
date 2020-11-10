@@ -23,3 +23,4 @@ func switch_level(new_level_name, level_data):
 	new_level.name = "world"
 	_get_universe().add_child(new_level)
 	assert(new_level == _get_universe().get_node("world"))
+	$SystemChangeSound.play()

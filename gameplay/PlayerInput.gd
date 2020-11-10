@@ -61,22 +61,27 @@ func _physics_process(delta):
 		rset_id(1, "puppet_thrusting", thrusting)
 		
 func select_spob(new_selected_spob: Spob):
-	print("Select Spob: ", new_selected_spob)
-	if is_instance_valid(selected_spob):
-		selected_spob.remove_selection()
-	selected_spob = new_selected_spob
-	selected_spob.add_selection()
-	$SelectionSound.play()
-	emit_signal("navigation_updated")
+	if new_selected_spob != selected_spob:
+		print("Select Spob: ", new_selected_spob)
+		if is_instance_valid(selected_spob):
+			selected_spob.remove_selection()
+		selected_spob = new_selected_spob
+		selected_spob.add_selection()
+		$SelectionSound.play()
+		emit_signal("navigation_updated")
 	
 func select_ship(new_selected_ship: Ship):
-	print("Select Spob: ", new_selected_ship)
-	if is_instance_valid(selected_ship):
-		selected_ship.remove_selection()
-	selected_ship = new_selected_ship
-	selected_ship.add_selection()
-	$SelectionSound.play()
-	emit_signal("targeting_updated")
+	if selected_ship != new_selected_ship:
+		print("Select Spob: ", new_selected_ship)
+		if is_instance_valid(selected_ship):
+			selected_ship.remove_selection()
+		if new_selected_ship != Client.player_ship:
+			selected_ship = new_selected_ship
+			selected_ship.add_selection()
+		else:
+			selected_ship = null
+		$SelectionSound.play()
+		emit_signal("targeting_updated")
 
 func _get_direction_change():
 	var dc = 0
