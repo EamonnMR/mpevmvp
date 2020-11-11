@@ -89,7 +89,7 @@ func randomly_assign_faction_core_worlds() -> Array:
 				scaled_rnd_result = int(rnd_result * (sorted.size() / scale))
 			else:
 				scaled_rnd_result = rng.randi_range(0, sorted.size())
-			if scaled_rnd_result > sorted.size():
+			if scaled_rnd_result > sorted.size() or scaled_rnd_result < 0 - sorted.size():
 				print("Long tail too long: ", rnd_result, " (", scaled_rnd_result, ")")
 				continue
 			var system_id = sorted[scaled_rnd_result]
