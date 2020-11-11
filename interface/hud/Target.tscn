@@ -1,7 +1,8 @@
-[gd_scene load_steps=3 format=2]
+[gd_scene load_steps=4 format=2]
 
 [ext_resource path="res://sprites/onyx_cc_nc/readout/5.png" type="Texture" id=1]
 [ext_resource path="res://interface/hud/Target.gd" type="Script" id=2]
+[ext_resource path="res://interface/NinePatchPanel.tscn" type="PackedScene" id=3]
 
 [node name="Target" type="Panel"]
 margin_left = 856.336
@@ -12,6 +13,11 @@ script = ExtResource( 2 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
+
+[node name="NinePatchPanel" parent="." instance=ExtResource( 3 )]
+margin_left = -4.0
+margin_right = 158.0
+margin_bottom = 145.0
 
 [node name="Name" type="Label" parent="."]
 margin_left = 7.0

@@ -1,6 +1,7 @@
-[gd_scene load_steps=2 format=2]
+[gd_scene load_steps=3 format=2]
 
 [ext_resource path="res://interface/landing/Store.gd" type="Script" id=1]
+[ext_resource path="res://interface/NinePatchPanel.tscn" type="PackedScene" id=2]
 
 [node name="Panel" type="Panel"]
 anchor_left = 0.5
@@ -15,6 +16,10 @@ script = ExtResource( 1 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
+
+[node name="NinePatchPanel" parent="." instance=ExtResource( 2 )]
+margin_right = 787.0
+margin_bottom = 484.0
 
 [node name="Left" type="Panel" parent="."]
 margin_left = 22.0

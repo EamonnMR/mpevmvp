@@ -1,6 +1,7 @@
-[gd_scene load_steps=2 format=2]
+[gd_scene load_steps=3 format=2]
 
 [ext_resource path="res://interface/MainMenu.gd" type="Script" id=1]
+[ext_resource path="res://interface/NinePatchPanel.tscn" type="PackedScene" id=2]
 
 [node name="MainMenu" type="Node2D"]
 script = ExtResource( 1 )
@@ -13,6 +14,12 @@ margin_bottom = 381.303
 __meta__ = {
 "_edit_use_anchors_": false
 }
+
+[node name="NinePatchPanel" parent="MainScreen" instance=ExtResource( 2 )]
+margin_left = -10.0
+margin_top = -14.5595
+margin_right = 314.0
+margin_bottom = 265.44
 
 [node name="FindGameButton" type="Button" parent="MainScreen"]
 anchor_left = 0.5
@@ -103,6 +110,12 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
+[node name="NinePatchPanel" parent="FindScreen" instance=ExtResource( 2 )]
+margin_left = -13.0
+margin_top = -8.0
+margin_right = 322.0
+margin_bottom = 240.0
+
 [node name="GamesList" type="VBoxContainer" parent="FindScreen"]
 margin_left = 20.0
 margin_top = 38.0
@@ -144,6 +157,12 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
+[node name="NinePatchPanel" parent="JoinScreen" instance=ExtResource( 2 )]
+margin_left = -10.0
+margin_top = -5.0
+margin_right = 320.0
+margin_bottom = 237.0
+
 [node name="CancelButton" type="Button" parent="JoinScreen"]
 margin_left = 9.5386
 margin_top = 195.378
@@ -175,6 +194,12 @@ margin_bottom = 379.968
 __meta__ = {
 "_edit_use_anchors_": false
 }
+
+[node name="NinePatchPanel" parent="HostScreen" instance=ExtResource( 2 )]
+margin_left = -8.0
+margin_top = -13.0
+margin_right = 312.0
+margin_bottom = 232.0
 
 [node name="CancelButton" type="Button" parent="HostScreen"]
 margin_left = 9.5386
