@@ -12,6 +12,7 @@ var factions = null
 var spobs = {}
 var ships_by_faction = {}
 var weapons = {}
+var upgrades = {}
 
 const INPUT = "input_nodes"
 const PLAY_AREA_RADIUS = 2000
@@ -42,7 +43,8 @@ func _ready():
 		"commodities": "res://data/trade.csv",
 		"factions": "res://data/factions.csv",
 		"ships": "res://data/ships.csv",
-		"weapons": "res://data/weapons.csv"
+		"weapons": "res://data/weapons.csv",
+		"upgrades": "res://data/upgrades.csv"
 	}, "process_data")
 
 func process_data():
@@ -50,6 +52,7 @@ func process_data():
 	load_commodities()
 	load_factions()
 	load_weapons()
+	load_upgrades()
 	load_galaxy()
 	load_ships()
 	print("Game Ready")
@@ -125,7 +128,7 @@ func load_ships():
 	for i in ships:
 		ships[i]["scene"] = load("res://gameplay/ships/" + ships[i]["scene"] + ".tscn")
 		ships[i]["standoff"] = parse_bool(ships[i]["standoff"])
-		ships[i]["weapons"] = parse_x_dict(ships[i]["weapons"])
+		ships[i]["upgrades"] = parse_x_dict(ships[i]["upgrades"])
 		ships[i]["readout"] = load("res://" + ships[i]["readout"])
 		ships[i]["armor"] = float(ships[i]["armor"])
 		var faction = ships[i]["faction"]
@@ -162,6 +165,10 @@ func load_weapons():
 		for field in sound_fields:
 			weapon[field] = GdScriptAudioImport.loadfile(weapon[field])
 			weapon[field].loop = false
+			
+func load_upgrades():
+	for i in upgrades:
+		upgrades[i] = Upgrade.new(upgrades[i])
 
 func get_ship(ship_type, player_id):
 	var type = str(ship_type)

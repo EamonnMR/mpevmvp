@@ -33,13 +33,19 @@ _global_script_classes=[ {
 "class": "Spob",
 "language": "GDScript",
 "path": "res://environment/spob.gd"
+}, {
+"base": "Node",
+"class": "Upgrade",
+"language": "GDScript",
+"path": "res://gameplay/Upgrade.gd"
 } ]
 _global_script_class_icons={
 "Hud": "",
 "PlayerInput": "",
 "RotationSprite": "",
 "Ship": "",
-"Spob": ""
+"Spob": "",
+"Upgrade": ""
 }
 
 [application]

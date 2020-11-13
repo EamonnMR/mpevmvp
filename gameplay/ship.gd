@@ -12,17 +12,22 @@ const SHIP_STATS = [
 	"max_cargo",
 	"price",
 	"standoff",
-	"armor"
+	"armor",
+	"upgrades",
+	"free_mass"
 ]
 
 var max_speed: float
 var turn: float
 var accel: float
 var max_cargo: int
+var free_mass: int
 var price: int
 var standoff: bool
 var subtitle: String
 var armor: float
+var upgrades: Dictionary
+var weapons: Dictionary
 
 puppet var puppet_pos = Vector2(0,0)
 puppet var puppet_dir: float = 0
@@ -70,6 +75,7 @@ func _ready():
 		removed.queue_free()
 	# _show_debug_info()
 	_apply_stats()
+	_apply_upgrades()
 	_create_weapons()
 	
 	# $ClickArea/CollisionShape2D.shape.radius = $RotationSprite.texture.get_size().length() / 2
@@ -83,12 +89,17 @@ func _apply_stats():
 	
 	health = armor
 	puppet_health = armor
-		
+
+func _apply_upgrades():
+	for upgrade in upgrades:
+		var count = upgrades[upgrade]
+		Game.upgrades[upgrade].apply(self, count)
+
 func _create_weapons():
-	for weapon_id in data()["weapons"]:
+	for weapon_id in weapons:
 		var weapon = preload("res://gameplay/Weapon.tscn").instance()
 		weapon.name = weapon_id
-		weapon.count = data()["weapons"][weapon_id]
+		weapon.count = weapons[weapon_id]
 		weapon.apply_stats()
 		$weapons.add_child(weapon)
 
@@ -264,7 +275,8 @@ func serialize():
 		"team_set": team_set,
 		"type": type,
 		"money": money,
-		"bulk_cargo": bulk_cargo
+		"bulk_cargo": bulk_cargo,
+		"upgrades": upgrades
 	}
 
 func deserialize(data):
