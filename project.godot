@@ -14,6 +14,11 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://interface/hud/Hud.gd"
 }, {
+"base": "Object",
+"class": "Item",
+"language": "GDScript",
+"path": "res://Item.gd"
+}, {
 "base": "Node2D",
 "class": "PlayerInput",
 "language": "GDScript",
@@ -29,22 +34,35 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://gameplay/ship.gd"
 }, {
+"base": "Item",
+"class": "ShipDat",
+"language": "GDScript",
+"path": "res://ShipData.gd"
+}, {
 "base": "Node2D",
 "class": "Spob",
 "language": "GDScript",
 "path": "res://environment/spob.gd"
 }, {
-"base": "Node",
+"base": "Panel",
+"class": "Store",
+"language": "GDScript",
+"path": "res://interface/landing/Store.gd"
+}, {
+"base": "Item",
 "class": "Upgrade",
 "language": "GDScript",
 "path": "res://gameplay/Upgrade.gd"
 } ]
 _global_script_class_icons={
 "Hud": "",
+"Item": "",
 "PlayerInput": "",
 "RotationSprite": "",
 "Ship": "",
+"ShipDat": "",
 "Spob": "",
+"Store": "",
 "Upgrade": ""
 }
 

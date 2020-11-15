@@ -48,12 +48,12 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="ShipName" type="Label" parent="."]
+[node name="ItemName" type="Label" parent="."]
 margin_left = 436.752
 margin_top = 29.3438
 margin_right = 505.752
 margin_bottom = 43.3438
-text = "Ship Name"
+text = "ItemName"
 __meta__ = {
 "_edit_use_anchors_": false
 }

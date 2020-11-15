@@ -4,19 +4,6 @@ class_name Ship
 
 const JUMP_DISTANCE = 600
 
-# Values loaded directly from ships.csv
-const SHIP_STATS = [
-	"max_speed",
-	"turn",
-	"accel",
-	"max_cargo",
-	"price",
-	"standoff",
-	"armor",
-	"upgrades",
-	"free_mass"
-]
-
 var max_speed: float
 var turn: float
 var accel: float
@@ -84,8 +71,9 @@ func is_alive():
 	return true
 
 func _apply_stats():
-	for stat in SHIP_STATS:
-		set(stat, data()[stat])
+	for stat in data().get_keys():
+		if stat in self:
+			set(stat, data().get(stat))
 	
 	health = armor
 	puppet_health = armor
@@ -103,7 +91,7 @@ func _create_weapons():
 		weapon.apply_stats()
 		$weapons.add_child(weapon)
 
-func data():
+func data() -> ShipDat:
 	return Game.ships[type]
 	
 func _show_debug_info():

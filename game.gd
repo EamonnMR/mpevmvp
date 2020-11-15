@@ -126,16 +126,14 @@ func load_factions():
 		
 func load_ships():
 	for i in ships:
-		ships[i]["scene"] = load("res://gameplay/ships/" + ships[i]["scene"] + ".tscn")
-		ships[i]["standoff"] = parse_bool(ships[i]["standoff"])
-		ships[i]["upgrades"] = parse_x_dict(ships[i]["upgrades"])
-		ships[i]["readout"] = load("res://" + ships[i]["readout"])
-		ships[i]["armor"] = float(ships[i]["armor"])
-		var faction = ships[i]["faction"]
-		if faction in ships_by_faction:
-			ships_by_faction[faction].append(ships[i]["id"])
+		var dict = ships[i]
+		var ship = ShipDat.new(ships[i])
+		
+		if ship.faction in ships_by_faction:
+			ships_by_faction[ship.faction].append(ship.id)
 		else:
-			ships_by_faction[faction] = [ships[i]["id"]]
+			ships_by_faction[ship.faction] = [ship.id]
+		ships[i] = ship
 
 func load_weapons():
 	var int_fields = [
@@ -172,7 +170,9 @@ func load_upgrades():
 
 func get_ship(ship_type, player_id):
 	var type = str(ship_type)
-	var ship = ships[type]["scene"].instance()
+	print("Type: ", type)
+	print("Scene: ", ships[type].scene)
+	var ship = ships[type].scene.instance()
 	ship.type = type
 	ship.set_name(str(player_id))
 	return ship

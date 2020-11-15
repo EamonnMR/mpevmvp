@@ -1,16 +1,15 @@
-extends Node
+extends Item
 
 class_name Upgrade
 
-var id: int
-var title: String
 var mass: int
 var effects: Dictionary
 
 func _init(csv_row: Dictionary):
 	id = int(csv_row["id"])
-	title = csv_row["name"]
+	name = csv_row["name"]
 	mass = int(csv_row["mass"])
+	icon = csv_row["icon"]
 	effects = {}
 	
 	var effect_counter = 0
@@ -25,11 +24,12 @@ func _init(csv_row: Dictionary):
 		effects[effect_type] = effect_value
 		effect_counter += 1
 
-func can_add(ship: Ship, count: int):
+func can_add(ship, count: int) -> bool:
 	if ship.free_mass >= mass:
 		return true
+	return false
 
-func apply(ship: Ship, count: int):
+func apply(ship, count: int):
 	for effect in effects:
 		if effect == "weapon":
 			var weapon_id = effects[effect]

@@ -17,9 +17,9 @@ func _selection_changed():
 func _update():
 	var ship: Ship = Client.player_input.selected_ship
 	if is_instance_valid(ship):
-		$Name.text = ship.data()["name"]
-		$Subtitle.text = ship.data()["subtitle"]
-		$Readout.texture = ship.data()["readout"]
+		$Name.text = ship.data().name
+		$Subtitle.text = ship.data().subtitle
+		$Readout.texture = ship.data().readout
 		$Health.max_value = ship.armor
 		$Health.value = ship.health
 		if ship.is_player():
