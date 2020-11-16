@@ -157,6 +157,10 @@ func map_select_system(system_id):
 	
 func handle_gui_player_ship_purchase(id):
 	Server.rpc_id(1, "purchase_ship", id)
+	
+func handle_gui_player_ship_upgrade(id, count):
+	print("Would buy upgrade: " + id + " (quantity: " + str(count) + ")")
+	#Server.rpc_id(1, "purchase_ship", id, count)
 
 func purchase_commodity(commodity_id, quantity, trading_partner):
 	Server.rpc_id(1, "purchase_commodity", commodity_id, quantity, trading_partner)

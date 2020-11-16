@@ -14,7 +14,6 @@ var armor: float
 var faction: String
 var upgrades: Dictionary
 var scene: PackedScene
-var desc: String
 var readout: Texture
 
 func _init(data: Dictionary):

@@ -7,6 +7,7 @@ class_name Item
 var id: int
 var name: String
 var icon: String
+var desc: String
 
 func get_keys():
 	var keys = []

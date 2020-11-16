@@ -10,6 +10,7 @@ func _init(csv_row: Dictionary):
 	name = csv_row["name"]
 	mass = int(csv_row["mass"])
 	icon = csv_row["icon"]
+	desc = csv_row["desc"]
 	effects = {}
 	
 	var effect_counter = 0

@@ -11,7 +11,7 @@ func _ready():
 		child.queue_free()
 	for type in items():
 		var button = button_class.instance()
-		button.data = Game.ships[type]
+		button.data = items()[type]
 		button.connect("pressed", self, "on_grid_button_pressed", [type])
 		$Left/IconGrid.add_child( button )
 
@@ -22,11 +22,10 @@ func on_grid_button_pressed(id):
 	update_selection(id)
 	
 func update_selection(id):
-	var data = Game.ships[id]
+	var data: Item = items()[id]
 	selected = id
 	$ItemName.text = data.name
 	$desc.text = data.desc
-	print("Selected item: ", id)
 
 func _on_leave_pressed():
 	hide()
