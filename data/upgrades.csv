@@ -1,3 +1,3 @@
-id,name,mass,desc,icon,effect_0,value_0
-0,cannon,1,"Damage shields and armor with sweet, sweet plasma",sprites/onyx_cc_nc/icons/upg_0.png,weapon,0
-1,gun,2,Hoaky religions and anchient weapons are no match for a good 20mm cannon at your side,sprites/onyx_cc_nc/icons/upg_1.png,weapon,1
+id,name,mass,price,desc,icon,effect_0,value_0
+0,cannon,1,100,"Damage shields and armor with sweet, sweet plasma",sprites/onyx_cc_nc/icons/upg_0.png,weapon,0
+1,gun,2,200,Hoaky religions and anchient weapons are no match for a good 20mm cannon at your side,sprites/onyx_cc_nc/icons/upg_1.png,weapon,1

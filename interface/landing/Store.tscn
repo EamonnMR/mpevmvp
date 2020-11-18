@@ -63,7 +63,7 @@ margin_left = 574.336
 margin_top = 432.747
 margin_right = 673.336
 margin_bottom = 452.747
-text = "Buy New Ship"
+text = "Buy"
 
 [node name="desc" type="Label" parent="."]
 margin_left = 439.0

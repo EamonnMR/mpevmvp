@@ -85,11 +85,27 @@ func _apply_upgrades():
 
 func _create_weapons():
 	for weapon_id in weapons:
-		var weapon = preload("res://gameplay/Weapon.tscn").instance()
-		weapon.name = weapon_id
-		weapon.count = weapons[weapon_id]
+		_add_weapon(weapon_id, weapons[weapon_id])
+
+func _add_weapon(type, count):
+	var weapon = $weapons.get_node(type)
+	if weapon:
+		weapon.count += count
+		weapon.apply_stats()
+	else:
+		weapon = preload("res://gameplay/Weapon.tscn").instance()
+		weapon.name = type
+		weapon.count = count
 		weapon.apply_stats()
 		$weapons.add_child(weapon)
+	
+func _remove_weapon(type, count):
+	var weapon = $weapons.get_node(type)
+	weapon.count -= count
+	if weapon.count <= 0:
+		$weapons.remove_child(type)
+	else:
+		$weapons.apply_stats()
 
 func data() -> ShipDat:
 	return Game.ships[type]
@@ -277,6 +293,7 @@ func deserialize(data):
 	type = data["type"]
 	money = data["money"]
 	bulk_cargo = data["bulk_cargo"]
+	upgrades = data["upgrades"]
 
 func rset_ex(puppet_var, value):
 	# This avoids a whole lot of extra network traffic...
@@ -337,6 +354,21 @@ func total_cargo() -> int:
 		total += bulk_cargo[key]
 	return total
 
+func purchase_upgrade(upgrade, quantity: int):
+	price = upgrade.price * quantity
+	if money >= price and free_mass >= quantity:
+		money -= price
+		push_add_upgrade(upgrade.id, quantity)
+	else:
+		print("Can't buy upgrade")
+
+func sell_upgrade(upgrade, quantity: int):
+	if upgrade.id in upgrades and quantity < upgrades[upgrade.id]:
+		money += upgrade.price * quantity
+		push_remove_upgrade(upgrade.id, quantity)
+	else:
+		print("Can't sell upgrade")
+
 func purchase_commodity(commodity_id, quantity, price):
 	if money >= price and free_cargo() >= quantity:
 		money -= price
@@ -352,6 +384,42 @@ func sell_commodity(commodity_id, quantity, price):
 # One-off push functions for setting remote stuff.
 # We don't want to go through the puppet push/pull because
 # they're unlikley to be called many times per frame.
+
+func push_add_upgrade(type, quantity):
+	add_upgrade(type, quantity)
+	for id in get_level().get_node("world").get_player_ids():
+		rpc_id(id, "add_upgrade", type, quantity)
+		
+sync func add_upgrade(type, quantity):
+	print(Game.upgrades.keys())
+	for key in Game.upgrades.keys():
+		print(typeof(key))
+		print(TYPE_STRING)
+	print(type)
+	var upgrade = Game.upgrades[str(type)]
+	if type in upgrades:
+		upgrades[type] += quantity
+	else:
+		upgrades[type] = quantity
+	var weapon_add = upgrade.apply(self, quantity)
+	for weapon_id in weapon_add:
+		_add_weapon(weapon_id, weapon_add[weapon_id])
+
+func push_remove_upgrade(type, quantity):
+	add_upgrade(type, quantity)
+	for id in get_level().get_node("world").get_player_ids():
+		rpc_id(id, "remove", type, quantity)
+		
+
+sync func remove_upgrade(type, quantity):
+	var upgrade = Game.upgrades[type]
+	if type in upgrades:
+		upgrades[type] -= quantity
+	else:
+		upgrades[type] = quantity
+	var weapon_remove = Game.upgrades.apply(self, -1 * quantity)
+	for weapon_id in weapon_remove:
+		_remove_weapon(weapon_id, abs(weapon_remove[weapon_id]))
 
 func push_update_cargo_and_money():
 	for id in get_level().get_node("world").get_player_ids():

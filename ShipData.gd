@@ -7,7 +7,6 @@ var turn: float
 var accel: float
 var max_cargo: int
 var free_mass: int
-var price: int
 var standoff: bool
 var subtitle: String
 var armor: float

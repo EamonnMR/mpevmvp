@@ -8,6 +8,7 @@ var id: int
 var name: String
 var icon: String
 var desc: String
+var price: int
 
 func get_keys():
 	var keys = []

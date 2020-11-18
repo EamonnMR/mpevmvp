@@ -5,3 +5,11 @@
 
 [node name="Panel" instance=ExtResource( 1 )]
 script = ExtResource( 2 )
+
+[node name="SellButton" type="Button" parent="." index="6"]
+margin_left = 532.97
+margin_top = 433.36
+margin_right = 567.97
+margin_bottom = 453.36
+text = "Sell"
+[connection signal="pressed" from="SellButton" to="." method="_on_SellButton_pressed"]

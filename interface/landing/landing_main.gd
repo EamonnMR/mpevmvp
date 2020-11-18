@@ -23,8 +23,8 @@ Faction: %s
 func _ready():
 	$Panel/LeaveButton.connect("pressed", Client.player_input, "toggle_landing")
 	$ShipStore.connect("player_purchased_ship", Client.player_input, "handle_gui_player_ship_purchase")
-	$ShipStore.connect("player_purchased_ship", Client.player_input, "handle_gui_player_ship_upgrade")
-	
+	$UpgradeStore.connect("player_purchased_upgrade", Client.player_input, "handle_gui_player_ship_upgrade_buy")
+	$UpgradeStore.connect("player_sold_upgrade", Client.player_input, "handle_gui_player_ship_upgrade_sell")
 func _on_ShipyardButton_pressed():
 	$ShipStore.show()
 

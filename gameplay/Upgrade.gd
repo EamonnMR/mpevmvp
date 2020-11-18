@@ -9,6 +9,7 @@ func _init(csv_row: Dictionary):
 	id = int(csv_row["id"])
 	name = csv_row["name"]
 	mass = int(csv_row["mass"])
+	price = int(csv_row["price"])
 	icon = csv_row["icon"]
 	desc = csv_row["desc"]
 	effects = {}
@@ -30,13 +31,20 @@ func can_add(ship, count: int) -> bool:
 		return true
 	return false
 
-func apply(ship, count: int):
+func apply(ship, count: int) -> Dictionary:
+	# Returns a dict of {weapon_id: count}
+	# If you pass a negative count, make sure the effect works in reverse.
+	var added_weapons = {}
 	for effect in effects:
 		if effect == "weapon":
 			var weapon_id = effects[effect]
+			added_weapons[weapon_id] = count
 			if weapon_id in ship.weapons:
 				ship.weapons[weapon_id] += count
 			else:
 				ship.weapons[weapon_id] = count
+			if ship.weapons[weapon_id] == 0:
+				ship.weapons.erase(weapon_id)
 		if effect == "armor":
 			ship.armor += float(effects[effect]) * count
+	return added_weapons
