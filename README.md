@@ -8,10 +8,6 @@ Built to sort of scratch an itch: can [EV](http://escape-velocity.games) mechani
 
 Also functions as a demo for multi-scene client/server godot projects.
 
-Some more screenshots:
-
-![Landing](https://raw.githubusercontent.com/EamonnMR/mpevmvp/master/screenshots/landing.jpg)
-
 Download:
 
 https://github.com/EamonnMR/mpevmvp/releases
