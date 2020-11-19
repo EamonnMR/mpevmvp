@@ -11,12 +11,26 @@ func _ready():
 		child.queue_free()
 	for type in items():
 		var button = button_class.instance()
+		button.id = type
 		button.data = items()[type]
+		button.count = get_count(type)
 		button.connect("pressed", self, "on_grid_button_pressed", [type])
 		$Left/IconGrid.add_child( button )
 
+func update():
+	print("Update")
+	for button in $Left/IconGrid.get_children():
+		# TODO: Why ain't this working?
+		button.count = get_count(button.id)
+		button.update()
+	# TODO: Enable / Disable buy and sell buttons here
+
 func items() -> Dictionary:
 	return {}
+	
+func get_count(item_id) -> int:
+	print("Base get count")
+	return 0
 
 func on_grid_button_pressed(id):
 	update_selection(id)

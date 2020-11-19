@@ -46,6 +46,7 @@ signal destroyed
 signal cargo_updated
 signal removed
 signal status_updated
+signal upgrades_updated
 
 func _ready():
 	if (name == str(Client.client_id)):
@@ -81,19 +82,23 @@ func _apply_stats():
 func _apply_upgrades():
 	for upgrade in upgrades:
 		var count = upgrades[upgrade]
-		Game.upgrades[upgrade].apply(self, count)
+		if not (upgrade in Game.upgrades):
+			print("INVALID UPGRADE: ", upgrade, " on ship type ", type)
+			print("Valid Upgrades: ", Game.upgrades.keys())
+		else:
+			Game.upgrades[upgrade].apply(self, count)
 
 func _create_weapons():
 	for weapon_id in weapons:
 		_add_weapon(weapon_id, weapons[weapon_id])
 
 func _add_weapon(type, count):
-	var weapon = $weapons.get_node(type)
-	if weapon:
+	if $weapons.has_node(type):
+		var weapon = $weapons.get_node(type)
 		weapon.count += count
 		weapon.apply_stats()
 	else:
-		weapon = preload("res://gameplay/Weapon.tscn").instance()
+		var weapon = preload("res://gameplay/Weapon.tscn").instance()
 		weapon.name = type
 		weapon.count = count
 		weapon.apply_stats()
@@ -391,6 +396,7 @@ func push_add_upgrade(type, quantity):
 		rpc_id(id, "add_upgrade", type, quantity)
 		
 sync func add_upgrade(type, quantity):
+	type = str(type)
 	print(Game.upgrades.keys())
 	for key in Game.upgrades.keys():
 		print(typeof(key))
@@ -404,6 +410,7 @@ sync func add_upgrade(type, quantity):
 	var weapon_add = upgrade.apply(self, quantity)
 	for weapon_id in weapon_add:
 		_add_weapon(weapon_id, weapon_add[weapon_id])
+	emit_signal("upgrades_updated")
 
 func push_remove_upgrade(type, quantity):
 	add_upgrade(type, quantity)
@@ -420,6 +427,7 @@ sync func remove_upgrade(type, quantity):
 	var weapon_remove = Game.upgrades.apply(self, -1 * quantity)
 	for weapon_id in weapon_remove:
 		_remove_weapon(weapon_id, abs(weapon_remove[weapon_id]))
+	emit_signal("upgrades_updated")
 
 func push_update_cargo_and_money():
 	for id in get_level().get_node("world").get_player_ids():

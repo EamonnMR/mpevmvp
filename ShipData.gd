@@ -16,7 +16,6 @@ var scene: PackedScene
 var readout: Texture
 
 func _init(data: Dictionary):
-	print("Ship Init")
 	for i in data:
 		var value = data[i]
 		if i == "scene":
@@ -29,4 +28,3 @@ func _init(data: Dictionary):
 			set(i, Game.parse_x_dict(value))
 		elif (i in self):
 			set(i, value)
-	print("Ship init successful")

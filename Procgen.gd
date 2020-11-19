@@ -107,7 +107,6 @@ func randomly_assign_faction_core_worlds() -> Array:
 
 func calculate_system_distances():
 	var sum_position = Vector2(0,0)
-	var max_position = Vector2(0,0)
 	
 	for system_id in Game.systems:
 		var system = Game.systems[system_id]
@@ -185,7 +184,7 @@ func grow_npc_spawns():
 	print("Growing faction spawns")
 	for faction_id in Game.factions:
 		var faction = Game.factions[faction_id]
-		for i in range(faction["npc_radius"]):
+		for _i in range(faction["npc_radius"]):
 			var marked_systems = []
 			for system_id in Game.systems:
 				var system = Game.systems[system_id]
