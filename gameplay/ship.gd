@@ -106,11 +106,14 @@ func _add_weapon(type, count):
 	
 func _remove_weapon(type, count):
 	var weapon = $weapons.get_node(type)
+	if not is_instance_valid(weapon):
+		print("Cannot remove weapon: ", type)
+		return
 	weapon.count -= count
 	if weapon.count <= 0:
-		$weapons.remove_child(type)
+		$weapons.remove_child(weapon)
 	else:
-		$weapons.apply_stats()
+		$weapons.get_node(type).apply_stats()
 
 func data() -> ShipDat:
 	return Game.ships[type]
@@ -368,10 +371,11 @@ func purchase_upgrade(upgrade, quantity: int):
 		print("Can't buy upgrade")
 
 func sell_upgrade(upgrade, quantity: int):
-	if upgrade.id in upgrades and quantity < upgrades[upgrade.id]:
+	if str(upgrade.id) in upgrades and quantity <= upgrades[str(upgrade.id)]:
 		money += upgrade.price * quantity
 		push_remove_upgrade(upgrade.id, quantity)
 	else:
+		breakpoint
 		print("Can't sell upgrade")
 
 func purchase_commodity(commodity_id, quantity, price):
@@ -415,19 +419,19 @@ sync func add_upgrade(type, quantity):
 func push_remove_upgrade(type, quantity):
 	add_upgrade(type, quantity)
 	for id in get_level().get_node("world").get_player_ids():
-		rpc_id(id, "remove", type, quantity)
-		
+		rpc_id(id, "remove_upgrade", type, quantity)
 
-sync func remove_upgrade(type, quantity):
-	var upgrade = Game.upgrades[type]
-	if type in upgrades:
-		upgrades[type] -= quantity
-	else:
-		upgrades[type] = quantity
-	var weapon_remove = Game.upgrades.apply(self, -1 * quantity)
+sync func remove_upgrade(type_int, quantity):
+	var upgrade = Game.upgrades[str(type)]
+	var type = str(type_int)
+	upgrades[type] -= quantity
+	if upgrades[type] == 0:
+		upgrades.erase(type)
+	var weapon_remove = upgrade.apply(self, -1 * quantity)
 	for weapon_id in weapon_remove:
 		_remove_weapon(weapon_id, abs(weapon_remove[weapon_id]))
 	emit_signal("upgrades_updated")
+	print("Upgrades updated emitted")
 
 func push_update_cargo_and_money():
 	for id in get_level().get_node("world").get_player_ids():
