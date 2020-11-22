@@ -179,7 +179,7 @@ remote func purchase_upgrade(upgrade_id, quantity):
 		player.purchase_upgrade(upgrade, quantity)
 		
 remote func sell_upgrade(upgrade_id, quantity):
-	print("Server.sell_upgrade")
+	print("Server.sell_upgrade. id: ", upgrade_id, " , quantity: ", quantity)
 	var player_id = get_tree().get_rpc_sender_id()
 	var upgrade: Upgrade = Game.upgrades[upgrade_id]
 	if _is_player_alive(player_id):
@@ -217,7 +217,7 @@ func create_npc(type, faction, position, level=null):
 	print("Server Spawn Ship on level: ", level)
 	var ship = Game.get_npc_ship(type, faction)
 	ship.add_child(preload("res://gameplay/AI.tscn").instance())
-	ship.team_set = ["pirates"]
+	ship.team_set = []
 	# So, there's a bit of a story here.
 	# If you just let it auto assign a name, it will be something like
 	# @ship@nn@

@@ -14,7 +14,6 @@ var standoff: bool
 var subtitle: String
 var armor: float
 var upgrades: Dictionary
-var weapons: Dictionary
 
 puppet var puppet_pos = Vector2(0,0)
 puppet var puppet_dir: float = 0
@@ -64,8 +63,6 @@ func _ready():
 	# _show_debug_info()
 	_apply_stats()
 	_apply_upgrades()
-	_create_weapons()
-	
 	# $ClickArea/CollisionShape2D.shape.radius = $RotationSprite.texture.get_size().length() / 2
 	
 func is_alive():
@@ -88,11 +85,7 @@ func _apply_upgrades():
 		else:
 			Game.upgrades[upgrade].apply(self, count)
 
-func _create_weapons():
-	for weapon_id in weapons:
-		_add_weapon(weapon_id, weapons[weapon_id])
-
-func _add_weapon(type, count):
+func add_weapon(type: String, count: int):
 	if $weapons.has_node(type):
 		var weapon = $weapons.get_node(type)
 		weapon.count += count
@@ -104,16 +97,20 @@ func _add_weapon(type, count):
 		weapon.apply_stats()
 		$weapons.add_child(weapon)
 	
-func _remove_weapon(type, count):
-	var weapon = $weapons.get_node(type)
+func remove_weapon(type: String, count: int):
+	print("remove_weapon: ", type)
+	var weapon: Weapon = $weapons.get_node(type)
 	if not is_instance_valid(weapon):
 		print("Cannot remove weapon: ", type)
 		return
 	weapon.count -= count
+	print("Count: ", weapon.count, " removing")
 	if weapon.count <= 0:
 		$weapons.remove_child(weapon)
+		print("Removed weapon")
 	else:
-		$weapons.get_node(type).apply_stats()
+		weapon.apply_stats()
+		print("Decrimented weapon")
 
 func data() -> ShipDat:
 	return Game.ships[type]
@@ -288,7 +285,9 @@ func serialize():
 		"type": type,
 		"money": money,
 		"bulk_cargo": bulk_cargo,
-		"upgrades": upgrades
+		"upgrades": upgrades,
+		"ai": is_instance_valid($AI),  # We just want to know if it's a player
+		"faction": faction
 	}
 
 func deserialize(data):
@@ -302,6 +301,12 @@ func deserialize(data):
 	money = data["money"]
 	bulk_cargo = data["bulk_cargo"]
 	upgrades = data["upgrades"]
+	faction = data["faction"]
+	
+	if data["ai"]:
+		var ai = Node.new()
+		ai.name = "AI"
+		add_child(ai)
 
 func rset_ex(puppet_var, value):
 	# This avoids a whole lot of extra network traffic...
@@ -411,25 +416,21 @@ sync func add_upgrade(type, quantity):
 		upgrades[type] += quantity
 	else:
 		upgrades[type] = quantity
-	var weapon_add = upgrade.apply(self, quantity)
-	for weapon_id in weapon_add:
-		_add_weapon(weapon_id, weapon_add[weapon_id])
+	upgrade.apply(self, quantity)
 	emit_signal("upgrades_updated")
 
 func push_remove_upgrade(type, quantity):
-	add_upgrade(type, quantity)
+	remove_upgrade(type, quantity)
 	for id in get_level().get_node("world").get_player_ids():
 		rpc_id(id, "remove_upgrade", type, quantity)
 
-sync func remove_upgrade(type_int, quantity):
-	var upgrade = Game.upgrades[str(type)]
+sync func remove_upgrade(type_int: int, quantity: int):
 	var type = str(type_int)
+	var upgrade = Game.upgrades[type]
 	upgrades[type] -= quantity
 	if upgrades[type] == 0:
 		upgrades.erase(type)
 	var weapon_remove = upgrade.apply(self, -1 * quantity)
-	for weapon_id in weapon_remove:
-		_remove_weapon(weapon_id, abs(weapon_remove[weapon_id]))
 	emit_signal("upgrades_updated")
 	print("Upgrades updated emitted")
 

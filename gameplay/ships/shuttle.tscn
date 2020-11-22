@@ -4,6 +4,8 @@
 [ext_resource path="res://sprites/onyx_cc_nc/ships/shuttle.png" type="Texture" id=2]
 [ext_resource path="res://sprites/onyx_cc_nc/ships/shuttle_glow_freehanded.png" type="Texture" id=3]
 
+
+
 [sub_resource type="AtlasTexture" id=1]
 flags = 4
 atlas = ExtResource( 2 )

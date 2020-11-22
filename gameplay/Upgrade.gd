@@ -31,20 +31,16 @@ func can_add(ship, count: int) -> bool:
 		return true
 	return false
 
-func apply(ship, count: int) -> Dictionary:
-	# Returns a dict of {weapon_id: count}
-	# If you pass a negative count, make sure the effect works in reverse.
-	var added_weapons = {}
+func apply(ship, count: int):
+	# Make sure each effect works in reverse if you pass a negative count
+	var fx = effects
 	for effect in effects:
+		print("Upgrade ID: ", id, " Effect: ", effect, " Value: ", effects[effect], " Quantity :", count )
 		if effect == "weapon":
 			var weapon_id = effects[effect]
-			added_weapons[weapon_id] = count
-			if weapon_id in ship.weapons:
-				ship.weapons[weapon_id] += count
-			else:
-				ship.weapons[weapon_id] = count
-			if ship.weapons[weapon_id] == 0:
-				ship.weapons.erase(weapon_id)
+			if count > 0:
+				ship.add_weapon(weapon_id, count)
+			elif count < 0:
+				ship.remove_weapon(weapon_id, abs(count))
 		if effect == "armor":
 			ship.armor += float(effects[effect]) * count
-	return added_weapons

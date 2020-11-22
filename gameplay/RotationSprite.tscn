@@ -2,5 +2,6 @@
 
 [ext_resource path="res://gameplay/RotationSprite.gd" type="Script" id=1]
 
+
 [node name="RotationSprite" type="AnimatedSprite"]
 script = ExtResource( 1 )

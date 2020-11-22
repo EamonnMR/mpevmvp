@@ -19,7 +19,7 @@ Faction: %s
 	# TODO: Refessh outfitter with available outfits
 	$Panel/TradeButton.show() if new_spob.commodities.size() else $Panel/TradeButton.hide()
 	$Panel/ShipyardButton.show() if new_spob.faction else $Panel/ShipyardButton.hide()
-
+	$Panel/UpgradeButton.show() if new_spob.faction else $Panel/UpgradeButton.hide()
 func _ready():
 	$Panel/LeaveButton.connect("pressed", Client.player_input, "toggle_landing")
 	$ShipStore.connect("player_purchased_ship", Client.player_input, "handle_gui_player_ship_purchase")

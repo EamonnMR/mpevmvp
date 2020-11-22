@@ -2,6 +2,8 @@ extends Node2D
 
 # Rather than having a seperate 'type', these are keyed into Game.weapons by name.
 
+class_name Weapon
+
 var cooldown = true
 export var count: int = 1
 
