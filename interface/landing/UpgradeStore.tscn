@@ -6,10 +6,39 @@
 [node name="Panel" instance=ExtResource( 1 )]
 script = ExtResource( 2 )
 
+[node name="NinePatchPanel" parent="." index="0"]
+margin_left = -4.79401
+margin_top = -0.0529785
+margin_right = 782.206
+margin_bottom = 483.947
+
 [node name="SellButton" type="Button" parent="." index="6"]
-margin_left = 532.97
-margin_top = 433.36
-margin_right = 567.97
-margin_bottom = 453.36
+margin_left = 469.428
+margin_top = 433.545
+margin_right = 568.428
+margin_bottom = 453.545
 text = "Sell"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="ItemMass" type="Label" parent="." index="7"]
+margin_left = 430.096
+margin_top = 391.825
+margin_right = 576.096
+margin_bottom = 405.825
+text = "Item Mass"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="FreeMass" type="Label" parent="." index="8"]
+margin_left = 429.596
+margin_top = 406.825
+margin_right = 575.596
+margin_bottom = 420.825
+text = "Total Mass / Free Mass"
+__meta__ = {
+"_edit_use_anchors_": false
+}
 [connection signal="pressed" from="SellButton" to="." method="_on_SellButton_pressed"]

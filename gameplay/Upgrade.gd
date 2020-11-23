@@ -34,6 +34,9 @@ func can_add(ship, count: int) -> bool:
 func apply(ship, count: int):
 	# Make sure each effect works in reverse if you pass a negative count
 	var fx = effects
+	print("Free mass before: ", ship.free_mass)
+	ship.free_mass -= count * mass
+	print("Free mass after: ", ship.free_mass)
 	for effect in effects:
 		print("Upgrade ID: ", id, " Effect: ", effect, " Value: ", effects[effect], " Quantity :", count )
 		if effect == "weapon":
