@@ -69,7 +69,8 @@ func send_entity(level, destination, entity):
 		Client.rpc_id(id, "send_entity", destination, {
 			"name": entity.name,
 			"scene": entity.filename,
-			"state": entity.serialize()
+			"state": entity.serialize(),
+			"type": entity.type
 		})
 
 func replace_entity(level, destination, entity, replace_on_server=false):
@@ -77,7 +78,8 @@ func replace_entity(level, destination, entity, replace_on_server=false):
 		Client.rpc_id(id, "replace_entity", destination, {
 			"name": entity.name,
 			"scene": entity.filename,
-			"state": entity.serialize()
+			"state": entity.serialize(),
+			"type": entity.type
 		})
 	if replace_on_server:
 		print("Also removing entity on server")

@@ -61,14 +61,14 @@ func _ready():
 		remove_child(removed)
 		removed.queue_free()
 	# _show_debug_info()
-	_apply_stats()
 	_apply_upgrades()
 	# $ClickArea/CollisionShape2D.shape.radius = $RotationSprite.texture.get_size().length() / 2
 	
 func is_alive():
 	return true
 
-func _apply_stats():
+func apply_stats(new_type):
+	type = new_type
 	for stat in data().get_keys():
 		if stat in self:
 			set(stat, data().get(stat))
@@ -84,6 +84,8 @@ func _apply_upgrades():
 			print("Valid Upgrades: ", Game.upgrades.keys())
 		else:
 			Game.upgrades[upgrade].apply(self, count)
+	print(" === Upgrades applied!")
+	print("Upgrades: ", upgrades.keys(), " weapons: ", $weapons.get_children())
 
 func add_weapon(type: String, count: int):
 	if $weapons.has_node(type):
@@ -282,7 +284,6 @@ func serialize():
 		"position": position,
 		"direction": direction,
 		"team_set": team_set,
-		"type": type,
 		"money": money,
 		"bulk_cargo": bulk_cargo,
 		"upgrades": upgrades,
@@ -297,7 +298,6 @@ func deserialize(data):
 	direction = data["direction"]
 	puppet_dir = direction
 	team_set = data["team_set"]
-	type = data["type"]
 	money = data["money"]
 	bulk_cargo = data["bulk_cargo"]
 	upgrades = data["upgrades"]

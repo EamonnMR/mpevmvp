@@ -9,6 +9,11 @@ var direction: float = 0.0
 
 var team_set = []
 
+var type = "todo_shot_types"
+
+func apply_stats(type):
+	pass
+
 func init(speed, new_damage, lifetime, start_angle, new_position, new_velocity):
 	# print("Start angle: ", start_angle)
 	$RotationSprite.set_direction(start_angle)
@@ -54,7 +59,6 @@ func deserialize(data):
 	set_linear_velocity(data["velocity"])
 	$RotationSprite.set_direction(data["direction"])
 	team_set = data["team_set"]
-	
 
 func _on_Timer_timeout():
 	queue_free()

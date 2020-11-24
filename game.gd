@@ -173,7 +173,7 @@ func get_ship(ship_type, player_id):
 	print("Type: ", type)
 	print("Scene: ", ships[type].scene)
 	var ship = ships[type].scene.instance()
-	ship.type = type
+	ship.apply_stats(type)
 	ship.set_name(str(player_id))
 	return ship
 
@@ -181,8 +181,8 @@ func get_ship(ship_type, player_id):
 func get_npc_ship(ship_type, faction):
 	var type = str(ship_type)
 	var ship = ships[type]["scene"].instance()
+	ship.apply_stats(type)
 	ship.faction = faction
-	ship.type = type
 	return ship
 
 func load_galaxy():
@@ -190,7 +190,7 @@ func load_galaxy():
 	systems = load_csv("res://data/galaxy.csv")
 	for system in systems:
 		preprocess_system(systems[system])
-	ensure_link_reciprocity()
+	# ensure_link_reciprocity()  # Trust the spreadsheet
 	print("Galaxy Loaded")
 	Procgen.populate_galaxy()
 

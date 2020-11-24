@@ -46,7 +46,8 @@ func get_each_serialized(node):
 		list.append({
 			"name": child.name,
 			"scene": child.filename,
-			"state": child.serialize()
+			"state": child.serialize(),
+			"type": child.type
 		})
 	return list
 
@@ -61,6 +62,7 @@ func receive_entity(destination, serial_data):
 	print("serial_data: ", serial_data)
 	# TODO: Is `load` the smartest thing to use here?
 	var object = load(serial_data["scene"]).instance()
+	object.apply_stats(serial_data["type"])
 	object.deserialize(serial_data["state"])
 	object.name = serial_data["name"]
 	node.add_child(object)
