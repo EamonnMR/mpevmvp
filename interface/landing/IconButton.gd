@@ -10,4 +10,5 @@ func _ready():
 	update()
 
 func update():
+	print("Button Updated")
 	$Count.text = str(count) if count else ""

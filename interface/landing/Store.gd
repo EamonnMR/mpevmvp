@@ -14,11 +14,11 @@ func _ready():
 		button.id = type
 		button.data = items()[type]
 		button.count = get_count(type)
-		button.connect("pressed", self, "on_grid_button_pressed", [type])
+		button.connect("pressed", self, "update_selection", [type])
 		$Left/IconGrid.add_child( button )
 
 func update():
-	print("Update")
+	print("Store.Update")
 	for button in $Left/IconGrid.get_children():
 		# TODO: Why ain't this working?
 		button.count = get_count(button.id)
@@ -32,9 +32,6 @@ func get_count(item_id) -> int:
 	print("Base get count")
 	return 0
 
-func on_grid_button_pressed(id):
-	update_selection(id)
-	
 func update_selection(id):
 	var data: Item = items()[id]
 	selected = id

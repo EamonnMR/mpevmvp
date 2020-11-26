@@ -4,8 +4,8 @@ signal player_purchased_upgrade(type, quantity)
 signal player_sold_upgrade(type, quantity)
 
 func _ready():
-	._ready()
 	Client.player_ship.connect("upgrades_updated", self, "update")
+	._ready()
 
 func items():
 	return Game.upgrades
@@ -27,6 +27,7 @@ func update_selection(id):
 
 func update():
 	.update()
+	print("Upgrade Store update")
 	update_mass_text()
 
 func update_mass_text():
