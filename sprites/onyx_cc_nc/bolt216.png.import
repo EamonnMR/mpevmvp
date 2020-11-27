@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/204.png-25630f29e32a391910ea467c10ba1069.stex"
+path="res://.import/bolt216.png-01c1eb30dfba6a181b7d59fc7c032a30.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://sprites/onyx_cc_nc/204.png"
-dest_files=[ "res://.import/204.png-25630f29e32a391910ea467c10ba1069.stex" ]
+source_file="res://sprites/onyx_cc_nc/bolt216.png"
+dest_files=[ "res://.import/bolt216.png-01c1eb30dfba6a181b7d59fc7c032a30.stex" ]
 
 [params]
 
