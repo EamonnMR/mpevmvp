@@ -28,7 +28,79 @@ motion_scale = Vector2( 0.9, 0.9 )
 texture = ExtResource( 1 )
 region_rect = Rect2( 0, 0, 640, 480 )
 
+[node name="Sprite2" type="Sprite" parent="ParallaxLayer4"]
+position = Vector2( -57.0176, 1910.09 )
+texture = ExtResource( 1 )
+region_rect = Rect2( 0, 0, 640, 480 )
+
+[node name="Sprite3" type="Sprite" parent="ParallaxLayer4"]
+position = Vector2( -42.7632, -2009.87 )
+texture = ExtResource( 1 )
+region_rect = Rect2( 0, 0, 640, 480 )
+
+[node name="Sprite4" type="Sprite" parent="ParallaxLayer4"]
+position = Vector2( -2523.02, -1867.32 )
+texture = ExtResource( 1 )
+region_rect = Rect2( 0, 0, 640, 480 )
+
+[node name="Sprite5" type="Sprite" parent="ParallaxLayer4"]
+position = Vector2( 2237.94, -1895.83 )
+texture = ExtResource( 1 )
+region_rect = Rect2( 0, 0, 640, 480 )
+
+[node name="Sprite6" type="Sprite" parent="ParallaxLayer4"]
+position = Vector2( 2394.74, 470.395 )
+texture = ExtResource( 1 )
+region_rect = Rect2( 0, 0, 640, 480 )
+
+[node name="Sprite7" type="Sprite" parent="ParallaxLayer4"]
+position = Vector2( -2323.46, 669.956 )
+texture = ExtResource( 1 )
+region_rect = Rect2( 0, 0, 640, 480 )
+
+[node name="Sprite8" type="Sprite" parent="ParallaxLayer4"]
+position = Vector2( -2166.67, 2280.7 )
+texture = ExtResource( 1 )
+region_rect = Rect2( 0, 0, 640, 480 )
+
+[node name="Sprite9" type="Sprite" parent="ParallaxLayer4"]
+position = Vector2( 2081.14, 2309.21 )
+texture = ExtResource( 1 )
+region_rect = Rect2( 0, 0, 640, 480 )
+
 [node name="ParallaxLayer2" type="ParallaxLayer" parent="."]
 
 [node name="Sprite" type="Sprite" parent="ParallaxLayer2"]
+texture = ExtResource( 2 )
+
+[node name="Sprite2" type="Sprite" parent="ParallaxLayer2"]
+position = Vector2( -99.6989, 2202.01 )
+texture = ExtResource( 2 )
+
+[node name="Sprite3" type="Sprite" parent="ParallaxLayer2"]
+position = Vector2( -2537.2, 2287.54 )
+texture = ExtResource( 2 )
+
+[node name="Sprite4" type="Sprite" parent="ParallaxLayer2"]
+position = Vector2( -2394.65, 106.619 )
+texture = ExtResource( 2 )
+
+[node name="Sprite5" type="Sprite" parent="ParallaxLayer2"]
+position = Vector2( -2252.11, -1874.74 )
+texture = ExtResource( 2 )
+
+[node name="Sprite6" type="Sprite" parent="ParallaxLayer2"]
+position = Vector2( 741.31, -1860.49 )
+texture = ExtResource( 2 )
+
+[node name="Sprite7" type="Sprite" parent="ParallaxLayer2"]
+position = Vector2( 2608.63, -1489.87 )
+texture = ExtResource( 2 )
+
+[node name="Sprite8" type="Sprite" parent="ParallaxLayer2"]
+position = Vector2( 2608.63, 733.811 )
+texture = ExtResource( 2 )
+
+[node name="Sprite9" type="Sprite" parent="ParallaxLayer2"]
+position = Vector2( 2423.33, 2430.08 )
 texture = ExtResource( 2 )
