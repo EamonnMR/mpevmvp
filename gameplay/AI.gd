@@ -103,7 +103,7 @@ func _should_thrust():
 		target
 		and ideal_face
 		and _facing_right_way_to_accel()
-		and _far_enough_to_accel()
+		and (_far_enough_to_accel() or get_node("../").joust)
 	)
 					
 

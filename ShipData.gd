@@ -8,6 +8,7 @@ var accel: float
 var max_cargo: int
 var free_mass: int
 var standoff: bool
+var joust: bool
 var subtitle: String
 var armor: float
 var faction: String
@@ -23,6 +24,8 @@ func _init(data: Dictionary):
 		elif i == "readout":
 			set(i, load("res://" + value))
 		elif i == "standoff":
+			set(i, Game.parse_bool(value))
+		elif i == "joust":
 			set(i, Game.parse_bool(value))
 		elif i == "upgrades":
 			set(i, Game.parse_x_dict(value))

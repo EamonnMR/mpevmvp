@@ -11,6 +11,7 @@ var max_cargo: int
 var free_mass: int
 var price: int
 var standoff: bool
+var joust: bool
 var subtitle: String
 var armor: float
 var upgrades: Dictionary
