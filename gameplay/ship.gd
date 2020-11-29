@@ -54,6 +54,9 @@ func _ready():
 		Client.player_ship = self
 	if(is_network_master()):
 		input_state = get_input_state()
+	else:
+		print("Ship: Add radar pip")
+		Client.hud.add_radar_pip(self)
 	$RotationSprite.set_direction(direction)
 	
 	# TODO: Handle ships with no engine glow

@@ -8,7 +8,8 @@ var size: int
 var DISPOSITION_COLORS = {
 	"hostile": Color(1,0,0),
 	"neutral": Color(1,1,0),
-	"abandoned": Color(0.5, 0.5, 0.5)
+	"abandoned": Color(0.5, 0.5, 0.5),
+	"player": Color(1,1,1)
 }
 
 func _radar_offset():
@@ -19,18 +20,27 @@ func _relative_position():
 
 func _process(delta):
 	# TODO: This is kind of hacky
-	if is_instance_valid(Client.player_ship) and Client.player_ship:
-		show()
-		if is_instance_valid(subject):
-			position = (_relative_position() * radar_scale) + _radar_offset()
-		else:
-			queue_free()
+	if subject == null:
+		queue_free()
 	else:
-		hide()
+		if is_instance_valid(Client.player_ship) and Client.player_ship:
+			show()
+			if is_instance_valid(subject):
+				position = (_relative_position() * radar_scale) + _radar_offset()
+			else:
+				queue_free()
+		else:
+			hide()
 
 func get_color() -> Color:
-	return DISPOSITION_COLORS["neutral"]
+	if subject == Client.player_ship:
+		return DISPOSITION_COLORS["player"]
+	# return DISPOSITION_COLORS["neutral"]
+	if subject == null:
+		return DISPOSITION_COLORS["abandoned"]
 	if "faction" in subject:
+		if not(subject.faction in Game.factions):
+			return DISPOSITION_COLORS["abandoned"]
 		var faction = Game.factions[subject.faction]
 		var disposition = faction["initial_disposition"]
 		if disposition < 0:
@@ -51,7 +61,7 @@ func get_size():
 		}[subject.kind]
 	elif subject is Ship:
 		# TODO: Check ship mass
-		return 3
+		return 2
 
 func _draw():
 	draw_circle(Vector2(0,0), size, get_color())
