@@ -9,7 +9,11 @@ class_name Hud
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	set_process_input(true)
-	# Connect to a bunch of events		
+	# Connect to a bunch of events
+	
+func add_radar_pip(subject):
+	print("Hud: Add radar pip")
+	$Radar.add_radar_pip(subject)
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.

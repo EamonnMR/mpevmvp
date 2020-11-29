@@ -73,8 +73,6 @@ remote func fire_shot(entity_name, destination, weapon_id, shot_name):
 	get_level().get_node("shots").add_child(shot)
 
 remote func switch_level(new_level_name, level_data):
-	print("client switch universe")
-	print(level_data)
 	get_multiverse().switch_level(new_level_name, level_data)
 	player_input.switch_system()
 	

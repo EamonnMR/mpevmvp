@@ -24,6 +24,10 @@ func _ready():
 	
 	$ClickArea/CollisionShape2D.shape.radius = $Sprite.texture.get_size().length() / 2
 	
+	if not is_network_master():
+		print("spob: Add radar pip")
+		Client.hud.add_radar_pip(self)
+	
 func _data():
 	return Game.spob_types[spob_type]
 
