@@ -11,10 +11,12 @@ var team_set = []
 
 var type = "todo_shot_types"
 
+var source: Node
+
 func apply_stats(type):
 	pass
 
-func init(speed, new_damage, lifetime, start_angle, new_position, new_velocity):
+func init(speed, new_damage, lifetime, start_angle, new_position, new_velocity, new_source):
 	# print("Start angle: ", start_angle)
 	$RotationSprite.set_direction(start_angle)
 	set_linear_velocity(Vector2(speed, 0).rotated(start_angle) + new_velocity)
@@ -22,6 +24,7 @@ func init(speed, new_damage, lifetime, start_angle, new_position, new_velocity):
 	direction = start_angle
 	damage = new_damage
 	$Timer.wait_time = lifetime
+	source = new_source
 	#_show_debug_info()
 	
 func _show_debug_info():
@@ -43,7 +46,7 @@ func _on_shot_body_entered(body):
 	#print("Shot Hit")
 	#print("Shot Flags: ", team_set, " Target Flags: ", body.team_set)
 	if( body.has_method("take_damage") ):
-		body.take_damage(damage)
+		body.take_damage(damage, source)
 	queue_free()
 
 func serialize():

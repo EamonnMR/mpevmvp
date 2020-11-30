@@ -47,6 +47,7 @@ signal cargo_updated
 signal removed
 signal status_updated
 signal upgrades_updated
+signal took_damage_from(source)
 
 func _ready():
 	if (name == str(Client.client_id)):
@@ -233,8 +234,9 @@ func _on_ShotTimer_timeout():
 func get_shot(weapon_id):
 	return $weapons.get_node(weapon_id).get_shot()
 
-func take_damage(damage):
+func take_damage(damage, source):
 	health -= damage
+	emit_signal("took_damage_from", source)
 	if health < 0 and is_network_master():
 		server_destroyed()
 

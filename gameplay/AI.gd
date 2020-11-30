@@ -24,6 +24,7 @@ var faction_dat = null
 func _ready():
 	var parent = get_node("../")
 	faction_dat = Game.factions[parent.faction]
+	parent.connect("took_damage_from", self, "_ship_took_damage")
 
 func _physics_process(delta):
 	if not target or not is_instance_valid(target):  # or is idling:
@@ -121,3 +122,7 @@ func _facing_within_margin(margin):
 
 func _should_shoot():
 	return target and _facing_within_margin(shoot_margin) and get_node("../").position.distance_to(target.position) < shoot_distance
+
+func _ship_took_damage(source):
+	# Just get real mad at anything that does damage
+	target = source

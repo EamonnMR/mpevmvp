@@ -44,6 +44,9 @@ func _on_CooldownTimer_timeout():
 func shot_effects():
 	$shot_sfx.play()
 
+func _parent_ship():
+	return get_node("../../")
+
 func get_shot():
 	print("Get shot")
 	var shot = projectile_scene.instance()
@@ -55,7 +58,8 @@ func get_shot():
 		projectile_lifetime,
 		ship.direction,
 		ship.position,
-		ship.get_linear_velocity()
+		ship.get_linear_velocity(),
+		_parent_ship()  # The ship node
 	)
 	if not ship.is_network_master():
 		shot_effects()
