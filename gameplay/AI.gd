@@ -1,13 +1,18 @@
 extends Node
 
+# TODO: This stuff ought to be configured at spawn time, based on present weapons
 export var accel_margin = PI / 2
 export var accel_distance = 10
 export var shoot_margin = PI / 2
 export var shoot_distance = 200
 export var max_target_distance = 1000
+export var destination_margin = 100
 
 var target
 var ideal_face
+var destination
+var parent: Ship
+var faction_dat
 
 # This is the output of the AI - ship.tscn uses these to move.
 var puppet_direction_change: int = 0
@@ -20,24 +25,48 @@ var puppet_jumping = false
 var puppet_selected_system: String = ""
 var puppet_landing = false
 
-var faction_dat = null
+func _anglemod(angle: float) -> float:
+	return fmod(angle, PI * 2)
+
 func _ready():
-	var parent = get_node("../")
+	parent = get_node("../")
 	faction_dat = Game.factions[parent.faction]
 	parent.connect("took_damage_from", self, "_ship_took_damage")
 
 func _physics_process(delta):
+	if not _hunt(delta):
+		_idle_fly(delta)
+
+func _idle_fly(delta):
+	pass
+	if not destination or _is_at_destination():
+		destination = Game.random_select(
+			parent.get_level().get_node("world/spobs").get_children()
+		).position
+		
+	if destination:
+		get_ideal_face_and_direction_change(destination, delta)
+		puppet_shooting = false
+		puppet_thrusting = _should_thrust_idle()
+		puppet_braking = _should_brake_idle()
+
+func _is_at_destination():
+	return parent.position.distance_to(destination) > destination_margin
+
+func _hunt(delta):
+	
 	if not target or not is_instance_valid(target):  # or is idling:
 		target = _find_target()
 	puppet_direction_change = 0
 	ideal_face = null
 	if(target):
-		var impulse = _constrained_point(get_node("../"), target, get_node("../").direction, get_node("../").turn * delta, target.position)
-		puppet_direction_change = _flatten_to_sign(impulse[0])
-		ideal_face = impulse[1]
+		get_ideal_face_and_direction_change(target.position, delta)
 		puppet_shooting = _should_shoot()
 		puppet_thrusting = _should_thrust()
 		puppet_braking = _should_brake()
+		return true
+	return false
+	
 
 func distance_comparitor(lval, rval):
 	# For sorting other nodes by how close they are
@@ -45,16 +74,23 @@ func distance_comparitor(lval, rval):
 	var ldist = lval.position.distance_to(parent.position)
 	var rdist = rval.position.distance_to(parent.position)
 	return ldist < rdist
+	
+func get_ideal_face_and_direction_change(at: Vector2, delta):
+	var impulse = _constrained_point(
+		parent, parent.direction, parent.turn * delta, at
+	)
+	puppet_direction_change = _flatten_to_sign(impulse[0])
+	ideal_face = impulse[1]
 
-func _constrained_point(subject, target, current_rotation, max_turn, position):
+func _constrained_point(subject, current_rotation, max_turn, position: Vector2):
 	# For finding the right direction and amount to turn when your rotation speed is limited
-	var ideal_face = fmod(subject.get_angle_to(target.position), PI * 2)
-	var ideal_turn = fmod(ideal_face - current_rotation, PI * 2)
+	var ideal_face = _anglemod(subject.get_angle_to(position))
+	var ideal_turn = _anglemod(ideal_face - current_rotation)
 	if(ideal_turn > PI):
-		ideal_turn = fmod(ideal_turn - 2 * PI, 2 * PI)
+		ideal_turn = _anglemod(ideal_turn - 2 * PI)
 
 	elif(ideal_turn < -1 * PI):
-		ideal_turn = fmod(ideal_turn + 2 * PI, 2 * PI)
+		ideal_turn = _anglemod(ideal_turn + 2 * PI)
 	
 	max_turn = sign(ideal_turn) * max_turn  # Ideal turn in the right direction
 	
@@ -104,24 +140,35 @@ func _should_thrust():
 		target
 		and ideal_face
 		and _facing_right_way_to_accel()
-		and (_far_enough_to_accel() or get_node("../").joust)
+		and (_far_enough_to_accel() or parent.joust)
 	)
-					
+	
+func _should_thrust_idle():
+	return (
+		destination != null
+		and ideal_face
+		and _facing_right_way_to_accel()
+	)
 
 func _facing_right_way_to_accel():
 	return _facing_within_margin(accel_margin)
 
 func _far_enough_to_accel():
-	return get_node("../").position.distance_to(target.position) > accel_distance
+	return parent.position.distance_to(target.position) > accel_distance
 
 func _should_brake():
-	return get_node("../").standoff and target and is_instance_valid(target) and get_node("../").position.distance_to(target.position) < shoot_distance
+	return parent.standoff and target and is_instance_valid(target) and parent.position.distance_to(target.position) < shoot_distance
+
+func _should_brake_idle():
+	# TODO: Sit on the planet for a while?
+	return false
 
 func _facing_within_margin(margin):
-	return ideal_face and abs(fmod(ideal_face - get_node("../").direction, 2 * PI)) < margin
+	""" Relies on 'ideal face' being populated """
+	return ideal_face and abs(_anglemod(ideal_face - parent.direction)) < margin
 
 func _should_shoot():
-	return target and _facing_within_margin(shoot_margin) and get_node("../").position.distance_to(target.position) < shoot_distance
+	return target and _facing_within_margin(shoot_margin) and parent.position.distance_to(target.position) < shoot_distance
 
 func _ship_took_damage(source):
 	# Just get real mad at anything that does damage
