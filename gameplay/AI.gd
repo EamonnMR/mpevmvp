@@ -13,6 +13,7 @@ var ideal_face
 var destination
 var parent: Ship
 var faction_dat
+var arrived: bool
 
 # This is the output of the AI - ship.tscn uses these to move.
 var puppet_direction_change: int = 0
@@ -38,12 +39,21 @@ func _physics_process(delta):
 		_idle_fly(delta)
 
 func _idle_fly(delta):
-	pass
-	if not destination or _is_at_destination():
-		destination = Game.random_select(
-			parent.get_level().get_node("world/spobs").get_children()
-		).position
-		
+	if _is_at_destination():
+		if not arrived:
+			var wait_time = randf()
+			print("Arrived, waiting ", wait_time, " seconds before picking a new spob")
+			$IdleTimer.start(wait_time)
+		arrived = true
+	if not destination:
+		var spobs = parent.get_level().get_node("world/spobs").get_children()
+		if spobs:
+			destination = Game.random_select(
+				spobs
+			).position
+		else:
+			print("AI: System empty; nowhere to idle to")
+			# TODO: Just leaveu
 	if destination:
 		get_ideal_face_and_direction_change(destination, delta)
 		puppet_shooting = false
@@ -51,7 +61,7 @@ func _idle_fly(delta):
 		puppet_braking = _should_brake_idle()
 
 func _is_at_destination():
-	return parent.position.distance_to(destination) > destination_margin
+	return (destination != null) and parent.position.distance_to(destination) < destination_margin
 
 func _hunt(delta):
 	
@@ -160,8 +170,7 @@ func _should_brake():
 	return parent.standoff and target and is_instance_valid(target) and parent.position.distance_to(target.position) < shoot_distance
 
 func _should_brake_idle():
-	# TODO: Sit on the planet for a while?
-	return false
+	return arrived
 
 func _facing_within_margin(margin):
 	""" Relies on 'ideal face' being populated """
@@ -173,3 +182,9 @@ func _should_shoot():
 func _ship_took_damage(source):
 	# Just get real mad at anything that does damage
 	target = source
+
+
+func _on_IdleTimer_timeout():
+	destination = null
+	arrived = false
+

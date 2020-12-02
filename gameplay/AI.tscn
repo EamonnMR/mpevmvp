@@ -4,3 +4,7 @@
 
 [node name="AI" type="Node"]
 script = ExtResource( 1 )
+
+[node name="IdleTimer" type="Timer" parent="."]
+one_shot = true
+[connection signal="timeout" from="IdleTimer" to="." method="_on_IdleTimer_timeout"]
