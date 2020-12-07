@@ -11,7 +11,7 @@ func _selection_changed():
 	if is_instance_valid(ship):
 		ship.connect("status_updated", self, "_update")
 		ship.connect("destroyed", self, "_selection_changed")
-		ship.connect("removed", self, "_selection_changed")
+		ship.connect("tree_exiting", self, "_selection_changed")
 	_update()
 
 func _update():

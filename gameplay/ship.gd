@@ -44,7 +44,6 @@ export var faction = ""
 
 signal destroyed
 signal cargo_updated
-signal removed
 signal status_updated
 signal upgrades_updated
 signal took_damage_from(source)
@@ -68,7 +67,7 @@ func _ready():
 	# _show_debug_info()
 	_apply_upgrades()
 	# $ClickArea/CollisionShape2D.shape.radius = $RotationSprite.texture.get_size().length() / 2
-	
+
 func is_alive():
 	return true
 

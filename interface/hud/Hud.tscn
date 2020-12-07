@@ -135,11 +135,14 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="ProgressBar" type="ProgressBar" parent="Status"]
-margin_left = 51.7818
-margin_top = 25.1362
-margin_right = 145.782
-margin_bottom = 39.1362
+[node name="energy_bar" type="ProgressBar" parent="Status"]
+margin_left = 51.4913
+margin_top = 50.2328
+margin_right = 145.492
+margin_bottom = 64.2328
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="health_label" type="Label" parent="Status"]
 margin_left = 3.56359
@@ -166,14 +169,12 @@ rect_pivot_offset = Vector2( 21, 7 )
 text = "50000"
 
 [node name="health_bar" type="ProgressBar" parent="Status"]
-visible = false
-margin_left = 52.6727
-margin_top = 46.9633
-margin_right = 146.673
-margin_bottom = 60.9633
+margin_left = 52.2981
+margin_top = 25.987
+margin_right = 146.298
+margin_bottom = 39.987
 
 [node name="E" type="Label" parent="Status"]
-visible = false
 margin_left = 4.00903
 margin_top = 48.1085
 margin_right = 46.009

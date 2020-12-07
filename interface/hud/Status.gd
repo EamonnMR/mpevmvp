@@ -1,17 +1,19 @@
 extends Panel
 
 func _ready():
-	# Client.connect("system_changed", self, "_connect")
+	print("Status.ready")
 	Client.connect("player_ship_set", self, "_connect")
 	
-func _connect(_ship):
-	print("Display got player ship set")
+func _connect():
+	print("Status._connect")
 	if Client.player_ship and Client.player_ship is Ship:
 		print("connected stats")
 		$health_bar.show()
 		Client.player_ship.connect("status_updated", self, "_update")
 		Client.player_ship.connect("money_updated", self, "_update")
-		$health_bar.max_value = Client.player_ship.max_health
+		Client.player_ship.connect("destroyed", self, "_connect")
+		Client.player_ship.connect("tree_exiting", self, "_connect")
+		$health_bar.max_value = Client.player_ship.armor
 		_update()
 	else:
 		$health_bar.hide()

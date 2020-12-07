@@ -63,6 +63,7 @@ func _server_disconnected_client(id):
 	
 func set_player_ship(player_ship):
 	self.player_ship = player_ship
+	print("Client.set_player_ship")
 	emit_signal("player_ship_set")
 
 func get_level():
