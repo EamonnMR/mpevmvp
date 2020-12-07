@@ -50,16 +50,6 @@ func _create_rows(spob):
 		$Rows.add_child(_get_label(type_data["name"]))
 		$Rows.add_child(_get_label(str(price)))
 		$Rows.add_child(_get_label(Game.comodity_price_factor_names[price_factor]))
-		print(
-			"Free Cargo: ",
-			Client.player_ship.free_cargo(),
-			", Money: ",
-			Client.player_ship.money,
-			" Price: ",
-			price,
-			", Disabled: ",
-			not (Client.player_ship.free_cargo() > 1 and Client.player_ship.money >= price)
-		)
 		$Rows.add_child(_get_button(
 			commodity_id, "buy", "purchase_commodity", spob,
 			Client.player_ship.free_cargo() > 1 and Client.player_ship.money >= price

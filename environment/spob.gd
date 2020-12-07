@@ -25,7 +25,6 @@ func _ready():
 	$ClickArea/CollisionShape2D.shape.radius = $Sprite.texture.get_size().length() / 2
 	
 	if not is_network_master():
-		print("spob: Add radar pip")
 		Client.hud.add_radar_pip(self)
 	
 func _data():
@@ -48,5 +47,4 @@ func remove_selection():
 
 func _on_ClickArea_input_event(viewport, event, shape_idx):
 	if (event is InputEventMouseButton && event.pressed):
-		print("Clicked a spob")
 		Client.player_input.select_spob(self)

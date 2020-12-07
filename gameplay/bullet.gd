@@ -17,7 +17,6 @@ func apply_stats(type):
 	pass
 
 func init(speed, new_damage, lifetime, start_angle, new_position, new_velocity, new_source):
-	# print("Start angle: ", start_angle)
 	$RotationSprite.set_direction(start_angle)
 	set_linear_velocity(Vector2(speed, 0).rotated(start_angle) + new_velocity)
 	position = new_position

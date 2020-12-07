@@ -15,7 +15,6 @@ func _ready():
 	var line_scene = preload("res://interface/map/line.tscn")
 	for system_id in Game.systems:
 		for destination in Game.systems[system_id]["links"]:
-			print(Game.systems[system_id]["links"])
 			var line = line_scene.instance()
 			line.start = system_id
 			line.end = destination
@@ -45,5 +44,4 @@ func update():
 
 
 func _on_Mode_item_selected(index):
-	print("New Mode: ", $Mode.selected)
 	update()

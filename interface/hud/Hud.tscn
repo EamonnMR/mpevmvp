@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=2]
+[gd_scene load_steps=8 format=2]
 
 [ext_resource path="res://interface/hud/Hud.gd" type="Script" id=1]
 [ext_resource path="res://interface/hud/Target.tscn" type="PackedScene" id=2]
@@ -6,6 +6,7 @@
 [ext_resource path="res://interface/NinePatchPanel.tscn" type="PackedScene" id=4]
 [ext_resource path="res://interface/hud/Radar.gd" type="Script" id=5]
 [ext_resource path="res://interface/hud/Panel.gd" type="Script" id=6]
+[ext_resource path="res://interface/hud/Status.gd" type="Script" id=7]
 
 [node name="Hud" type="CanvasLayer"]
 layer = 2
@@ -125,11 +126,11 @@ __meta__ = {
 }
 
 [node name="Status" type="Panel" parent="."]
-visible = false
 margin_left = 10.6425
 margin_top = 13.1066
 margin_right = 162.643
 margin_bottom = 157.107
+script = ExtResource( 7 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -140,7 +141,7 @@ margin_top = 25.1362
 margin_right = 145.782
 margin_bottom = 39.1362
 
-[node name="Label" type="Label" parent="Status"]
+[node name="health_label" type="Label" parent="Status"]
 margin_left = 3.56359
 margin_top = 26.2815
 margin_right = 45.5636
@@ -148,7 +149,7 @@ margin_bottom = 40.2815
 rect_pivot_offset = Vector2( 21, 7 )
 text = "Health"
 
-[node name="Label2" type="Label" parent="Status"]
+[node name="money_label" type="Label" parent="Status"]
 margin_left = 4.45448
 margin_top = 4.89995
 margin_right = 46.4545
@@ -156,7 +157,7 @@ margin_bottom = 18.8999
 rect_pivot_offset = Vector2( 21, 7 )
 text = "Credits"
 
-[node name="Label3" type="Label" parent="Status"]
+[node name="money_value" type="Label" parent="Status"]
 margin_left = 57.0
 margin_top = 4.0
 margin_right = 104.0
@@ -164,13 +165,15 @@ margin_bottom = 19.0
 rect_pivot_offset = Vector2( 21, 7 )
 text = "50000"
 
-[node name="ProgressBar2" type="ProgressBar" parent="Status"]
+[node name="health_bar" type="ProgressBar" parent="Status"]
+visible = false
 margin_left = 52.6727
 margin_top = 46.9633
 margin_right = 146.673
 margin_bottom = 60.9633
 
 [node name="E" type="Label" parent="Status"]
+visible = false
 margin_left = 4.00903
 margin_top = 48.1085
 margin_right = 46.009

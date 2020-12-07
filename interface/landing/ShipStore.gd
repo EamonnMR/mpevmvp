@@ -10,7 +10,6 @@ func _on_BuyButton_pressed():
 	hide()
 
 func get_count(type) -> int:
-	print("ShipStore getcount")
 	if Client.player_ship.type == type:
 		return 1
 	else:

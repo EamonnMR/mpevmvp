@@ -13,7 +13,6 @@ func cleanup_if_done():
 		queue_free()
 	
 func _on_sfx_finished():
-	print("Stream finished")
 	sfx_finished = true
 	$sfx.queue_free()
 	cleanup_if_done()

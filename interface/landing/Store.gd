@@ -18,7 +18,6 @@ func _ready():
 		$Left/IconGrid.add_child( button )
 
 func update():
-	print("Store.Update")
 	for button in $Left/IconGrid.get_children():
 		# TODO: Why ain't this working?
 		button.count = get_count(button.id)
@@ -29,7 +28,6 @@ func items() -> Dictionary:
 	return {}
 	
 func get_count(item_id) -> int:
-	print("Base get count")
 	return 0
 
 func update_selection(id):

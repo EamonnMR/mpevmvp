@@ -42,7 +42,6 @@ func _idle_fly(delta):
 	if _is_at_destination():
 		if not arrived:
 			var wait_time = randf()
-			print("Arrived, waiting ", wait_time, " seconds before picking a new spob")
 			$IdleTimer.start(wait_time)
 		arrived = true
 	if not destination:
@@ -52,8 +51,8 @@ func _idle_fly(delta):
 				spobs
 			).position
 		else:
-			print("AI: System empty; nowhere to idle to")
-			# TODO: Just leaveu
+			pass
+			# TODO: Leave system
 	if destination:
 		get_ideal_face_and_direction_change(destination, delta)
 		puppet_shooting = false

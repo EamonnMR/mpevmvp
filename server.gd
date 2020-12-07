@@ -82,7 +82,6 @@ func replace_entity(level, destination, entity, replace_on_server=false):
 			"type": entity.type
 		})
 	if replace_on_server:
-		print("Also removing entity on server")
 		var dest = level.get_node(destination)
 		var old_node = dest.get_node(entity.name)
 		dest.remove_child(old_node)
@@ -91,13 +90,11 @@ func replace_entity(level, destination, entity, replace_on_server=false):
 
 func remove_entity(level, destination, entity_name, remove_on_server=false):
 	if remove_on_server:
-		print("Also removing entity on server")
 		var old_node = level.get_node(destination).get_node(entity_name)
 		level.get_node(destination).remove_child(old_node)
 		old_node.queue_free()
 	print('remove entity: ', entity_name, 'from level: ', level.get_node('../').name)
 	for id in level.get_player_ids():
-		print("Remove entity: ", destination, "/", entity_name, " from client: ", id)
 		Client.rpc_id(id, "remove_entity", destination, entity_name)
 	
 func get_level(level):

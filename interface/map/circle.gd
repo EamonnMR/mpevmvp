@@ -31,7 +31,6 @@ func get_color():
 		return Color(brightness, brightness, brightness)
 	if mode == 2:
 		if "faction" in dat():
-			# print("Grow Generation: ", dat().get("grow_generation", 0))
 			return Game.factions[dat()["faction"]]["color"] / (dat().get("grow_generation", 0) + 1)
 		else:
 			return Color(0.5, 0.5, 0.5)

@@ -62,7 +62,6 @@ func _physics_process(delta):
 		
 func select_spob(new_selected_spob: Spob):
 	if new_selected_spob != selected_spob:
-		print("Select Spob: ", new_selected_spob)
 		if is_instance_valid(selected_spob):
 			selected_spob.remove_selection()
 		selected_spob = new_selected_spob
@@ -72,7 +71,6 @@ func select_spob(new_selected_spob: Spob):
 	
 func select_ship(new_selected_ship: Ship, play_sound:bool = true):
 	if selected_ship != new_selected_ship:
-		print("Select Spob: ", new_selected_ship)
 		if is_instance_valid(selected_ship):
 			selected_ship.remove_selection()
 		if new_selected_ship != Client.player_ship:
@@ -106,7 +104,6 @@ func _handle_spob_select():
 	for spob in spobs:
 		i += 1
 		if Input.is_action_pressed("spob_" + str(i)):
-			print("Select pressed: ", i)
 			select_spob(spob)
 	
 
@@ -121,7 +118,6 @@ func _handle_show_landing_menu():
 			
 func _handle_jump():
 	if Input.is_action_just_pressed("jump"):
-		print("PlayerInput._handle_jump")
 		Client.player_ship.rpc_id(1, "try_jump")
 
 func toggle_landing():
@@ -159,11 +155,9 @@ func handle_gui_player_ship_purchase(id):
 	Server.rpc_id(1, "purchase_ship", id)
 	
 func handle_gui_player_ship_upgrade_buy(id, count):
-	print("Would buy upgrade: " + id + " (quantity: " + str(count) + ")")
 	Server.rpc_id(1, "purchase_upgrade", id, count)
 
 func handle_gui_player_ship_upgrade_sell(id, count):
-	print("Would sell upgrade: " + id + " (quantity: " + str(count) + ")")
 	Server.rpc_id(1, "sell_upgrade", id, count)
 
 func purchase_commodity(commodity_id, quantity, trading_partner):

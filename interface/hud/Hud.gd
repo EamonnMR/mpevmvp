@@ -12,7 +12,6 @@ func _ready():
 	# Connect to a bunch of events
 	
 func add_radar_pip(subject):
-	print("Hud: Add radar pip")
 	$Radar.add_radar_pip(subject)
 
 

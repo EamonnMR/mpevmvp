@@ -48,15 +48,15 @@ signal removed
 signal status_updated
 signal upgrades_updated
 signal took_damage_from(source)
+signal money_updated
 
 func _ready():
 	if (name == str(Client.client_id)):
 		$Camera2D.make_current()
-		Client.player_ship = self
+		Client.set_player_ship(self)
 	if(is_network_master()):
 		input_state = get_input_state()
 	else:
-		print("Ship: Add radar pip")
 		Client.hud.add_radar_pip(self)
 	$RotationSprite.set_direction(direction)
 	
@@ -89,11 +89,8 @@ func _apply_upgrades():
 		var count = upgrades[upgrade]
 		if not (upgrade in Game.upgrades):
 			print("INVALID UPGRADE: ", upgrade, " on ship type ", type)
-			print("Valid Upgrades: ", Game.upgrades.keys())
 		else:
 			Game.upgrades[upgrade].apply(self, count)
-	print(" === Upgrades applied!")
-	print("Upgrades: ", upgrades.keys(), " weapons: ", $weapons.get_children())
 
 func add_weapon(type: String, count: int):
 	if $weapons.has_node(type):
@@ -108,19 +105,15 @@ func add_weapon(type: String, count: int):
 		$weapons.add_child(weapon)
 	
 func remove_weapon(type: String, count: int):
-	print("remove_weapon: ", type)
 	var weapon: Weapon = $weapons.get_node(type)
 	if not is_instance_valid(weapon):
 		print("Cannot remove weapon: ", type)
 		return
 	weapon.count -= count
-	print("Count: ", weapon.count, " removing")
 	if weapon.count <= 0:
 		$weapons.remove_child(weapon)
-		print("Removed weapon")
 	else:
 		weapon.apply_stats()
-		print("Decrimented weapon")
 
 func data() -> ShipDat:
 	return Game.ships[type]
@@ -244,9 +237,7 @@ func take_damage(damage, source):
 		server_destroyed()
 
 func server_destroyed():
-	print("Server Destroyed")
 	if is_player():
-		print(name, " is considered a player because it does not have an AI node")
 		Server.set_respawn_timer(int(name))
 		Server.players[int(self.name)]
 	for id in get_level().get_node("world").get_player_ids():
@@ -331,17 +322,13 @@ func rset_ex_cond(puppet_var, value):
 		
 # Single-message moves:
 remote func try_jump():
-	print("Server ship.try_jump")
 	if is_far_enough_to_jump():
-		print("Far enough to jump: switching universe")
 		# TODO: Jump Effects
 		if selected_valid_system_to_jump_to():
 			Server.switch_player_universe(self)
 		else:
-			print("Tried to jump to unconnected system. Current System %s has no hyperlane to selected (%s)" % [current_system(), get_input_state().puppet_selected_system])
 			Client.rpc_id(int(name), "complain", "Cannot enter hyperspace - Current System %s has no hyperlane to selected (%s)" % [current_system(), get_input_state().puppet_selected_system])
 	else:
-		print("Too close to jump")
 		Client.rpc_id(int(name), "complain", "Cannot enter hyperspace - too close to sytem center")
 
 # Trade related functions:
@@ -389,8 +376,7 @@ func sell_upgrade(upgrade, quantity: int):
 		money += upgrade.price * quantity
 		push_remove_upgrade(upgrade.id, quantity)
 	else:
-		breakpoint
-		print("Can't sell upgrade")
+		Client.rpc_id(int(name), "complain", "Can't sell an upgrade you don't have")
 
 func purchase_commodity(commodity_id, quantity, price):
 	if money >= price and free_cargo() >= quantity:
@@ -415,11 +401,6 @@ func push_add_upgrade(type, quantity):
 		
 sync func add_upgrade(type, quantity):
 	type = str(type)
-	print(Game.upgrades.keys())
-	for key in Game.upgrades.keys():
-		print(typeof(key))
-		print(TYPE_STRING)
-	print(type)
 	var upgrade = Game.upgrades[str(type)]
 	if type in upgrades:
 		upgrades[type] += quantity
@@ -450,6 +431,7 @@ func push_update_cargo_and_money():
 remote func client_set_cargo_and_money(new_bulk_cargo, new_money):
 	bulk_cargo = new_bulk_cargo
 	money = new_money
+	emit_signal("money_updated")
 	emit_signal("cargo_updated")
 
 func push_update_money():
@@ -458,7 +440,7 @@ func push_update_money():
 		
 remote func client_set_money(new_money):
 	new_money = new_money
-
+	emit_signal("money_updated")
 # Selection box stuff
 
 func add_selection():

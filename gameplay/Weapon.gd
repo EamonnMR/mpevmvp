@@ -33,7 +33,6 @@ func get_ship():
 
 func try_shooting():
 	if cooldown:
-		print("Server: Firing: ", name)
 		cooldown = false
 		Server.fire_shot(get_ship(), name)
 		$CooldownTimer.start()
@@ -48,7 +47,6 @@ func _parent_ship():
 	return get_node("../../")
 
 func get_shot():
-	print("Get shot")
 	var shot = projectile_scene.instance()
 	var ship = get_ship()
 	shot.team_set = get_ship().team_set

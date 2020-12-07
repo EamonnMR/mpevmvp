@@ -10,7 +10,6 @@ func _ready():
 	data = Game.systems[system_id]
 
 func clicked():
-	print("Clicked: ", system_name)
 	Client.player_input.map_select_system(system_id)
 	$circle.update()
 
