@@ -76,7 +76,10 @@ func apply_stats(new_type):
 	type = new_type
 	for stat in data().get_keys():
 		if stat in self:
-			set(stat, data().get(stat))
+			var dat = data().get(stat)
+			if dat is Dictionary:
+				dat = dat.duplicate()
+			set(stat, dat)
 	
 	health = armor
 	puppet_health = armor
