@@ -1,0 +1,135 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://interface/NinePatchPanel.tscn" type="PackedScene" id=1]
+[ext_resource path="res://interface/info/Info.gd" type="Script" id=2]
+
+[node name="Info" type="CanvasLayer"]
+layer = 10
+script = ExtResource( 2 )
+
+[node name="NinePatchPanel" parent="." instance=ExtResource( 1 )]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -226.5
+margin_top = -136.5
+margin_right = 226.5
+margin_bottom = 136.5
+
+[node name="Tabs" type="Tabs" parent="NinePatchPanel"]
+margin_left = 17.0
+margin_top = 43.0
+margin_right = 442.0
+margin_bottom = 251.0
+
+[node name="TabContainer" type="TabContainer" parent="NinePatchPanel/Tabs"]
+margin_right = 409.0
+margin_bottom = 193.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Ship" type="Control" parent="NinePatchPanel/Tabs/TabContainer"]
+visible = false
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 4.0
+margin_top = 32.0
+margin_right = -4.0
+margin_bottom = -4.0
+
+[node name="ShipType" type="Label" parent="NinePatchPanel/Tabs/TabContainer/Ship"]
+margin_right = 40.0
+margin_bottom = 14.0
+text = "Ship Type"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Subtitle" type="Label" parent="NinePatchPanel/Tabs/TabContainer/Ship"]
+margin_left = 0.594604
+margin_top = 19.0273
+margin_right = 80.5946
+margin_bottom = 33.0273
+text = "Ship Subtitle"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Equipment" type="Label" parent="NinePatchPanel/Tabs/TabContainer/Ship"]
+margin_left = 1.0
+margin_top = 38.0
+margin_right = 399.0
+margin_bottom = 136.0
+text = "Ship Subtitle"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="ShipValue" type="Label" parent="NinePatchPanel/Tabs/TabContainer/Ship"]
+margin_left = 5.94604
+margin_top = 142.11
+margin_right = 85.946
+margin_bottom = 156.11
+text = "Ship Value"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Cash" type="Label" parent="NinePatchPanel/Tabs/TabContainer/Ship"]
+margin_left = 322.0
+margin_top = 143.0
+margin_right = 402.0
+margin_bottom = 157.0
+text = "Cash"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Cargo" type="Control" parent="NinePatchPanel/Tabs/TabContainer"]
+visible = false
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 4.0
+margin_top = 32.0
+margin_right = -4.0
+margin_bottom = -4.0
+
+[node name="Grid" type="GridContainer" parent="NinePatchPanel/Tabs/TabContainer/Cargo"]
+margin_right = 402.0
+margin_bottom = 157.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Factions" type="Control" parent="NinePatchPanel/Tabs/TabContainer"]
+visible = false
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 4.0
+margin_top = 32.0
+margin_right = -4.0
+margin_bottom = -4.0
+
+[node name="Grid" type="GridContainer" parent="NinePatchPanel/Tabs/TabContainer/Factions"]
+margin_right = 401.0
+margin_bottom = 156.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Alliances" type="Control" parent="NinePatchPanel/Tabs/TabContainer"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 4.0
+margin_top = 32.0
+margin_right = -4.0
+margin_bottom = -4.0
+
+[node name="GridContainer" type="GridContainer" parent="NinePatchPanel/Tabs/TabContainer/Alliances"]
+margin_right = 402.0
+margin_bottom = 157.0
+__meta__ = {
+"_edit_use_anchors_": false
+}

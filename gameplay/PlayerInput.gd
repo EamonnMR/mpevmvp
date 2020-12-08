@@ -17,6 +17,7 @@ var shooting = false
 var thrusting = false
 var jumping = false
 var map = null
+var info = null
 var selected_system: String = ""
 var spobs
 
@@ -31,6 +32,7 @@ signal targeting_updated()
 func _ready():
 	if is_network_master():
 		map = preload("res://interface/map/Map.tscn").instance()
+		info = preload("res://interface/info/Info.tscn").instance()
 		landing = preload("res://interface/landing/landing_main.tscn").instance()
 		# landing.bind(self)
 		spobs = _get_spobs()
@@ -52,6 +54,7 @@ func _physics_process(delta):
 		shooting = Input.is_action_pressed("fire_primary")
 		thrusting = Input.is_action_pressed("thrust")
 		_handle_show_map()
+		_handle_show_info()
 		_handle_show_landing_menu()
 		_handle_spob_select()
 		_handle_jump()
@@ -135,6 +138,10 @@ func toggle_landing():
 func _handle_show_map():
 	if Input.is_action_just_pressed("show_map"):
 		_toggle_map()
+		
+func _handle_show_info():
+	if Input.is_action_just_pressed("show_info"):
+		_toggle_info()
 
 func _toggle_map():
 	var root = get_tree().get_root()
@@ -144,6 +151,15 @@ func _toggle_map():
 	else:
 		set_process_input(false)
 		root.add_child(map)
+
+func _toggle_info():
+	var root = get_tree().get_root()
+	if info.is_inside_tree():
+		set_process_input(true)
+		root.remove_child(info)
+	else:
+		set_process_input(false)
+		root.add_child(info)
 
 func map_select_system(system_id):
 	selected_system = system_id
