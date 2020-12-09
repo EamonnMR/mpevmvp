@@ -452,3 +452,7 @@ func remove_selection():
 func _on_ClickArea_input_event(viewport, event, shape_idx):
 	if (event is InputEventMouseButton && event.pressed):
 		Client.player_input.select_ship(self)
+
+func get_value():
+	# TODO: Total up price of ship + price of upgrades
+	return 0

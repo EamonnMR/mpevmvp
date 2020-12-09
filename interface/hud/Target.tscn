@@ -1,6 +1,6 @@
 [gd_scene load_steps=4 format=2]
 
-[ext_resource path="res://sprites/onyx_cc_nc/readout/5.png" type="Texture" id=1]
+[ext_resource path="res://sprites/emr_cc_by/empty.png" type="Texture" id=1]
 [ext_resource path="res://interface/hud/Target.gd" type="Script" id=2]
 [ext_resource path="res://interface/NinePatchPanel.tscn" type="PackedScene" id=3]
 

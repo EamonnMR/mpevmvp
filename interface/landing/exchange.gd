@@ -16,7 +16,7 @@ func _bind_ship_updates(spob):
 func _clear_rows():
 	for child in $Rows.get_children():
 		$Rows.remove_child(child)
-		
+
 func _get_label(text):
 	var label = Label.new()
 	label.text = text

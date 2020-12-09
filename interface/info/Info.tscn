@@ -1,7 +1,9 @@
-[gd_scene load_steps=3 format=2]
+[gd_scene load_steps=5 format=2]
 
 [ext_resource path="res://interface/NinePatchPanel.tscn" type="PackedScene" id=1]
 [ext_resource path="res://interface/info/Info.gd" type="Script" id=2]
+[ext_resource path="res://interface/info/Ship.gd" type="Script" id=3]
+[ext_resource path="res://sprites/emr_cc_by/empty.png" type="Texture" id=4]
 
 [node name="Info" type="CanvasLayer"]
 layer = 10
@@ -19,25 +21,28 @@ margin_bottom = 136.5
 
 [node name="Tabs" type="Tabs" parent="NinePatchPanel"]
 margin_left = 17.0
-margin_top = 43.0
+margin_top = 14.0
 margin_right = 442.0
 margin_bottom = 251.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="TabContainer" type="TabContainer" parent="NinePatchPanel/Tabs"]
-margin_right = 409.0
-margin_bottom = 193.0
+margin_right = 422.0
+margin_bottom = 239.0
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="Ship" type="Control" parent="NinePatchPanel/Tabs/TabContainer"]
-visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
 margin_left = 4.0
 margin_top = 32.0
 margin_right = -4.0
 margin_bottom = -4.0
+script = ExtResource( 3 )
 
 [node name="ShipType" type="Label" parent="NinePatchPanel/Tabs/TabContainer/Ship"]
 margin_right = 40.0
@@ -59,30 +64,40 @@ __meta__ = {
 
 [node name="Equipment" type="Label" parent="NinePatchPanel/Tabs/TabContainer/Ship"]
 margin_left = 1.0
-margin_top = 38.0
-margin_right = 399.0
-margin_bottom = 136.0
-text = "Ship Subtitle"
+margin_top = 64.0
+margin_right = 412.0
+margin_bottom = 179.0
+text = "Equipment"
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="ShipValue" type="Label" parent="NinePatchPanel/Tabs/TabContainer/Ship"]
-margin_left = 5.94604
-margin_top = 142.11
-margin_right = 85.946
-margin_bottom = 156.11
+margin_left = 4.88659
+margin_top = 184.489
+margin_right = 84.8866
+margin_bottom = 198.489
 text = "Ship Value"
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="Cash" type="Label" parent="NinePatchPanel/Tabs/TabContainer/Ship"]
-margin_left = 322.0
-margin_top = 143.0
-margin_right = 402.0
-margin_bottom = 157.0
+margin_left = 327.297
+margin_top = 186.438
+margin_right = 407.297
+margin_bottom = 200.438
 text = "Cash"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Readout" type="TextureRect" parent="NinePatchPanel/Tabs/TabContainer/Ship"]
+margin_left = 275.813
+margin_top = -4.20447
+margin_right = 403.813
+margin_bottom = 59.7955
+texture = ExtResource( 4 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -120,6 +135,7 @@ __meta__ = {
 }
 
 [node name="Alliances" type="Control" parent="NinePatchPanel/Tabs/TabContainer"]
+visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
 margin_left = 4.0
