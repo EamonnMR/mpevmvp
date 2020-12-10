@@ -43,6 +43,7 @@ export var team_set = []
 export var faction = ""
 
 signal destroyed
+signal disappeared
 signal cargo_updated
 signal status_updated
 signal upgrades_updated
@@ -456,3 +457,6 @@ func _on_ClickArea_input_event(viewport, event, shape_idx):
 func get_value():
 	# TODO: Total up price of ship + price of upgrades
 	return 0
+	
+func _exit_tree():
+	emit_signal("disappeared")

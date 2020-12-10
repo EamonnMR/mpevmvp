@@ -4,6 +4,9 @@ class_name Store
 
 var selected = null
 
+func _enter_tree():
+	update()
+
 func _ready():
 	var button_class = preload("res://interface/landing/IconButton.tscn")
 	
@@ -35,6 +38,8 @@ func update_selection(id):
 	selected = id
 	$ItemName.text = data.name
 	$desc.text = data.desc
+	
+	update()
 
 func _on_leave_pressed():
 	hide()
