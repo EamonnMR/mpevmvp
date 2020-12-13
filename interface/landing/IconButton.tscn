@@ -13,14 +13,13 @@ __meta__ = {
 }
 
 [node name="Label" type="Label" parent="."]
-anchor_left = 0.5
 anchor_top = 1.0
-anchor_right = 0.5
+anchor_right = 1.0
 anchor_bottom = 1.0
-margin_left = -20.0
-margin_top = -14.0
-margin_right = 20.0
+margin_top = -29.0
 text = "Name"
+align = 1
+valign = 2
 __meta__ = {
 "_edit_use_anchors_": false
 }
