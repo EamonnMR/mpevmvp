@@ -2,7 +2,7 @@
 
 Networked multiplayer Space Trading/Combat game with asteroids style mechanics and a procedurally generated world. Built in Godot using free graphics.
 
-![Spaceship combat](https://raw.githubusercontent.com/EamonnMR/mpevmvp/master/screenshots/gameplay.jpg)
+![Spaceship combat](https://raw.githubusercontent.com/EamonnMR/mpevmvp/master/screenshots/hero.png)
 
 Built to sort of scratch an itch: can [EV](http://escape-velocity.games) mechanics work in a multiplayer setting?
 
