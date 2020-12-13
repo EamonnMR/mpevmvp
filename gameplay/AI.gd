@@ -186,4 +186,3 @@ func _ship_took_damage(source):
 func _on_IdleTimer_timeout():
 	destination = null
 	arrived = false
-
