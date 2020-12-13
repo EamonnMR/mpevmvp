@@ -216,7 +216,7 @@ func ensure_link_reciprocity():
 				link_sys["links"].append(system_id)
 
 func parse_color(color_text) -> Color:
-	var color_parsed = color_text.split(",")
+	var color_parsed = color_text.split(" ")
 	return Color(color_parsed[0], color_parsed[1], color_parsed[2])
 	
 func parse_int_array(text: String) -> Array:
