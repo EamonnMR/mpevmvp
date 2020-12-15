@@ -154,7 +154,8 @@ func load_weapons():
 	]
 	
 	var bool_fields = [
-		"turret"
+		"turret",
+		"gimbal"
 	]
 	for weapon_id in weapons:
 		var weapon = weapons[weapon_id]

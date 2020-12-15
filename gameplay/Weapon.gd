@@ -7,13 +7,15 @@ class_name Weapon
 var cooldown = true
 export var count: int = 1
 var turret = false
+var gimbal = false
 
 const STATS = [
 	"damage",
 	"projectile_velocity",
 	"projectile_lifetime",
 	"projectile_scene",
-	"turret"
+	"turret",
+	"gimbal"
 ]
 
 var damage: int
@@ -28,6 +30,8 @@ func apply_stats():
 	# Stacking weapons
 	$CooldownTimer.wait_time = data["cooldown"] / count
 	$shot_sfx.stream = data["sound_effect"]
+	if gimbal:
+		print("Gimbal is true")
 
 
 func get_ship():
@@ -49,11 +53,19 @@ func _parent_ship():
 	return get_node("../../")
 	
 func _turret_facing_if_applicable(ship):
-	if not turret:
+	if (not turret) and (not gimbal):
 		return null
 	var target = ship.get_target()
-	if target:
-		return ship.get_angle_to(target.position)
+	var angle = anglemod(ship.get_angle_to(target.position))
+	if turret:
+		return angle
+	elif gimbal and within_quadrent(angle, ship.direction):
+		return angle
+	else:
+		return null
+
+func within_quadrent(angle: float, direction: float) -> bool:
+	return abs(anglemod(angle - anglemod(direction - (PI / 4)))) < PI / 2
 
 func _get_angle(angle, ship) -> float:
 	if angle:
@@ -80,3 +92,8 @@ func get_shot(angle):
 		shot_effects()
 	return shot
 
+func anglemod(angle):
+	"""I wish this was a builtin"""
+	var ARC = 2 * PI
+	# TODO: Recursive might be too slow
+	return fmod(angle + ARC, ARC)
