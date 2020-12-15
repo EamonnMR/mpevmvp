@@ -237,7 +237,7 @@ func fire_shot(ship, weapon_id):
 	var shot = ship.get_shot(weapon_id)
 	shot.set_network_master(1)
 	ship.get_level().get_node("world/shots").add_child(shot)
-	Client.rpc("fire_shot", ship.name, ship.get_node("../").name, weapon_id, shot.name)
+	Client.rpc("fire_shot", ship.name, ship.get_node("../").name, weapon_id, shot.name, shot.direction)
 
 func switch_player_universe(player):
 	var old_level = player.get_level().get_node("world")

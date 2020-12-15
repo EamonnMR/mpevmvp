@@ -6,12 +6,14 @@ class_name Weapon
 
 var cooldown = true
 export var count: int = 1
+var turret = false
 
 const STATS = [
 	"damage",
 	"projectile_velocity",
 	"projectile_lifetime",
-	"projectile_scene"
+	"projectile_scene",
+	"turret"
 ]
 
 var damage: int
@@ -45,8 +47,23 @@ func shot_effects():
 
 func _parent_ship():
 	return get_node("../../")
+	
+func _turret_facing_if_applicable(ship):
+	if not turret:
+		return null
+	var target = ship.get_target()
+	if target:
+		return ship.get_angle_to(target.position)
 
-func get_shot():
+func _get_angle(angle, ship) -> float:
+	if angle:
+		return angle
+	var turret_facing = _turret_facing_if_applicable(ship)
+	if turret_facing:
+		return turret_facing
+	return ship.direction
+
+func get_shot(angle):
 	var shot = projectile_scene.instance()
 	var ship = get_ship()
 	shot.team_set = get_ship().team_set
@@ -54,7 +71,7 @@ func get_shot():
 		projectile_velocity,
 		damage,
 		projectile_lifetime,
-		ship.direction,
+		_get_angle(angle, ship),
 		ship.position,
 		ship.get_linear_velocity(),
 		_parent_ship()  # The ship node

@@ -12,6 +12,7 @@ var free_mass: int
 var price: int
 var standoff: bool
 var joust: bool
+var has_turrets: bool
 var subtitle: String
 var armor: float
 var upgrades: Dictionary
@@ -227,8 +228,8 @@ func current_system():
 func _on_ShotTimer_timeout():
 	shot_cooldown = true
 
-func get_shot(weapon_id):
-	return $weapons.get_node(weapon_id).get_shot()
+func get_shot(weapon_id, angle=null):
+	return $weapons.get_node(weapon_id).get_shot(angle)
 
 func take_damage(damage, source):
 	health -= damage
@@ -460,3 +461,9 @@ func get_value():
 	
 func _exit_tree():
 	emit_signal("disappeared")
+
+func get_target():
+	var input = get_input_state()
+	if input:
+		return input.target
+	return null

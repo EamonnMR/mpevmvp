@@ -30,6 +30,12 @@ func can_add(ship, count: int) -> bool:
 	if ship.free_mass >= mass:
 		return true
 	return false
+	
+func decide_if_ship_has_turrets(ship):
+	for weapon in ship.get_node("weapons").get_children():
+		if weapon.turret:
+			return true
+	return false
 
 func apply(ship, count: int):
 	# Make sure each effect works in reverse if you pass a negative count
@@ -42,5 +48,6 @@ func apply(ship, count: int):
 				ship.add_weapon(weapon_id, count)
 			elif count < 0:
 				ship.remove_weapon(weapon_id, abs(count))
+			ship.has_turrets = decide_if_ship_has_turrets(ship)
 		if effect == "armor":
 			ship.armor += float(effects[effect]) * count

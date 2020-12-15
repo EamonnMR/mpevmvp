@@ -173,7 +173,10 @@ func _should_brake_idle():
 
 func _facing_within_margin(margin):
 	""" Relies on 'ideal face' being populated """
-	return ideal_face and abs(_anglemod(ideal_face - parent.direction)) < margin
+	return (
+		parent.has_turrets or
+		(ideal_face and abs(_anglemod(ideal_face - parent.direction)) < margin)
+	)
 
 func _should_shoot():
 	return target and _facing_within_margin(shoot_margin) and parent.position.distance_to(target.position) < shoot_distance

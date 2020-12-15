@@ -11,6 +11,7 @@ puppet var puppet_jumping = false
 puppet var puppet_selected_system: String = ""
 puppet var puppet_landing = false
 puppet var puppet_braking = false
+var target = null  # Not a puppet var, but set remotely
 
 var direction_change: int = 0
 var shooting = false
@@ -46,7 +47,7 @@ func _get_entity():
 	var root = get_tree().get_root()
 	var world = root.get_node("Multiverse").get_level()
 	var players = world.get_node("players")
-	return players.get_node(name)
+	return Server.get_level_for_player(name)
 
 func _physics_process(delta):
 	if (is_network_master()):
@@ -81,11 +82,21 @@ func select_ship(new_selected_ship: Ship, play_sound:bool = true):
 			if is_instance_valid(selected_ship):
 				selected_ship.add_selection()
 				selected_ship.connect("destroyed", self, "select_ship", [null, false])
+				rpc_id(1, "update_target_selection", selected_ship.name, selected_ship.get_node("../").name)
 		else:
 			selected_ship = null
+			rpc_id(1, "update_target_selection", null, null)
 		if play_sound:
 			$SelectionSound.play()
 		emit_signal("targeting_updated")
+		
+remote func update_target_selection(target_name, destination):
+	if target_name:
+		var player_level = Server.get_level_for_player(int(name))
+		var path = destination + "/" + target_name
+		target = player_level.get_node(path)
+	else:
+		target = null
 
 func _get_direction_change():
 	var dc = 0
