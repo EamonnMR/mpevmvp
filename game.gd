@@ -137,7 +137,8 @@ func load_ships():
 
 func load_weapons():
 	var int_fields = [
-		"damage"
+		"damage",
+		"arc"
 	]
 	
 	var float_fields = [
@@ -152,11 +153,7 @@ func load_weapons():
 	var sound_fields = [
 		"sound_effect"
 	]
-	
-	var bool_fields = [
-		"turret",
-		"gimbal"
-	]
+
 	for weapon_id in weapons:
 		var weapon = weapons[weapon_id]
 		for field in int_fields:
@@ -168,8 +165,6 @@ func load_weapons():
 		for field in sound_fields:
 			weapon[field] = GdScriptAudioImport.loadfile(weapon[field])
 			weapon[field].loop = false
-		for field in bool_fields:
-			weapon[field] = parse_bool(weapon[field])
 			
 func load_upgrades():
 	for i in upgrades:

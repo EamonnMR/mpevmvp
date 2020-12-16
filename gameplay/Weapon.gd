@@ -14,11 +14,12 @@ const STATS = [
 	"projectile_velocity",
 	"projectile_lifetime",
 	"projectile_scene",
-	"turret",
-	"gimbal"
+	"arc"
 ]
 
 var damage: int
+var arc: int
+var arc_radians: float
 var projectile_velocity: float
 var projectile_lifetime: float
 var projectile_scene: PackedScene
@@ -30,8 +31,7 @@ func apply_stats():
 	# Stacking weapons
 	$CooldownTimer.wait_time = data["cooldown"] / count
 	$shot_sfx.stream = data["sound_effect"]
-	if gimbal:
-		print("Gimbal is true")
+	arc_radians = 2 * PI * (float(arc) / 360)
 
 
 func get_ship():
@@ -53,19 +53,18 @@ func _parent_ship():
 	return get_node("../../")
 	
 func _turret_facing_if_applicable(ship):
-	if (not turret) and (not gimbal):
+	if not arc:
 		return null
 	var target = ship.get_target()
 	var angle = anglemod(ship.get_angle_to(target.position))
-	if turret:
-		return angle
-	elif gimbal and within_quadrent(angle, ship.direction):
+	if within_arc(angle, ship.direction):
 		return angle
 	else:
 		return null
 
-func within_quadrent(angle: float, direction: float) -> bool:
-	return abs(anglemod(angle - anglemod(direction - (PI / 4)))) < PI / 2
+func within_arc(angle: float, direction: float) -> bool:
+	print("Direction: ", direction, ", angle: ", angle, ", normalized_angle: ", abs(anglemod(angle - anglemod(direction - (PI / 4)))), ", arc: ", arc, ", arc_radians: ", arc_radians, ", in_arc: ", abs(anglemod(angle - anglemod(direction - (PI / 4)))) < arc_radians)
+	return abs(anglemod(angle - anglemod(direction - (PI / 4)))) < arc_radians
 
 func _get_angle(angle, ship) -> float:
 	if angle:
