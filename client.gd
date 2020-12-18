@@ -11,6 +11,8 @@ var hud: Hud
 
 signal system_changed
 signal player_ship_set
+signal player_added
+signal player_left
 
 func start(ip, port, player_nick):
 	get_tree().connect("connected_to_server", self, "_client_connected")
@@ -31,12 +33,15 @@ remote func update_player_list(players):
 	self.players = players
 	print("Players: ", players)
 	print("My client id:", client_id)
+	emit_signal("player_added")
 	
 remote func add_net_player(player_id):
 	players[str(player_id)] = {"nick": str(player_id)}
+	emit_signal("player_added")
 	
 remote func remove_net_player(player_id):
 	players.erase(str(player_id))
+	emit_signal("player_left")
 
 func _setup_net_client(ip, port):
 	client = NetworkedMultiplayerENet.new()
