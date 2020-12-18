@@ -22,8 +22,10 @@ func _update():
 		$Readout.texture = ship.data().readout
 		$Health.max_value = ship.armor
 		$Health.value = ship.health
-		if ship.is_player():
-			$Faction.text = "player"
+		var players = Client.players
+		var ship_name = ship.name
+		if ship.is_player() and ship.name in players:
+			$Faction.text = Client.players[ship.name]["nick"]
 		else:
 			$Faction.text = Game.factions[ship.faction]["name"]
 	else:

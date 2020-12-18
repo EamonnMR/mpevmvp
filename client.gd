@@ -1,17 +1,18 @@
 extends Node
 
+var players = {}
 var player_ship: Node
 
 var client
 var client_id
-var player_name
+var player_nick
 var player_input: PlayerInput
 var hud: Hud
 
 signal system_changed
 signal player_ship_set
 
-func start(ip, port, new_player_name):
+func start(ip, port, player_nick):
 	get_tree().connect("connected_to_server", self, "_client_connected")
 	get_tree().connect("network_peer_connected", self, "_player_connected_client")
 	get_tree().connect("network_peer_disconnected", self,"_player_disconnected_client")
@@ -20,6 +21,22 @@ func start(ip, port, new_player_name):
 	
 	_setup_net_client(ip, port)
 	_setup_client_world()
+	self.player_nick = player_nick
+
+remote func update_player_nick(player_id, new_nick):
+	players[str(player_id)]["nick"] = new_nick
+	print("Player nick updated: ", player_id, ": ", new_nick)
+	
+remote func update_player_list(players):
+	self.players = players
+	print("Players: ", players)
+	print("My client id:", client_id)
+	
+remote func add_net_player(player_id):
+	players[str(player_id)] = {"nick": str(player_id)}
+	
+remote func remove_net_player(player_id):
+	players.erase(str(player_id))
 
 func _setup_net_client(ip, port):
 	client = NetworkedMultiplayerENet.new()
@@ -27,7 +44,6 @@ func _setup_net_client(ip, port):
 	get_tree().set_network_peer(client)
 	client_id = get_tree().get_network_unique_id()
 	print("Your player ID is: ", client_id)
-
 
 func _setup_client_world():
 	var root = get_tree().get_root()
@@ -50,6 +66,7 @@ func _client_connected():
 	net_players.add_child(player_input)
 	get_tree().get_root().add_child(net_players)
 	get_tree().get_root().add_child(hud)
+	Server.rpc_id(1, "set_player_nick", player_nick)
 
 func disconnect_from_server():
 	print("Client trying to disconnect")
@@ -86,9 +103,9 @@ remote func switch_level(new_level_name, level_data):
 remote func remove_entity(destination, ent_name):
 	var entity_to_remove = get_level().get_node(destination + "/" + ent_name)
 	# Hacky.
-	if entity_to_remove is Ship:
+	# if entity_to_remove is Ship:
 		# TODO: Does this need to be before or after?
-		entity_to_remove.emit_signal("removed")
+		# entity_to_remove.emit_signal("removed")
 	get_level().get_node(destination).remove_child(entity_to_remove)
 	
 remote func send_entity(destination, entity_data):

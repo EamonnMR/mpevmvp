@@ -125,4 +125,5 @@ func get_random_name(_list: String, seed_value: int) -> String:
 	var new_name = getName(random_letter, 4, 7)
 	new_name = new_name.capitalize()
 	# print("Seed: ", seed_value, " Result: ", new_name)
+	# TODO: Add bad words filter here, hash the bad word result for a new seed value
 	return new_name

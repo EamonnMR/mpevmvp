@@ -288,7 +288,7 @@ func serialize():
 		"money": money,
 		"bulk_cargo": bulk_cargo,
 		"upgrades": upgrades,
-		"ai": is_instance_valid($AI),  # We just want to know if it's a player
+		"ai": "AI" in self,  # We just want to know if it's a player
 		"faction": faction
 	}
 

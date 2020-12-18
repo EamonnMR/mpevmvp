@@ -42,6 +42,7 @@ func _setup_server_nodes(game_name):
 func _client_connected(id):
 	print("Server: Client_Connected: ", id)
 	players[id] = {
+		"nick": str(id),
 		"name": id,
 		"ship_type": 0,
 		"money": STARTING_MONEY  # Really not in love with storing this here (only when the player is unspawned) 
@@ -51,14 +52,32 @@ func _client_connected(id):
 	player_input.set_name(str(id))
 	player_input.set_network_master(id)
 	net_players.add_child(player_input)
-	
+	Client.rpc_id(id, "update_player_list", _get_public_players())
+	Client.rpc("add_net_player", id)
 	spawn_player(id)
-	
+
+func _get_public_players():
+	var public = {}
+	# Returns a dict with just the public-facing information about all players in the game
+	for player in players.keys():
+		public[str(player)] = {
+			"nick": players[player]["nick"]
+		}
+	return public
+
 func _client_disconnected(id):
 	print("Server._client_disconnected: ", id)
 	_remove_player_entity_by_id(id)
 	players.erase(id)
+	Client.rpc("remove_net_player", id)
 	net_players.remove_child(net_players.get_node(str(id)))
+
+remote func set_player_nick(new_nick):
+	var player_id = get_tree().get_rpc_sender_id()
+	# TODO: Abuse Filter here
+	players[player_id]["nick"] = new_nick
+	Client.rpc("update_player_nick", player_id, new_nick)
+	print("New Nickname: ", new_nick)
 
 func send_level(client_id, new_level_name, new_level):
 	assert(new_level != null)
