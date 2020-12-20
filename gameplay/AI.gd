@@ -15,9 +15,6 @@ var parent: Ship
 var faction_dat
 var arrived: bool
 
-func _anglemod(angle: float) -> float:
-	return fmod(angle, PI * 2)
-
 func _ready():
 	parent = get_node("../")
 	faction_dat = Game.factions[parent.faction]
@@ -80,23 +77,6 @@ func get_ideal_face_and_direction_change(at: Vector2, delta):
 	puppet_direction_change = _flatten_to_sign(impulse[0])
 	ideal_face = impulse[1]
 
-func _constrained_point(subject, current_rotation, max_turn, position: Vector2):
-	# For finding the right direction and amount to turn when your rotation speed is limited
-	var ideal_face = _anglemod(subject.get_angle_to(position))
-	var ideal_turn = _anglemod(ideal_face - current_rotation)
-	if(ideal_turn > PI):
-		ideal_turn = _anglemod(ideal_turn - 2 * PI)
-
-	elif(ideal_turn < -1 * PI):
-		ideal_turn = _anglemod(ideal_turn + 2 * PI)
-	
-	max_turn = sign(ideal_turn) * max_turn  # Ideal turn in the right direction
-	
-	if(abs(ideal_turn) > abs(max_turn)):
-		return [max_turn, ideal_face]
-	else:
-		return [ideal_turn, ideal_face]
-
 func _find_target():
 	var level = get_node("../../../")
 	var possible_targets = []
@@ -125,13 +105,6 @@ func is_player_enemy(ship):
 # TODO: Add a timer for this
 func _on_ai_rethink_timer_timeout():
 	var target = _find_target()
-
-func _flatten_to_sign(value):
-	if value > 0:
-		return 1
-	if value < 0:
-		return -1
-	return 0
 
 func _should_thrust():
 	return (
