@@ -6,6 +6,7 @@ const FACE_MARGIN = PI / 10.0
 
 var parent
 var fixed_ideal_face: float
+var slowdown_completed = false
 
 func _ready():
 	parent = get_node("../")
@@ -26,16 +27,21 @@ func _facing_within_margin():
 	return abs(_anglemod(fixed_ideal_face - parent.direction)) < FACE_MARGIN
 
 func _physics_process(delta):
-	var moving = parent.get_linear_velocity().length() > 0.01
-	if moving:
-		puppet_braking = true
+	if not slowdown_completed:
+		var moving = parent.get_linear_velocity().length() > 0.01
+		if moving:
+			puppet_braking = true
+		else:
+			slowdown_completed = true
 	else:
 		puppet_braking = false
+		
 		var facing_destination = _facing_within_margin()
 		if not facing_destination:
 			rotate_to_face_destination(delta)
 		else:
-			parent.complete_jump()
-			# Blastoff! Accelerate towards space
-			# If outside jump radius:
-			# complete jump
+			if parent.get_linear_velocity().length() > (parent.max_speed * 0.9):
+				parent.complete_jump()
+			else:
+				puppet_direction_change = 0
+				puppet_thrusting = true
