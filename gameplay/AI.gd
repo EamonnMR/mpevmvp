@@ -1,4 +1,4 @@
-extends Node
+extends ShipController
 
 # TODO: This stuff ought to be configured at spawn time, based on present weapons
 export var accel_margin = PI / 2
@@ -14,17 +14,6 @@ var destination
 var parent: Ship
 var faction_dat
 var arrived: bool
-
-# This is the output of the AI - ship.tscn uses these to move.
-var puppet_direction_change: int = 0
-var puppet_shooting = false
-var puppet_thrusting = false
-var puppet_braking = false
-
-# I don't think we'll need these
-var puppet_jumping = false
-var puppet_selected_system: String = ""
-var puppet_landing = false
 
 func _anglemod(angle: float) -> float:
 	return fmod(angle, PI * 2)

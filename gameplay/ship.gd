@@ -32,7 +32,7 @@ var thrusting = false
 var braking = false
 var health = 20
 puppet var puppet_health = 20
-var input_state: Node
+var input_state: ShipController
 var landing = false
 
 export var bulk_cargo = {}
@@ -130,10 +130,9 @@ func _show_team_set():
 
 func _physics_process(delta):
 	if (is_network_master()):
-		# var input_state = get_input_state()
+		input_state = get_input_state()
 		
 		shooting = input_state.puppet_shooting
-		jumping = input_state.puppet_jumping
 		thrusting = input_state.puppet_thrusting and not input_state.puppet_braking
 		landing = input_state.puppet_landing
 		braking = input_state.puppet_braking
@@ -180,8 +179,10 @@ func handle_rotation(delta):
 		direction = anglemod(((turn  * input_state.puppet_direction_change * delta) + direction))
 
 func get_input_state():
+	if has_node("JumpAutopilot"):
+		return $JumpAutopilot
 	if has_node("AI"):
-		return get_node("AI")
+		return $AI
 	else:
 		return get_tree().get_root().get_node(Game.INPUT).get_node(name)
 
@@ -288,7 +289,7 @@ func serialize():
 		"money": money,
 		"bulk_cargo": bulk_cargo,
 		"upgrades": upgrades,
-		"ai": "AI" in self,  # We just want to know if it's a player
+		"ai": has_node("AI"),  # We just want to know if it's a player
 		"faction": faction
 	}
 
@@ -324,14 +325,24 @@ func rset_ex_cond(puppet_var, value):
 # Single-message moves:
 remote func try_jump():
 	if is_far_enough_to_jump():
-		# TODO: Jump Effects
 		if selected_valid_system_to_jump_to():
-			Server.switch_player_universe(self)
+			start_jump()
+			# Server.switch_player_universe(self)
 		else:
 			Client.rpc_id(int(name), "complain", "Cannot enter hyperspace - Current System %s has no hyperlane to selected (%s)" % [current_system(), get_input_state().puppet_selected_system])
 	else:
 		Client.rpc_id(int(name), "complain", "Cannot enter hyperspace - too close to sytem center")
 
+func start_jump():
+	var autopilot: Node = preload("res://gameplay/JumpAutopilot.tscn").instance()
+	autopilot.puppet_selected_system = get_input_state().puppet_selected_system
+	add_child(autopilot)
+
+func complete_jump():
+	print("Complete Jump")
+	Server.switch_player_universe(self)
+	remove_child($JumpAutopilot)
+	
 # Trade related functions:
 	
 func get_npc_carried_money() -> int:

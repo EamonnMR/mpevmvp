@@ -19,7 +19,12 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://Item.gd"
 }, {
-"base": "Node2D",
+"base": "ShipController",
+"class": "JumpAutopilot",
+"language": "GDScript",
+"path": "res://gameplay/JumpAutopilot.gd"
+}, {
+"base": "ShipController",
 "class": "PlayerInput",
 "language": "GDScript",
 "path": "res://gameplay/PlayerInput.gd"
@@ -33,6 +38,11 @@ _global_script_classes=[ {
 "class": "Ship",
 "language": "GDScript",
 "path": "res://gameplay/ship.gd"
+}, {
+"base": "Node",
+"class": "ShipController",
+"language": "GDScript",
+"path": "res://gameplay/ShipController.gd"
 }, {
 "base": "Item",
 "class": "ShipDat",
@@ -62,9 +72,11 @@ _global_script_classes=[ {
 _global_script_class_icons={
 "Hud": "",
 "Item": "",
+"JumpAutopilot": "",
 "PlayerInput": "",
 "RotationSprite": "",
 "Ship": "",
+"ShipController": "",
 "ShipDat": "",
 "Spob": "",
 "Store": "",

@@ -1,22 +1,12 @@
-extends Node2D
-
-# This captures input and displays the cursor
+extends ShipController
 
 class_name PlayerInput
 
-puppet var puppet_direction_change: int = 0
-puppet var puppet_shooting = false
-puppet var puppet_thrusting = false
-puppet var puppet_jumping = false
-puppet var puppet_selected_system: String = ""
-puppet var puppet_landing = false
-puppet var puppet_braking = false
 var target = null  # Not a puppet var, but set remotely
 
 var direction_change: int = 0
 var shooting = false
 var thrusting = false
-var jumping = false
 var map = null
 var info = null
 var selected_system: String = ""

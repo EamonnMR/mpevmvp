@@ -3,7 +3,7 @@
 [ext_resource path="res://gameplay/PlayerInput.gd" type="Script" id=1]
 [ext_resource path="res://sound/cc0_rubberduck/sfx_20a.ogg" type="AudioStream" id=2]
 
-[node name="PlayerInput" type="Node2D"]
+[node name="PlayerInput" type="Node"]
 script = ExtResource( 1 )
 
 [node name="Cursor" type="Sprite" parent="."]
