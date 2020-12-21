@@ -22,12 +22,15 @@ puppet var puppet_dir: float = 0
 puppet var puppet_thrusting = false
 puppet var puppet_velocity = Vector2(0,0)
 puppet var puppet_braking = false
+puppet var puppet_jumping_out = false
+puppet var puppet_jumping_in = false
 
 var direction: float = 0
 
 var shooting = false
 var shot_cooldown = false
-var jumping = false
+var jumping_out = false
+var jumping_in = false
 var thrusting = false
 var braking = false
 var health = 20
@@ -145,6 +148,8 @@ func _physics_process(delta):
 		rset_ex("puppet_braking", braking)
 		rset_ex("puppet_velocity", get_linear_velocity())
 		rset_ex_cond("puppet_health", health)
+		rset_ex_cond("puppet_jumping_out", jumping_out)
+		rset_ex_cond("puppet_jumping_in", jumping_in)
 		
 		if shooting:
 			for weapon in $weapons.get_children():
@@ -158,6 +163,8 @@ func _physics_process(delta):
 		thrusting = puppet_thrusting
 		braking = puppet_braking
 		position = puppet_pos # This should be in integrate forces, but for some reason the puppet pos variable does not work there
+		jumping_in = puppet_jumping_in
+		jumping_out = puppet_jumping_out
 	if (not is_network_master()):
 		# To avoid jitter alledgedly
 		pass
@@ -196,16 +203,23 @@ func get_limited_velocity_with_thrust():
 		vel += Vector2(accel, 0).rotated(direction)
 	if braking:
 		vel -= (Vector2(min(accel, vel.length()), 0).rotated(vel.angle()))
-	if vel.length() > max_speed:
-		return Vector2(max_speed, 0).rotated(vel.angle())
+	var tmp_max_speed = max_speed
+	if jumping_out:
+		tmp_max_speed = max_speed * 2
+	if vel.length() > tmp_max_speed:
+		return Vector2(tmp_max_speed, 0).rotated(vel.angle())
 	else:
 		return vel
 
 func wrap_position_with_transform(state):
 	var transform = state.get_transform()
-	if transform.origin.length() > Game.PLAY_AREA_RADIUS:
+	if transform.origin.length() > Game.PLAY_AREA_RADIUS and not (jumping_in or jumping_out):
 		transform.origin = Vector2(Game.PLAY_AREA_RADIUS / 2, 0).rotated(anglemod(transform.origin.angle() + PI))
 		state.set_transform(transform)
+	else:
+		if jumping_in:
+			jumping_in = false
+			puppet_jumping_in = false
 
 func _integrate_forces(state):
 	set_applied_torque(0)  # No rotation component
@@ -338,7 +352,10 @@ func start_jump():
 	autopilot.puppet_selected_system = get_input_state().puppet_selected_system
 	add_child(autopilot)
 
-func complete_jump():
+func complete_jump(arrival_position):
+	position = arrival_position
+	jumping_out = false
+	jumping_in = true
 	print("Complete Jump")
 	Server.switch_player_universe(self)
 	remove_child($JumpAutopilot)

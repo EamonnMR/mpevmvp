@@ -261,7 +261,6 @@ func fire_shot(ship, weapon_id):
 func switch_player_universe(player):
 	var old_level = player.get_level().get_node("world")
 	var old_level_name = player.get_level().name
-	player.position = player.position.rotated(PI)
 	
 	var new_level_name = player.get_input_state().puppet_selected_system
 	print("Impulse: ", new_level_name, " --> ", old_level_name)

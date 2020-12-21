@@ -40,14 +40,21 @@ func _physics_process(delta):
 		if not facing_destination:
 			rotate_to_face_destination(delta)
 		else:
-			if parent.get_linear_velocity().length() > (parent.max_speed * 0.9):
-				parent.complete_jump()
+			if parent.get_linear_velocity().length() > (parent.max_speed * 1.9):
+				parent.complete_jump(_get_jump_in_position())
 			else:
 				puppet_direction_change = 0
 				puppet_thrusting = true
+				parent.jumping_out = true
 
 func _get_hyperjump_angle():
 	var current_system = Game.systems[parent.current_system()]["position"]
 	var destination_system = Game.systems[puppet_selected_system]["position"]
 	
 	return _anglemod(destination_system.angle_to_point(current_system))
+	
+func _get_jump_in_position():
+	var current_system = Game.systems[parent.current_system()]["position"]
+	var destination_system = Game.systems[puppet_selected_system]["position"]
+	
+	return Vector2(Game.PLAY_AREA_RADIUS * 0.99, 0).rotated(_anglemod(current_system.angle_to_point(destination_system)))
