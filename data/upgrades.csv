@@ -3,3 +3,4 @@ id,name,mass,price,desc,icon,effect_0,value_0
 1,gun,2,200,Hoaky religions and anchient weapons are no match for a good 20mm cannon at your side,sprites/onyx_cc_nc/icons/upg_1.png,weapon,1
 2,Applique,3,100,"Survival in space depends on keeping space on the outside and air on the inside. Sure, everyone drills for hull breach - reach for masks and gloves, don helmets, communicate by radio and hand sign. But at the end of the day, the ship that keeps its atmosphere usually wins the fight. Sometimes that means welding on additional pieces of armor over weak spots, even if the design does not call for them",sprites/onyx_cc_nc/icons/upg_2.png,armor,10
 3,Cannon (tr),3,300,Why turn your whole ship when you could mount the cannons on a turret? We thought so.,sprites/onyx_cc_nc/icons/upg_3.png,weapon,2
+4,Beam,10,1000,Collimated plasma beam. It can melt through any armor if you can get close enough to use it.,sprites/onyx_cc_nc/icons/upg_4.png,weapon,3
