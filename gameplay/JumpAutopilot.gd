@@ -10,7 +10,7 @@ var slowdown_completed = false
 
 func _ready():
 	parent = get_node("../")
-	fixed_ideal_face = PI # TODO: Calculate jump angle
+	fixed_ideal_face = _get_hyperjump_angle()
 
 func rotate_to_face_destination(delta):
 	var impulse = _constrained_point(
@@ -45,3 +45,9 @@ func _physics_process(delta):
 			else:
 				puppet_direction_change = 0
 				puppet_thrusting = true
+
+func _get_hyperjump_angle():
+	var current_system = Game.systems[parent.current_system()]["position"]
+	var destination_system = Game.systems[puppet_selected_system]["position"]
+	
+	return _anglemod(current_system.angle_to_point(destination_system))
