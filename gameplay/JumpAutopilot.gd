@@ -50,4 +50,4 @@ func _get_hyperjump_angle():
 	var current_system = Game.systems[parent.current_system()]["position"]
 	var destination_system = Game.systems[puppet_selected_system]["position"]
 	
-	return _anglemod(current_system.angle_to_point(destination_system))
+	return _anglemod(destination_system.angle_to_point(current_system))
