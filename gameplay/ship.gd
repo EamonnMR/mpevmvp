@@ -205,7 +205,7 @@ func get_limited_velocity_with_thrust():
 		vel -= (Vector2(min(accel, vel.length()), 0).rotated(vel.angle()))
 	var tmp_max_speed = max_speed
 	if jumping_out:
-		tmp_max_speed = max_speed * 2
+		tmp_max_speed = max_speed * 10
 	if vel.length() > tmp_max_speed:
 		return Vector2(tmp_max_speed, 0).rotated(vel.angle())
 	else:
