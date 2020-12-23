@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=2]
+[gd_scene load_steps=10 format=2]
 
 [ext_resource path="res://interface/hud/Hud.gd" type="Script" id=1]
 [ext_resource path="res://interface/hud/Target.tscn" type="PackedScene" id=2]
@@ -7,6 +7,8 @@
 [ext_resource path="res://interface/hud/Radar.gd" type="Script" id=5]
 [ext_resource path="res://interface/hud/Panel.gd" type="Script" id=6]
 [ext_resource path="res://interface/hud/Status.gd" type="Script" id=7]
+[ext_resource path="res://sound/cc0_rubberduck/sfx_21a.wav" type="AudioStream" id=8]
+[ext_resource path="res://interface/hud/messages.gd" type="Script" id=9]
 
 [node name="Hud" type="CanvasLayer"]
 layer = 2
@@ -188,6 +190,16 @@ margin_left = 189.0
 margin_top = 500.0
 margin_right = 829.0
 margin_bottom = 576.0
+script = ExtResource( 9 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
+
+[node name="NotificationSound" type="AudioStreamPlayer2D" parent="messages"]
+position = Vector2( -189, -500 )
+stream = ExtResource( 8 )
+
+[node name="Timer" type="Timer" parent="messages"]
+wait_time = 5.0
+one_shot = true
+[connection signal="timeout" from="messages/Timer" to="messages" method="_on_Timer_timeout"]

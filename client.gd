@@ -122,9 +122,7 @@ remote func replace_entity(destination, entity_data):
 	get_level().receive_entity(destination, entity_data)
 
 remote func complain(text):
-	# TODO: HUD.Show text on screen
-	# TODO: Play Sound
-	print("Complain: ", text)
-
+	hud.get_node("messages").display(text)
+	
 func current_system_id():
 	return get_level().get_node("../").name
