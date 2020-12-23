@@ -56,6 +56,8 @@ func _turret_facing_if_applicable(ship):
 	if not arc:
 		return null
 	var target = ship.get_target()
+	if not is_instance_valid(target):
+		return null
 	var angle = anglemod(ship.get_angle_to(target.position))
 	if within_arc(angle, ship.direction):
 		return angle
