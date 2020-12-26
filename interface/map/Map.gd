@@ -37,7 +37,7 @@ func _input(event):
 
 func update():
 	for system in $Panel/systems.get_children():
-		if system.get_node("circle"):
+		if "circle" in system:
 			system.get_node("circle").call_deferred("update")
 		else:
 			system.call_deferred("update")
