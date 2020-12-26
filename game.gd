@@ -163,9 +163,15 @@ func load_weapons():
 		for field in scene_fields:
 			weapon[field] = load(weapon[field])
 		for field in sound_fields:
-			weapon[field] = GdScriptAudioImport.loadfile(weapon[field])
-			weapon[field].loop = false
-			
+			var sound = GdScriptAudioImport.loadfile(weapon[field])
+			# Having sounds loop by default is positively mutinous.
+			if "loop" in sound:
+				sound.loop = false
+			elif "loop_mode" in sound:
+				sound.loop_mode = AudioStreamSample.LOOP_DISABLED
+			weapon[field] = sound
+		var a = AudioStreamSample.new()
+		a.loop_mode = AudioStreamSample.LOOP_DISABLED
 func load_upgrades():
 	for i in upgrades:
 		upgrades[i] = Upgrade.new(upgrades[i])

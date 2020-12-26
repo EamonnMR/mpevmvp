@@ -1,5 +1,5 @@
 id,damage,projectile_velocity,projectile_lifetime,cooldown,arc,projectile_scene,sound_effect
-0,5,200,3,0.5,0,res://gameplay/projectiles/dual_red.tscn,res://sound/cc0_rubberduck/synth_laser_02.ogg
-1,5,400,2,1,90,res://gameplay/projectiles/green_bolt.tscn,res://sound/cc0_rubberduck/synth_laser_02.ogg
-2,5,200,3,0.5,360,res://gameplay/projectiles/dual_red.tscn,res://sound/cc0_rubberduck/synth_laser_02.ogg
-3,5,500,0.1,0.1,0,res://gameplay/projectiles/green_bolt.tscn,res://sound/cc0_rubberduck/synth_laser_02.ogg
+0,5,200,3,0.5,0,res://gameplay/projectiles/dual_red.tscn,res://sound/cc0_rubberduck/synth_laser_02.wav
+1,5,400,2,1,90,res://gameplay/projectiles/green_bolt.tscn,res://sound/cc0_rubberduck/synth_laser_02.wav
+2,5,200,3,0.5,360,res://gameplay/projectiles/dual_red.tscn,res://sound/cc0_rubberduck/synth_laser_02.wav
+3,1,750,0.2,0.1,0,res://gameplay/beams/blue.tscn,res://sound/cc0_rubberduck/weird_04.wav

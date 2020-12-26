@@ -29,6 +29,7 @@ extends Node
 func loadfile(filepath):
 	var file = File.new()
 	file.open(filepath, File.READ)
+	print(filepath)
 	var bytes = file.get_buffer(file.get_len())
 
 	# if File is wav

@@ -27,7 +27,7 @@ func _ready():
 		landing = preload("res://interface/landing/landing_main.tscn").instance()
 		# landing.bind(self)
 		spobs = _get_spobs()
-		$SelectionSound.stream.loop = false
+		$SelectionSound.stream.loop_mode = AudioStreamSample.LOOP_DISABLED
 
 func switch_system():
 	spobs = _get_spobs()

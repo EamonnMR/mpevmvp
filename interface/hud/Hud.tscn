@@ -137,6 +137,12 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
+[node name="NinePatchPanel2" parent="Status" instance=ExtResource( 4 )]
+margin_left = -9.03069
+margin_top = -8.19077
+margin_right = 151.969
+margin_bottom = 148.809
+
 [node name="energy_bar" type="ProgressBar" parent="Status"]
 margin_left = 51.4913
 margin_top = 50.2328
