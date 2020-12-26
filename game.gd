@@ -245,7 +245,12 @@ func parse_x_dict(x_dict: String) -> Dictionary:
 
 func load_csv(csv):
 	var file = File.new()
-	file.open(csv + ".txt", File.READ) # Simlink *csv.txt this to your *.csv to dodge export badness
+	var directory = Directory.new();
+	if not directory.file_exists(csv):
+		# Simlink *csv.txt this to your *.csv to dodge export badness
+		# Windows does not seem to correctly use simlinks, so for windows dev to work, we need to handle both
+		csv = csv + ".txt"
+	file.open(csv, File.READ)
 	var headers = file.get_csv_line()
 	var parsed_file = {}
 	while true:
