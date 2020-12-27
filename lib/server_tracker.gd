@@ -1,15 +1,16 @@
 extends Node
 const TRACKER = "tracker.eamonnmr.com"
 const GAMETYPE = "mp_ev_mvp"
-const DEFAULT_PORT = 26000
 
 signal post_completed()
 signal get_completed(games)
 
 var game_name = null
+var port = null
 
-func register_game(gname):
-	game_name = gname
+func register_game(game_name, port):
+	self.game_name = game_name
+	self.port = port
 
 	# TODO: Stick this right into world.tscn and show/hide it?
 	var timer = Timer.new()
@@ -22,7 +23,7 @@ func _post_to_tracker():
 	# Put a game up on the server tracker
 	# See: https://github.com/eamonnmr/server-tracker
 	var query = JSON.print({
-		"port": DEFAULT_PORT,
+		"port": port,
 		"name": game_name,
 		"type": GAMETYPE
 	})

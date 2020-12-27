@@ -62,6 +62,7 @@ func _player_connected_client(id):
 	print("Client: Player Connected: ", id)
 
 func _client_connected():
+	print("In Client Connected")
 	player_input = preload("res://gameplay/PlayerInput.tscn").instance()
 	hud = preload("res://interface/hud/Hud.tscn").instance()
 	player_input.set_name(str(client_id))

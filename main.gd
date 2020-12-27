@@ -11,10 +11,11 @@ func _ready():
 	var args = OS.get_cmdline_args()
 	var kwargs = parse_args({
 		"server-name": "EV MP Server",
-		"max_players": "6"
+		"max_players": "6",
+		"port": "2600"
 	})
 	if OS.has_feature("Server") or "--server" in args:
-		Server.start(kwargs["server-name"], int(kwargs["max_players"]))
+		Server.start(kwargs["server-name"], int(kwargs["port"]), int(kwargs["max_players"]))
 	else:
 		# TODO: Show Menu
 		pass

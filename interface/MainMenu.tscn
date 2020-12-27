@@ -218,6 +218,15 @@ margin_right = 57.8326
 margin_bottom = 66.715
 text = "Server Name"
 
+[node name="ServerPort" type="LineEdit" parent="HostScreen"]
+anchor_left = 0.5
+anchor_right = 0.5
+margin_left = -58.1674
+margin_top = 75.715
+margin_right = 58.8326
+margin_bottom = 99.715
+text = "26000"
+
 [node name="Start" type="Button" parent="HostScreen"]
 margin_left = 234.057
 margin_top = 193.696

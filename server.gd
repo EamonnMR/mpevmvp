@@ -11,19 +11,19 @@ const MAX_PLAYERS = 6
 
 const STARTING_MONEY = 20000
 
-func start(game_name, max_players):
+func start(game_name, port, max_players):
 	print("Starting Server: ", game_name, ", ", max_players)
 	
 	get_tree().connect("network_peer_connected", self, "_client_connected")
 	get_tree().connect("network_peer_disconnected", self,"_client_disconnected")
 	
 	var server = NetworkedMultiplayerENet.new()
-	server.create_server(ServerTracker.DEFAULT_PORT, max_players)
+	server.create_server(port, max_players)
 	get_tree().set_network_peer(server)
 	
-	call_deferred("_setup_server_nodes", game_name)
+	call_deferred("_setup_server_nodes", game_name, port)
 
-func _setup_server_nodes(game_name):
+func _setup_server_nodes(game_name, port):
 	# Needs to be called deferred to avoid
 	# ERROR: add_child: Condition "data.blocked > 0" is true.
 
@@ -37,7 +37,7 @@ func _setup_server_nodes(game_name):
 	net_players.set_name(Game.INPUT)
 	get_tree().get_root().add_child(net_players)
 	
-	ServerTracker.register_game(game_name)
+	ServerTracker.register_game(game_name, port)
 
 func _client_connected(id):
 	print("Server: Client_Connected: ", id)

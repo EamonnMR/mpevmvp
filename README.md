@@ -12,6 +12,8 @@ Download:
 
 https://github.com/EamonnMR/mpevmvp/releases
 
+Make sure you host a server then run another instance of the game and join it as a client. Make sure you've opened the port on your router! (default port is 26000!)
+
 (windows and linux users will also need the .pck file)
 
 Trello board where I try to track work:

@@ -33,9 +33,9 @@ func update_games_list(games):
 		$FindScreen/GamesList.add_child(game_row)
 		
 func _join_game(game):
+	$MainScreen.hide()
 	$FindScreen.hide()
 	Client.start(game["address"], game["port"], $MainScreen/EnterName.text)
-
 
 func _on_HostOnlineGame_pressed():
 	$MainScreen.hide()
@@ -43,4 +43,4 @@ func _on_HostOnlineGame_pressed():
 
 func _on_Start_pressed():
 	$HostScreen.hide()
-	Server.start($HostScreen/ServerName.text, 100)
+	Server.start($HostScreen/ServerName.text, int($HostScreen/ServerPort.text), 100)
