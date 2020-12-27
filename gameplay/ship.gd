@@ -325,10 +325,11 @@ func deserialize(data):
 		add_child(ai)
 
 func rset_ex(puppet_var, value):
+	# Unreliable!
 	# This avoids a whole lot of extra network traffic...
 	# and a whole lot of "Invalid packet received. Requested node was not found."
 	for id in get_level().get_node("world").get_player_ids():
-		rset_id(id, puppet_var, value)
+		rset_unreliable_id(id, puppet_var, value)
 	set(puppet_var, value)
 
 func rset_ex_cond(puppet_var, value):
