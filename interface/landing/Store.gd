@@ -46,3 +46,10 @@ func _on_leave_pressed():
 
 func _on_BuyButton_pressed():
 	pass
+
+
+func _on_up_pressed():
+	$Left/IconGrid.rect_position.y += 104
+
+func _on_down_pressed():
+	$Left/IconGrid.rect_position.y -= 104

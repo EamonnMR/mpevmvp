@@ -24,14 +24,15 @@ margin_bottom = 484.0
 [node name="Left" type="Panel" parent="."]
 margin_left = 22.0
 margin_top = 23.0
-margin_right = 399.0
-margin_bottom = 431.0
+margin_right = 435.0
+margin_bottom = 450.0
+rect_clip_content = true
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="IconGrid" type="GridContainer" parent="Left"]
-margin_right = 385.0
+margin_right = 409.0
 margin_bottom = 412.0
 columns = 4
 __meta__ = {
@@ -65,6 +66,20 @@ margin_right = 673.336
 margin_bottom = 452.747
 text = "Buy"
 
+[node name="up" type="Button" parent="."]
+margin_left = 347.476
+margin_top = 453.22
+margin_right = 383.476
+margin_bottom = 473.22
+text = "Up"
+
+[node name="down" type="Button" parent="."]
+margin_left = 387.476
+margin_top = 453.37
+margin_right = 435.476
+margin_bottom = 473.37
+text = "Down"
+
 [node name="desc" type="Label" parent="."]
 margin_left = 439.0
 margin_top = 65.0
@@ -77,3 +92,5 @@ __meta__ = {
 }
 [connection signal="pressed" from="leave" to="." method="_on_leave_pressed"]
 [connection signal="pressed" from="BuyButton" to="." method="_on_BuyButton_pressed"]
+[connection signal="pressed" from="up" to="." method="_on_up_pressed"]
+[connection signal="pressed" from="down" to="." method="_on_down_pressed"]
