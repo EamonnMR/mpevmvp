@@ -99,7 +99,7 @@ func randomly_assign_faction_core_worlds() -> Array:
 			else:
 				Game.systems[system_id]["faction"] = faction_id
 				Game.systems[system_id]["core"] = true
-				add_npc_spawn(Game.systems[system_id], faction_id)
+				add_npc_spawn(Game.systems[system_id], faction_id, int(faction["npc_radius"]) + int(faction["systems_radius"]))
 				already_selected.append(system_id)
 				i += 1
 	print("Core worlds assigned")
@@ -143,7 +143,7 @@ func assign_peninsula_bonus_worlds() -> Array:
 			if system["links"].size() == 1 and not "faction" in system:
 				# TODO: Randomize, don't just iterate through
 				system["faction"] = peninsula_factions[i]
-				add_npc_spawn(system, peninsula_factions[i])
+				add_npc_spawn(system, peninsula_factions[i], 10)
 				core_systems.append(system_id)
 				i += 1
 				if i == peninsula_factions.size():
@@ -168,23 +168,27 @@ func grow_faction_influence_from_core_worlds():
 			for system_id in marked_systems:
 				var system = Game.systems[system_id]
 				system["faction"] = faction_id
-				add_npc_spawn(system, faction_id)
+				add_npc_spawn(system, faction_id, int(faction["npc_radius"]) + int(faction["systems_radius"]) - i)
 				
 	print("Factions grown")
 
-func add_npc_spawn(system, faction_id):
+func add_npc_spawn(system, faction_id, count):
 	if "npc_spawns" in system:
 		if not (faction_id in system["npc_spawns"]):
 			system["npc_spawns"].append(faction_id)
 	else:
 		system["npc_spawns"] = [faction_id]
+	if "npc_count" in system:
+		system["npc_count"] = max(system["npc_count"], count)
+	else:
+		system["npc_count"] = count
 
 func grow_npc_spawns():
 	# TODO: This is also obviously not optimal
 	print("Growing faction spawns")
 	for faction_id in Game.factions:
 		var faction = Game.factions[faction_id]
-		for _i in range(faction["npc_radius"]):
+		for i in range(faction["npc_radius"]):
 			var marked_systems = []
 			for system_id in Game.systems:
 				var system = Game.systems[system_id]
@@ -194,7 +198,7 @@ func grow_npc_spawns():
 						marked_systems.append(system_id)
 						break
 			for system_id in marked_systems:
-				add_npc_spawn(Game.systems[system_id], faction_id)
+				add_npc_spawn(Game.systems[system_id], faction_id, int(faction["npc_radius"]) - i)
 	
 	print("Adding 'spawn anywhere' spawns")
 	

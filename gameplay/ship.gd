@@ -147,7 +147,7 @@ func _physics_process(delta):
 		rset_ex("puppet_thrusting", thrusting)
 		rset_ex("puppet_braking", braking)
 		rset_ex("puppet_velocity", get_linear_velocity())
-		rset_ex_cond("puppet_health", health)
+		rset_ex("puppet_health", health)
 		rset_ex_cond("puppet_jumping_out", jumping_out)
 		rset_ex_cond("puppet_jumping_in", jumping_in)
 		

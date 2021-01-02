@@ -11,7 +11,7 @@ func _physics_process(delta):
 	# TODO: This belongs in a timer
 	if is_network_master() and "npc_spawns" in dat:
 		if $players.get_children().size() > 0:
-			if $npcs.get_children().size() < 4:
+			if $npcs.get_children().size() < dat["npc_count"]:
 				randomize()
 				var faction_id = dat["npc_spawns"][randi() % dat["npc_spawns"].size()]
 				var faction = Game.factions[faction_id]

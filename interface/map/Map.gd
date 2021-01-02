@@ -7,7 +7,8 @@ func _ready():
 		"Disposition",
 		"Distance from core",
 		"Political",
-		"Influence"
+		"Influence",
+		"NPC Count"
 	]:
 		$Mode.add_item(item)
 	

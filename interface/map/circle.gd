@@ -46,6 +46,14 @@ func get_color():
 			return sum_color / colors_count
 		else:
 			return DISPOSITION_COLORS["abandoned"]
+	if mode == 4:
+		if "npc_count" in dat():
+			var count = dat()["npc_count"]
+			var brightness = (10.0 - count) / 10.0
+			return Color(brightness, brightness, brightness)
+		else:
+			return Color(0, 0, 0)
+
 	return DISPOSITION_COLORS["abandoned"]
 
 func _draw():
