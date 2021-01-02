@@ -20,6 +20,9 @@ var selected_ship: Ship
 signal navigation_updated()
 signal targeting_updated()
 
+const MAX_LAND_DISTANCE = 100
+const MAX_LAND_SPEED = 20
+
 func _ready():
 	if is_network_master():
 		map = preload("res://interface/map/Map.tscn").instance()
@@ -125,16 +128,24 @@ func _handle_jump():
 		Client.player_ship.rpc_id(1, "try_jump")
 
 func toggle_landing():
-	var root = get_tree().get_root()
 	if landing.is_inside_tree():
 		rset_id(1, "puppet_landing", false)
 		set_process_input(true)
-		root.remove_child(landing)
+		get_tree().get_root().remove_child(landing)
 	else:
-		rset_id(1, "puppet_landing", true)
-		set_process_input(false)
-		landing.set_spob(selected_spob)
-		root.add_child(landing)
+		if selected_spob.position.distance_to(Client.player_ship.position) < MAX_LAND_DISTANCE:
+			if Client.player_ship.get_linear_velocity().length() < MAX_LAND_SPEED:
+				land()
+			else:
+				Client.complain("Moving too fast to land on " + selected_spob.name)
+		else:
+			Client.complain("Cannot land on " + selected_spob.name + ", too far away.")
+			
+func land():
+	rset_id(1, "puppet_landing", true)
+	set_process_input(false)
+	landing.set_spob(selected_spob)
+	get_tree().get_root().add_child(landing)
 
 func _handle_show_map():
 	if Input.is_action_just_pressed("show_map"):
