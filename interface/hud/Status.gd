@@ -1,4 +1,4 @@
-extends Panel
+extends NinePatchRect
 
 func _ready():
 	print("Status.ready")
