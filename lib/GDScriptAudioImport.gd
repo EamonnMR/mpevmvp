@@ -108,7 +108,7 @@ func loadfile(filepath):
 		#get samples and set loop end
 		var samplenum = newstream.data.size() / 4
 		newstream.loop_end = samplenum
-		newstream.loop_mode = 1 #chage to 0 or delete this line if you don't want loop, also check out modes 2 and 3 in the docs
+		newstream.loop_mode = 0 #chage to 0 or delete this line if you don't want loop, also check out modes 2 and 3 in the docs
 		return newstream  #:D
 
 	#if file is ogg

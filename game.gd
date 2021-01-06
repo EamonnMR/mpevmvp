@@ -136,42 +136,9 @@ func load_ships():
 		ships[i] = ship
 
 func load_weapons():
-	var int_fields = [
-		"damage",
-		"arc"
-	]
+	for i in weapons:
+		weapons[i] = WeaponData.new(weapons[i])
 	
-	var float_fields = [
-		"projectile_lifetime",
-		"cooldown"
-	]
-	
-	var scene_fields = [
-		"projectile_scene"
-	]
-	
-	var sound_fields = [
-		"sound_effect"
-	]
-
-	for weapon_id in weapons:
-		var weapon = weapons[weapon_id]
-		for field in int_fields:
-			weapon[field] = int(weapon[field])
-		for field in float_fields:
-			weapon[field] = float(weapon[field])
-		for field in scene_fields:
-			weapon[field] = load(weapon[field])
-		for field in sound_fields:
-			var sound = GdScriptAudioImport.loadfile(weapon[field])
-			# Having sounds loop by default is positively mutinous.
-			if "loop" in sound:
-				sound.loop = false
-			elif "loop_mode" in sound:
-				sound.loop_mode = AudioStreamSample.LOOP_DISABLED
-			weapon[field] = sound
-		var a = AudioStreamSample.new()
-		a.loop_mode = AudioStreamSample.LOOP_DISABLED
 func load_upgrades():
 	for i in upgrades:
 		upgrades[i] = Upgrade.new(upgrades[i])

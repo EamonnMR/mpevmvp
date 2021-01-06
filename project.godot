@@ -68,6 +68,11 @@ _global_script_classes=[ {
 "class": "Weapon",
 "language": "GDScript",
 "path": "res://gameplay/Weapon.gd"
+}, {
+"base": "Reference",
+"class": "WeaponData",
+"language": "GDScript",
+"path": "res://WeaponData.gd"
 } ]
 _global_script_class_icons={
 "Hud": "",
@@ -81,7 +86,8 @@ _global_script_class_icons={
 "Spob": "",
 "Store": "",
 "Upgrade": "",
-"Weapon": ""
+"Weapon": "",
+"WeaponData": ""
 }
 
 [application]

@@ -13,17 +13,20 @@ var type = "todo_shot_types"
 
 var source: Node
 
+var in_aoe = []
+
+var dat
+
 func apply_stats(type):
 	pass
 
-func init(speed, new_damage, lifetime, start_angle, new_position, new_velocity, new_source):
-	$RotationSprite.set_direction(start_angle)
-	set_linear_velocity(Vector2(speed, 0).rotated(start_angle) + new_velocity)
-	position = new_position
-	direction = start_angle
-	damage = new_damage
-	$Timer.wait_time = lifetime
-	source = new_source
+func init(dat: WeaponData, direction, position, velocity, source):
+	$RotationSprite.set_direction(direction)
+	set_linear_velocity(Vector2(dat.projectile_velocity, 0).rotated(direction) + velocity)
+	self.position = position
+	self.direction = direction
+	$Timer.wait_time = dat.projectile_lifetime
+	self.source = source
 	#_show_debug_info()
 	
 func _show_debug_info():
@@ -35,17 +38,15 @@ func _show_team_set():
 	for team in team_set:
 		$team_set_label.text += str(team) + ", "
 
-
 func _on_shot_body_entered(body):
 	for team_flag in team_set:
 		if body.team_set.has(team_flag):
-			#print("Ignoring friendly fire")
-			#print("Shot Flags: ", team_set, " Target Flags: ", body.team_set)
 			return
-	#print("Shot Hit")
-	#print("Shot Flags: ", team_set, " Target Flags: ", body.team_set)
 	if( body.has_method("take_damage") ):
 		body.take_damage(damage, source)
+	for aoe_body in in_aoe:
+		if( body.has_method("take_damage") ):
+			body.take_damage(damage, source)
 	queue_free()
 
 func serialize():
@@ -64,3 +65,10 @@ func deserialize(data):
 
 func _on_Timer_timeout():
 	queue_free()
+
+
+func _on_Aoe_body_entered(body):
+	in_aoe.append(body)
+
+func _on_Aoe_body_exited(body):
+	in_aoe.erase(body)

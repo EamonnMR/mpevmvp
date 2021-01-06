@@ -9,28 +9,18 @@ export var count: int = 1
 var turret = false
 var gimbal = false
 
-const STATS = [
-	"damage",
-	"projectile_velocity",
-	"projectile_lifetime",
-	"projectile_scene",
-	"arc"
-]
-
-var damage: int
 var arc: int
 var arc_radians: float
-var projectile_velocity: float
-var projectile_lifetime: float
 var projectile_scene: PackedScene
 
 func apply_stats():
 	var data = Game.weapons[name]
-	for stat in STATS:
-		set(stat, data[stat])
+	arc = data.arc
+	projectile_scene = data.projectile_scene
+
 	# Stacking weapons
-	$CooldownTimer.wait_time = data["cooldown"] / count
-	$shot_sfx.stream = data["sound_effect"]
+	$CooldownTimer.wait_time = data.cooldown / count
+	$shot_sfx.stream = data.sound_effect
 	arc_radians = 2 * PI * (float(arc) / 360)
 
 
@@ -81,9 +71,7 @@ func get_shot(angle):
 	var ship = get_ship()
 	shot.team_set = get_ship().team_set
 	shot.init(
-		projectile_velocity,
-		damage,
-		projectile_lifetime,
+		Game.weapons[name],
 		_get_angle(angle, ship),
 		ship.position,
 		ship.get_linear_velocity(),
