@@ -1,4 +1,4 @@
-extends Object
+extends DataRow
 
 class_name Item
 
@@ -6,7 +6,7 @@ class_name Item
 
 var id: int
 var name: String
-var icon: String
+var icon: Texture
 var desc: String
 var price: int
 

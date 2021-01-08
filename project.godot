@@ -9,12 +9,22 @@
 config_version=4
 
 _global_script_classes=[ {
+"base": "Reference",
+"class": "DataRow",
+"language": "GDScript",
+"path": "res://DataRow.gd"
+}, {
+"base": "DataRow",
+"class": "Faction",
+"language": "GDScript",
+"path": "res://faction.gd"
+}, {
 "base": "CanvasLayer",
 "class": "Hud",
 "language": "GDScript",
 "path": "res://interface/hud/Hud.gd"
 }, {
-"base": "Object",
+"base": "DataRow",
 "class": "Item",
 "language": "GDScript",
 "path": "res://Item.gd"
@@ -69,12 +79,14 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://gameplay/Weapon.gd"
 }, {
-"base": "Reference",
+"base": "DataRow",
 "class": "WeaponData",
 "language": "GDScript",
 "path": "res://WeaponData.gd"
 } ]
 _global_script_class_icons={
+"DataRow": "",
+"Faction": "",
 "Hud": "",
 "Item": "",
 "JumpAutopilot": "",

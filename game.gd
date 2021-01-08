@@ -64,7 +64,7 @@ func load_multiple_csvs(csv_dict, callback):
 	var keys = csv_dict.keys()
 	if keys.size():
 		var key = keys[0]
-		set(key, load_csv(csv_dict[key]))
+		set(key, DataRow.load_csv(csv_dict[key]))
 		csv_dict.erase(key)
 		call_deferred("load_multiple_csvs", csv_dict, callback)
 	else:
@@ -95,34 +95,8 @@ func load_commodities():
 		}
 		
 func load_factions():
-	# TODO: Support this kind of parsing out of the box, in load_csv maybe
-	# as a template somehow?
-	var boolean_fields = [
-		"is_default",
-		"spawn_anywhere",
-		"host_spawn_anywhere",
-		"peninsula_bonus"
-	]
-	
-	var int_array_fields = [
-		"allies",
-		"enemies"
-	]
-	
-	var float_fields = [
-		
-	]
-	
 	for faction_id in factions:
-		var faction = factions[faction_id]
-		faction["color"] = parse_color(faction["color"])
-		faction["initial_disposition"] = int(faction["initial_disposition"])
-		
-		for field in boolean_fields:
-			faction[field] = parse_bool(faction[field])
-			
-		for field in int_array_fields:
-			faction[field] = parse_int_array(faction[field])
+		factions[faction_id] = Faction.new(factions[faction_id])
 		
 func load_ships():
 	for i in ships:
@@ -153,7 +127,7 @@ func get_ship(ship_type, player_id):
 	return ship
 
 # TODO: Refactor obv.
-func get_npc_ship(ship_type, faction):
+func get_npc_ship(ship_type: int, faction: String):
 	var type = str(ship_type)
 	var ship = ships[type]["scene"].instance()
 	ship.apply_stats(type)
@@ -162,7 +136,7 @@ func get_npc_ship(ship_type, faction):
 
 func load_galaxy():
 	print("Loading Galaxy")
-	systems = load_csv("res://data/galaxy.csv")
+	systems = DataRow.load_csv("res://data/galaxy.csv")
 	for system in systems:
 		preprocess_system(systems[system])
 	# ensure_link_reciprocity()  # Trust the spreadsheet
@@ -189,53 +163,6 @@ func ensure_link_reciprocity():
 			var link_sys = systems[link]
 			if not(system_id in link_sys["links"]):
 				link_sys["links"].append(system_id)
-
-func parse_color(color_text) -> Color:
-	var color_parsed = color_text.split(" ")
-	return Color(color_parsed[0], color_parsed[1], color_parsed[2])
-	
-func parse_int_array(text: String) -> Array:
-	var int_array = []
-	for i in text.split(" "):
-		int_array.append(int(i))
-	return int_array
-
-func parse_bool(caps_true_or_false: String) -> bool:
-	return caps_true_or_false == "TRUE"
-	
-func parse_x_dict(x_dict: String) -> Dictionary:
-	""" Looks like: '1x4 0x3' and translates to:
-		{
-			"1": 4,
-			"0": 3
-		}
-	"""
-	var dict = {}
-	for i in x_dict.split(" "):
-		var key_count = i.split("x")
-		dict[key_count[0]] = int(key_count[1])
-	return dict
-
-func load_csv(csv):
-	var file = File.new()
-	var directory = Directory.new();
-	if not directory.file_exists(csv):
-		# Simlink *csv.txt this to your *.csv to dodge export badness
-		# Windows does not seem to correctly use simlinks, so for windows dev to work, we need to handle both
-		csv = csv + ".txt"
-	file.open(csv, File.READ)
-	var headers = file.get_csv_line()
-	var parsed_file = {}
-	while true:
-		var parsed_line = {}
-		var line = file.get_csv_line()
-		if line.size() == 1:
-			break
-		for column in range(line.size()):
-			parsed_line[headers[column]] = line[column]
-		parsed_file[line[0]] = parsed_line
-	print("Parsed ", csv + ".txt ", "got ", parsed_file.size(), " rows")
-	return parsed_file
 	
 func get_level(level_name):
 	var directory = Directory.new();
@@ -244,3 +171,6 @@ func get_level(level_name):
 		return load(file_path).instance()
 	else:
 		return Procgen._level_from_data(level_name, systems[level_name])
+
+func random_ship_for_faction(faction_id: int):
+	return random_select(ships_by_faction[faction_id])

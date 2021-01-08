@@ -81,13 +81,14 @@ func randomly_assign_faction_core_worlds() -> Array:
 	for faction_id in Game.factions:
 		var faction = Game.factions[faction_id]
 		var i = 0
-		while i < int(int(faction["core_systems_per_500"]) * (Game.systems.size() / 500)):
+		while i < int(int(faction.core_systems_per_500) * (Game.systems.size() / 500)):
 			var rnd_result = abs(rng.randfn(0.0))
-			var scale = int(faction["favor_galactic_center"])
+			var scale = int(faction.favor_galactic_center)
 			var scaled_rnd_result = 0
 			if scale:
 				scaled_rnd_result = int(rnd_result * (sorted.size() / scale))
 			else:
+				print(0, sorted.size())
 				scaled_rnd_result = rng.randi_range(0, sorted.size())
 			if scaled_rnd_result > sorted.size() or scaled_rnd_result < 0 - sorted.size():
 				print("Long tail too long: ", rnd_result, " (", scaled_rnd_result, ")")
@@ -155,7 +156,7 @@ func grow_faction_influence_from_core_worlds():
 	print("Growing faction influence")
 	for faction_id in Game.factions:
 		var faction = Game.factions[faction_id]
-		for i in range(faction["systems_radius"]):
+		for i in range(faction.systems_radius):
 			print("Full iteration: ", faction["name"], ", iteration: ", i)
 			var marked_systems = []
 			for system_id in Game.systems:
@@ -188,7 +189,7 @@ func grow_npc_spawns():
 	print("Growing faction spawns")
 	for faction_id in Game.factions:
 		var faction = Game.factions[faction_id]
-		for i in range(faction["npc_radius"]):
+		for i in range(faction.npc_radius):
 			var marked_systems = []
 			for system_id in Game.systems:
 				var system = Game.systems[system_id]
@@ -206,7 +207,7 @@ func grow_npc_spawns():
 	var spawn_anywhere_hosts = []
 	for faction_id in Game.factions:
 		var faction = Game.factions[faction_id]
-		if faction["spawn_anywhere"]:
+		if faction.spawn_anywhere:
 			spawn_anywhere_factions.append(faction_id)
 		if faction["host_spawn_anywhere"]:
 			spawn_anywhere_hosts.append(faction_id)

@@ -78,12 +78,7 @@ func is_alive():
 
 func apply_stats(new_type):
 	type = new_type
-	for stat in data().get_keys():
-		if stat in self:
-			var dat = data().get(stat)
-			if dat is Dictionary:
-				dat = dat.duplicate()
-			set(stat, dat)
+	data().apply(self)
 	
 	health = armor
 	puppet_health = armor
@@ -165,12 +160,7 @@ func _physics_process(delta):
 		position = puppet_pos # This should be in integrate forces, but for some reason the puppet pos variable does not work there
 		jumping_in = puppet_jumping_in
 		jumping_out = puppet_jumping_out
-	if (not is_network_master()):
-		# To avoid jitter alledgedly
-		pass
-		# puppet_pos = position # To avoid jitter
-		# puppet_dir = direction
-		
+
 	$RotationSprite.set_direction(direction)
 	
 	if $EngineGlowSprite:
@@ -364,6 +354,7 @@ func complete_jump(arrival_position):
 # Trade related functions:
 	
 func get_npc_carried_money() -> int:
+	print(int(price / 10), int(price / 5))
 	return RandomNumberGenerator.new().randi_range(int(price / 10), int(price / 5))
 
 func bulk_cargo_amount(type) -> int:

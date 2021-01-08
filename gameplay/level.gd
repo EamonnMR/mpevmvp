@@ -16,7 +16,7 @@ func _physics_process(delta):
 				var faction_id = dat["npc_spawns"][randi() % dat["npc_spawns"].size()]
 				var faction = Game.factions[faction_id]
 				print("System: ", get_node("../").name, " needs an NPC, spawn a ", faction["name"])
-				var ship_type = Game.random_select(Game.ships_by_faction[faction_id])
+				var ship_type = Game.random_ship_for_faction(int(faction_id))
 				randomize()
 				var x_pos = randi() % 20
 				randomize()
