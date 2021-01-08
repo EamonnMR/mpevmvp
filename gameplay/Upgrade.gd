@@ -6,12 +6,7 @@ var mass: int
 var effects: Dictionary
 
 func _init(csv_row: Dictionary):
-	id = int(csv_row["id"])
-	name = csv_row["name"]
-	mass = int(csv_row["mass"])
-	price = int(csv_row["price"])
-	icon = csv_row["icon"]
-	desc = csv_row["desc"]
+	init(csv_row)
 	effects = {}
 	
 	var effect_counter = 0

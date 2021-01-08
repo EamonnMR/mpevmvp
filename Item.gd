@@ -1,4 +1,4 @@
-extends Object
+extends DataRow
 
 class_name Item
 

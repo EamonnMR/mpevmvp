@@ -11,23 +11,19 @@ var standoff: bool
 var joust: bool
 var subtitle: String
 var armor: float
-var faction: String
+var faction: int
 var upgrades: Dictionary
 var scene: PackedScene
 var readout: Texture
 
 func _init(data: Dictionary):
-	for i in data:
-		var value = data[i]
-		if i == "scene":
-			set(i, load("res://gameplay/ships/" + value + ".tscn"))
-		elif i == "readout":
-			set(i, load("res://" + value))
-		elif i == "standoff":
-			set(i, Game.parse_bool(value))
-		elif i == "joust":
-			set(i, Game.parse_bool(value))
-		elif i == "upgrades":
-			set(i, Game.parse_x_dict(value))
-		elif (i in self):
-			set(i, value)
+	init(data)
+	upgrades = parse_x_dict(data["upgrades"])
+
+func apply(ship):
+	for stat in get_keys():
+		if stat in self:
+			var dat = get(stat)
+			if dat is Dictionary:
+				dat = dat.duplicate()
+				ship.set(stat, dat)

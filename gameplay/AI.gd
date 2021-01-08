@@ -12,7 +12,7 @@ var target
 var ideal_face
 var destination
 var parent: Ship
-var faction_dat
+var faction_dat: Faction
 var arrived: bool
 
 func _ready():
@@ -97,10 +97,10 @@ func _find_target():
 	return null
 
 func is_faction_enemy(ship):
-	return ship.faction != faction_dat["id"] and int(ship.faction) in faction_dat["enemies"]
+	return int(ship.faction) != faction_dat.id and int(ship.faction) in faction_dat.enemies
 
 func is_player_enemy(ship):
-	return faction_dat["initial_disposition"] < 0
+	return faction_dat.initial_disposition < 0
 
 # TODO: Add a timer for this
 func _on_ai_rethink_timer_timeout():
