@@ -20,6 +20,8 @@ func convert_column_value(string_val: String, type: int, type_class: String):
 		return parse_bool(string_val)
 	elif type == TYPE_REAL:
 		return float(string_val)
+	elif type == TYPE_STRING:
+		return string_val
 	elif type == TYPE_OBJECT:
 		if type_class in ["PackedScene", "Texture"]:
 			return load(string_val)

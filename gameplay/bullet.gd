@@ -27,6 +27,7 @@ func init(dat: WeaponData, direction, position, velocity, source):
 	self.direction = direction
 	$Timer.wait_time = dat.projectile_lifetime
 	self.source = source
+	self.damage = dat.damage
 	#_show_debug_info()
 	
 func _show_debug_info():

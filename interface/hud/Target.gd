@@ -27,7 +27,7 @@ func _update():
 		if ship.is_player() and ship.name in players:
 			$Faction.text = Client.players[ship.name]["nick"]
 		else:
-			$Faction.text = Game.factions[ship.faction]["name"]
+			$Faction.text = Game.factions[ship.faction].name
 	else:
 		$Name.text = "[no target]"
 		$Subtitle.text = "---"
