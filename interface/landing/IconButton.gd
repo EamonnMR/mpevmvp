@@ -5,7 +5,7 @@ var id: String
 var count: int
 
 func _ready():
-	texture_normal = load("res://" + data.icon)
+	texture_normal = data.icon
 	$Label.text = data.name
 	update()
 

@@ -160,12 +160,7 @@ func _physics_process(delta):
 		position = puppet_pos # This should be in integrate forces, but for some reason the puppet pos variable does not work there
 		jumping_in = puppet_jumping_in
 		jumping_out = puppet_jumping_out
-	if (not is_network_master()):
-		# To avoid jitter alledgedly
-		pass
-		# puppet_pos = position # To avoid jitter
-		# puppet_dir = direction
-		
+
 	$RotationSprite.set_direction(direction)
 	
 	if $EngineGlowSprite:

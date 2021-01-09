@@ -21,9 +21,11 @@ func _init(data: Dictionary):
 	upgrades = parse_x_dict(data["upgrades"])
 
 func apply(ship):
+	print("Applying ship stats")
 	for stat in get_keys():
-		if stat in self:
+		print(stat)
+		if stat in ship:
 			var dat = get(stat)
 			if dat is Dictionary:
 				dat = dat.duplicate()
-				ship.set(stat, dat)
+			ship.set(stat, dat)
