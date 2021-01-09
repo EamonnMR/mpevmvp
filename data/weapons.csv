@@ -1,7 +1,7 @@
-id,damage,projectile_velocity,projectile_lifetime,cooldown,arc,aoe,projectile_scene,sound_effect
-0,5,200,3,0.5,0,1000,res://gameplay/projectiles/dual_red.tscn,res://sound/cc0_rubberduck/synth_laser_02.wav
-1,5,400,2,1,90,0,res://gameplay/projectiles/green_bolt.tscn,res://sound/cc0_rubberduck/synth_laser_02.wav
-2,5,200,3,0.5,360,0,res://gameplay/projectiles/dual_red.tscn,res://sound/cc0_rubberduck/synth_laser_02.wav
-3,1,750,0.2,0.1,0,0,res://gameplay/beams/blue.tscn,res://sound/cc0_rubberduck/weird_04.wav
-4,25,210,5,2,270,5,res://gameplay/projectiles/torp.tscn,res://sound/cc0_rubberduck/synth_laser_02.wav
-5,10,450,10,1.5,0,10,res://gameplay/projectiles/missile.tscn,res://sound/cc0_rubberduck/synth_laser_02.wav
+id,damage,projectile_velocity,projectile_lifetime,cooldown,arc,aoe,guided_turn,guided_accel,projectile_scene,sound_effect
+0,5,200,3,0.5,0,0,0,0,res://gameplay/projectiles/dual_red.tscn,res://sound/cc0_rubberduck/synth_laser_02.wav
+1,5,400,2,1,90,0,0,0,res://gameplay/projectiles/green_bolt.tscn,res://sound/cc0_rubberduck/synth_laser_02.wav
+2,5,200,3,0.5,360,0,0,0,res://gameplay/projectiles/dual_red.tscn,res://sound/cc0_rubberduck/synth_laser_02.wav
+3,1,750,0.2,0.1,0,0,0,0,res://gameplay/beams/blue.tscn,res://sound/cc0_rubberduck/weird_04.wav
+4,25,210,5,2,270,5,5,50,res://gameplay/projectiles/torp.tscn,res://sound/cc0_rubberduck/synth_laser_02.wav
+5,10,450,10,1.5,0,10,3.5,100,res://gameplay/projectiles/missile.tscn,res://sound/cc0_rubberduck/synth_laser_02.wav

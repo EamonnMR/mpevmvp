@@ -255,6 +255,7 @@ func create_npc(type, faction, position, level=null):
 func fire_shot(ship, weapon_id):
 	var shot = ship.get_shot(weapon_id)
 	shot.set_network_master(1)
+	shot.set_name(Uuid.v4())
 	ship.get_level().get_node("world/shots").add_child(shot)
 	Client.rpc("fire_shot", ship.name, ship.get_node("../").name, weapon_id, shot.name, shot.direction)
 

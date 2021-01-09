@@ -99,6 +99,9 @@ remote func fire_shot(entity_name, destination, weapon_id, shot_name, angle):
 	var shot = get_level().get_node(destination + "/" + entity_name).get_shot(weapon_id, angle)
 	shot.set_name(shot_name)
 	get_level().get_node("shots").add_child(shot)
+	if shot.name != shot_name:
+		var real_name = shot.name
+		print("SYNC BUG: UNABLE TO SET NAME: ", shot_name)
 
 remote func switch_level(new_level_name, level_data):
 	get_multiverse().switch_level(new_level_name, level_data)

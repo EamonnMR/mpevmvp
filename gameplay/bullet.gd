@@ -1,5 +1,7 @@
 extends RigidBody2D
 
+class_name Bullet
+
 # The position of bullets isn't sent over the network except at init
 # We use dead reckoning (via the physics engine) to get the position.
 
@@ -47,14 +49,11 @@ func _on_shot_body_entered(body):
 	for team_flag in team_set:
 		if body.team_set.has(team_flag):
 			return
-	print("Shot hit")
 	if( body.has_method("take_damage") ):
 		body.take_damage(damage, source)
-	print("AOE Damage: ", in_aoe)
 	for aoe_body in in_aoe:
 		if( aoe_body.has_method("take_damage") ):
 			aoe_body.take_damage(damage, source)
-			print("Took Damage: ", aoe_body)
 	queue_free()
 
 func serialize():
@@ -74,11 +73,8 @@ func deserialize(data):
 func _on_Timer_timeout():
 	queue_free()
 
-
 func _on_Aoe_body_entered(body):
-	print("Body entered: ", body)
 	in_aoe.append(body)
 
 func _on_Aoe_body_exited(body):
-	print("Body exited: ", body)
 	in_aoe.erase(body)
