@@ -30,6 +30,8 @@ __meta__ = {
 }
 
 [node name="Aoe" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Aoe"]
 [connection signal="body_entered" from="." to="." method="_on_shot_body_entered"]
 [connection signal="body_entered" from="Area2D" to="." method="_on_shot_body_entered"]
 [connection signal="timeout" from="Timer" to="." method="_on_Timer_timeout"]

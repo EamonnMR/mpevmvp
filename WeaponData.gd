@@ -9,6 +9,7 @@ var cooldown: float
 var arc: int
 var projectile_scene: PackedScene
 var sound_effect: AudioStream
+var aoe: int
 
 func _init(data: Dictionary):
 	init(data)

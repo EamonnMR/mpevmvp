@@ -238,6 +238,7 @@ func get_shot(weapon_id, angle=null):
 
 func take_damage(damage, source):
 	health -= damage
+	print(self.name, " Took damage from", source)
 	emit_signal("took_damage_from", source)
 	if health < 0 and is_network_master():
 		server_destroyed()

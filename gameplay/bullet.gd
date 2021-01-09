@@ -28,6 +28,10 @@ func init(dat: WeaponData, direction, position, velocity, source):
 	$Timer.wait_time = dat.projectile_lifetime
 	self.source = source
 	self.damage = dat.damage
+	if dat.aoe:
+		var shape = CircleShape2D.new()
+		shape.radius = dat.aoe
+		$Aoe/CollisionShape2D.shape = shape
 	#_show_debug_info()
 	
 func _show_debug_info():
@@ -43,11 +47,14 @@ func _on_shot_body_entered(body):
 	for team_flag in team_set:
 		if body.team_set.has(team_flag):
 			return
+	print("Shot hit")
 	if( body.has_method("take_damage") ):
 		body.take_damage(damage, source)
+	print("AOE Damage: ", in_aoe)
 	for aoe_body in in_aoe:
-		if( body.has_method("take_damage") ):
-			body.take_damage(damage, source)
+		if( aoe_body.has_method("take_damage") ):
+			aoe_body.take_damage(damage, source)
+			print("Took Damage: ", aoe_body)
 	queue_free()
 
 func serialize():
@@ -69,7 +76,9 @@ func _on_Timer_timeout():
 
 
 func _on_Aoe_body_entered(body):
+	print("Body entered: ", body)
 	in_aoe.append(body)
 
 func _on_Aoe_body_exited(body):
+	print("Body exited: ", body)
 	in_aoe.erase(body)
