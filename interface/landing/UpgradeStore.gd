@@ -3,10 +3,10 @@ extends Store
 signal player_purchased_upgrade(type, quantity)
 signal player_sold_upgrade(type, quantity)
 
-func _ready():
+func _enter_tree():
 	Client.player_ship.connect("upgrades_updated", self, "update")
-	._ready()
-
+	update()
+	
 func items():
 	return Game.upgrades
 
