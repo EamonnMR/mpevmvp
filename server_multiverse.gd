@@ -22,7 +22,8 @@ func create_level(level_name):
 func get_level(level_name):
 	return get_node(level_name).get_node("world")
 
-func switch_player_level(player, new_level_name):
+func switch_ship_level(ship, new_level_name):
 	var new_level = get_level(new_level_name)
-	player.get_parent().remove_child(player)
-	new_level.get_node("players").add_child(player)
+	var parent = ship.get_parent()
+	parent.remove_child(ship)
+	new_level.get_node(parent.name).add_child(ship)

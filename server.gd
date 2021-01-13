@@ -259,19 +259,21 @@ func fire_shot(ship, weapon_id):
 	ship.get_level().get_node("world/shots").add_child(shot)
 	Client.rpc("fire_shot", ship.name, ship.get_node("../").name, weapon_id, shot.name, shot.direction)
 
-func switch_player_universe(player):
-	var old_level = player.get_level().get_node("world")
-	var old_level_name = player.get_level().name
+func switch_system(ship):
+	var old_level = ship.get_level().get_node("world")
+	var old_level_name = ship.get_level().name
 	
-	var new_level_name = player.get_input_state().puppet_selected_system
-	print("Impulse: ", new_level_name, " --> ", old_level_name)
+	var new_level_name = ship.get_input_state().puppet_selected_system
 	if new_level_name != old_level_name:
+		var parent_name = ship.get_node("../").name
 		var new_level = get_level(new_level_name)
-		send_entity(new_level, "players", player)
-		get_multiverse().switch_player_level(player, new_level_name)
-		send_level(int(player.name), new_level_name, new_level)
-		remove_entity(old_level, "players", player.name)
-		players[int(player.name)]["level"] = new_level_name
+		send_entity(new_level, parent_name, ship)
+		get_multiverse().switch_ship_level(ship, new_level_name)
+		if ship.is_player():
+			send_level(int(ship.name), new_level_name, new_level)
+		remove_entity(old_level, parent_name, ship.name)
+		if ship.is_player():
+			players[int(ship.name)]["level"] = new_level_name
 
 func _remove_player_entity_by_id(id, remove_on_server=true):
 	print("Removing player entity by ID")

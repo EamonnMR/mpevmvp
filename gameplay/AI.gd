@@ -14,6 +14,8 @@ var destination
 var parent: Ship
 var faction_dat: Faction
 var arrived: bool
+var try_leaving_system: bool = false
+var waiting: bool = false
 
 func _ready():
 	parent = get_node("../")
@@ -21,15 +23,18 @@ func _ready():
 	parent.connect("took_damage_from", self, "_ship_took_damage")
 
 func _physics_process(delta):
-	if not _hunt(delta):
-		_idle_fly(delta)
+	if not waiting:
+		if puppet_selected_system:
+			print("Fly to leave system")
+			_fly_to_leave_system(delta)
+		else:
+			if not _hunt(delta):
+				_idle_fly(delta)
 
 func _idle_fly(delta):
 	if _is_at_destination():
-		if not arrived:
-			var wait_time = randf()
-			$IdleTimer.start(wait_time)
 		arrived = true
+		_set_wait_timer()
 	if not destination:
 		var spobs = parent.get_level().get_node("world/spobs").get_children()
 		if spobs:
@@ -37,16 +42,32 @@ func _idle_fly(delta):
 				spobs
 			).position
 		else:
-			pass
-			# TODO: Leave system
+			_start_leaving_system()
 	if destination:
-		get_ideal_face_and_direction_change(destination, delta)
-		puppet_shooting = false
-		puppet_thrusting = _should_thrust_idle()
-		puppet_braking = _should_brake_idle()
+		_fly_to_destination(delta)
 
 func _is_at_destination():
 	return (destination != null) and parent.position.distance_to(destination) < destination_margin
+
+func _fly_to_leave_system(delta):
+	if _is_at_destination() and parent.position.length() > Game.JUMP_DISTANCE:
+		print("Start jump")
+		parent.start_jump()
+	else:
+		print("Fly to destination")
+		_fly_to_destination(delta)
+
+func _fly_to_destination(delta):
+	get_ideal_face_and_direction_change(destination, delta)
+	puppet_shooting = false
+	puppet_thrusting = _should_thrust_idle()
+	puppet_braking = _should_brake_idle()
+
+func _start_leaving_system():
+	print("start leaving system: ")
+	destination = Vector2(max(Game.JUMP_DISTANCE, parent.position.length()) + 30, 0).rotated(parent.position.angle())
+	print("Goal Destination: ", destination)
+	puppet_selected_system = _select_random_adjacent_system()
 
 func _hunt(delta):
 	
@@ -145,9 +166,27 @@ func _should_shoot():
 
 func _ship_took_damage(source):
 	# Just get real mad at anything that does damage
-	target = source
+	# target = source
+	waiting = false
+	if (parent.health < parent.armor * 0.75) and parent.wimpy:
+		print("Fleeing system")
+		_start_leaving_system()
+		print("Flee destination: ", puppet_selected_system)
+		
+func _select_random_adjacent_system():
+	var system = Game.systems[parent.current_system()]
+	print(system.links)
+	return Game.random_select(
+		system.links
+	)
 
+func _set_wait_timer():
+	waiting = true
+	var timer = Timer.new()
+	timer.connect("timeout", self, "_wait_timer_timeout")
+	add_child(timer)
+	timer.set_wait_time(20)
+	timer.start()
 
-func _on_IdleTimer_timeout():
-	destination = null
-	arrived = false
+func _wait_timer_timeout():
+	waiting = false

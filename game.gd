@@ -16,6 +16,7 @@ var upgrades = {}
 
 const INPUT = "input_nodes"
 const PLAY_AREA_RADIUS = 2000
+const JUMP_DISTANCE = 600
 
 # Commodity price factors
 # Maybe pull this out into its own spreadsheet

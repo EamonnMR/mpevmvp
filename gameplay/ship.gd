@@ -2,8 +2,6 @@ extends RigidBody2D
 
 class_name Ship
 
-const JUMP_DISTANCE = 600
-
 var max_speed: float
 var turn: float
 var accel: float
@@ -12,6 +10,7 @@ var free_mass: int
 var price: int
 var standoff: bool
 var joust: bool
+var wimpy: bool
 var has_turrets: bool
 var subtitle: String
 var armor: float
@@ -222,7 +221,7 @@ func _integrate_forces(state):
 		set_linear_velocity(puppet_velocity)
 	
 func is_far_enough_to_jump():
-	return JUMP_DISTANCE < position.length()
+	return Game.JUMP_DISTANCE < position.length()
 
 func selected_valid_system_to_jump_to():
 	return get_input_state().puppet_selected_system in Game.systems[current_system()].links
@@ -265,7 +264,7 @@ sync func destroyed():
 		ghost.position = position
 	queue_free()
 	print("Destroyed: ", name)
-	
+
 func is_player():
 	return not has_node("AI")
 
@@ -333,7 +332,6 @@ remote func try_jump():
 	if is_far_enough_to_jump():
 		if selected_valid_system_to_jump_to():
 			start_jump()
-			# Server.switch_player_universe(self)
 		else:
 			Client.rpc_id(int(name), "complain", "Cannot enter hyperspace - Current System %s has no hyperlane to selected (%s)" % [current_system(), get_input_state().puppet_selected_system])
 	else:
@@ -348,8 +346,8 @@ func complete_jump(arrival_position):
 	position = arrival_position
 	jumping_out = false
 	jumping_in = true
-	print("Complete Jump")
-	Server.switch_player_universe(self)
+	Server.switch_system(self)
+		
 	remove_child($JumpAutopilot)
 	
 # Trade related functions:

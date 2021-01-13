@@ -9,6 +9,7 @@ var max_cargo: int
 var free_mass: int
 var standoff: bool
 var joust: bool
+var wimpy: bool
 var subtitle: String
 var armor: float
 var faction: int
