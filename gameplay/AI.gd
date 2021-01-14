@@ -1,5 +1,7 @@
 extends ShipController
 
+const LEAVE_SYSTEM_CHANCE = 0.5
+
 # TODO: This stuff ought to be configured at spawn time, based on present weapons
 export var accel_margin = PI / 2
 export var accel_distance = 10
@@ -23,9 +25,13 @@ func _ready():
 	parent.connect("took_damage_from", self, "_ship_took_damage")
 
 func _physics_process(delta):
-	if not waiting:
+	if waiting:
+		puppet_shooting = false
+		puppet_thrusting = false
+		puppet_braking = true
+		puppet_direction_change = 0
+	else:
 		if puppet_selected_system:
-			print("Fly to leave system")
 			_fly_to_leave_system(delta)
 		else:
 			if not _hunt(delta):
@@ -38,9 +44,17 @@ func _idle_fly(delta):
 	if not destination:
 		var spobs = parent.get_level().get_node("world/spobs").get_children()
 		if spobs:
-			destination = Game.random_select(
-				spobs
-			).position
+			randomize()
+			var rng = rand_range(0,1)
+			print(rng)
+			if rng > LEAVE_SYSTEM_CHANCE:
+				print("Elected to leave the system")
+				_start_leaving_system()
+			else:
+				print("Elected to fly to a spob")
+				destination = Game.random_select(
+					spobs
+				).position
 		else:
 			_start_leaving_system()
 	if destination:
@@ -50,11 +64,9 @@ func _is_at_destination():
 	return (destination != null) and parent.position.distance_to(destination) < destination_margin
 
 func _fly_to_leave_system(delta):
-	if _is_at_destination() and parent.position.length() > Game.JUMP_DISTANCE:
-		print("Start jump")
+	if parent.position.length() > Game.JUMP_DISTANCE:
 		parent.start_jump()
 	else:
-		print("Fly to destination")
 		_fly_to_destination(delta)
 
 func _fly_to_destination(delta):
@@ -175,18 +187,25 @@ func _ship_took_damage(source):
 		
 func _select_random_adjacent_system():
 	var system = Game.systems[parent.current_system()]
-	print(system.links)
 	return Game.random_select(
 		system.links
 	)
 
 func _set_wait_timer():
-	waiting = true
-	var timer = Timer.new()
-	timer.connect("timeout", self, "_wait_timer_timeout")
-	add_child(timer)
-	timer.set_wait_time(20)
-	timer.start()
+	destination = null
+	if not waiting:
+		print("Set AI wait timer")
+		waiting = true
+		var timer = Timer.new()
+		timer.connect("timeout", self, "_wait_timer_timeout", [timer])
+		add_child(timer)
+		timer.set_wait_time(10)
+		timer.one_shot = true
+		timer.start()
+	else:
+		print("Wait timer already active")
 
-func _wait_timer_timeout():
+func _wait_timer_timeout(timer):
+	print("Wait timer finished")
+	remove_child(timer)
 	waiting = false
