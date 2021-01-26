@@ -44,3 +44,9 @@ func _on_HostOnlineGame_pressed():
 func _on_Start_pressed():
 	$HostScreen.hide()
 	Server.start($HostScreen/ServerName.text, int($HostScreen/ServerPort.text), 100)
+
+
+func _on_JoinLocalServer_pressed():
+	$MainScreen.hide()
+	Client.start("localhost", 26000, $MainScreen/EnterName.text)
+

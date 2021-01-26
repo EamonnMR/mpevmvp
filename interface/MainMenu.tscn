@@ -51,6 +51,21 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
+[node name="JoinLocalServer" type="Button" parent="MainScreen"]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -44.6524
+margin_top = 31.8241
+margin_right = 45.3476
+margin_bottom = 51.8241
+rect_pivot_offset = Vector2( 84.1736, 20 )
+text = "Join Local"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
 [node name="QuitButton" type="Button" parent="MainScreen"]
 anchor_left = 0.5
 anchor_top = 1.0
@@ -238,6 +253,7 @@ __meta__ = {
 }
 [connection signal="pressed" from="MainScreen/FindGameButton" to="." method="_on_FindGameButton_pressed"]
 [connection signal="pressed" from="MainScreen/HostOnlineGame" to="." method="_on_HostOnlineGame_pressed"]
+[connection signal="pressed" from="MainScreen/JoinLocalServer" to="." method="_on_JoinLocalServer_pressed"]
 [connection signal="pressed" from="MainScreen/QuitButton" to="." method="_on_QuitButton_pressed"]
 [connection signal="pressed" from="FindScreen/CancelButton" to="." method="_on_CancelButton_pressed"]
 [connection signal="pressed" from="JoinScreen/CancelButton" to="." method="_on_CancelButton_pressed"]
