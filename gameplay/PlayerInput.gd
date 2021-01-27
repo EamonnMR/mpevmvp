@@ -53,9 +53,9 @@ func _physics_process(delta):
 		_handle_spob_select()
 		_handle_jump()
 		
-		rset_id(1, "puppet_direction_change", direction_change)
-		rset_id(1, "puppet_shooting", shooting)
-		rset_id(1, "puppet_thrusting", thrusting)
+		rset_unreliable_id(1, "puppet_direction_change", direction_change)
+		rset_unreliable_id(1, "puppet_shooting", shooting)
+		rset_unreliable_id(1, "puppet_thrusting", thrusting)
 		
 func select_spob(new_selected_spob: Spob):
 	if new_selected_spob != selected_spob:
