@@ -177,13 +177,14 @@ func _should_shoot():
 	return target and _facing_within_margin(shoot_margin) and parent.position.distance_to(target.position) < shoot_distance
 
 func _ship_took_damage(source):
-	# Just get real mad at anything that does damage
-	# target = source
 	waiting = false
 	if (parent.health < parent.armor * 0.75) and parent.wimpy:
 		print("Fleeing system")
 		_start_leaving_system()
 		print("Flee destination: ", puppet_selected_system)
+	else:
+		print("Aggro")
+		target = source
 		
 func _select_random_adjacent_system():
 	var system = Game.systems[parent.current_system()]
