@@ -1,7 +1,7 @@
-id,name,short,color,initial_disposition,is_default,core_systems_per_500,systems_radius,npc_radius,spawn_anywhere,host_spawn_anywhere,favor_galactic_center,peninsula_bonus,allies,enemies
-0,Independent,Ind,0 0 1,0,TRUE,13,1,2,FALSE,TRUE,-2,TRUE,1,3
-1,Trader,Trd,0 0 1,0,FALSE,0,0,0,TRUE,FALSE,0,FALSE,,3
-2,Compact,Cmp,1 0 0,-1,FALSE,15,3,3,FALSE,TRUE,7,FALSE,1,3
-3,Pirate,Pir,0.3 0.3 0.3,-1,TRUE,10,0,6,FALSE,FALSE,-10,TRUE,,0 1 2 4 5
-4,WarpCorp,Wrp,0 .5 0,0,FALSE,6,2,5,FALSE,TRUE,0,FALSE,,3
-5,The Society,Soc,1 1 0,0,FALSE,3,1,2,FALSE,FALSE,-10,TRUE,1,3
+id,name,short,color,initial_disposition,is_default,core_systems_per_500,systems_radius,npc_radius,spawn_anywhere,host_spawn_anywhere,favor_galactic_center,peninsula_bonus,allies,enemies,destroy_penalty,destroy_foe_bonus
+0,Independent,Ind,0 0 1,0,TRUE,13,1,2,FALSE,TRUE,-2,TRUE,1,3,10,15
+1,Trader,Trd,0 0 1,20,FALSE,0,0,0,TRUE,FALSE,0,FALSE,,3,0,0
+2,Compact,Cmp,1 0 0,-10,FALSE,15,3,3,FALSE,TRUE,7,FALSE,1,3,1,5
+3,Pirate,Pir,0.3 0.3 0.3,-30,TRUE,10,0,6,FALSE,FALSE,-10,TRUE,,0 1 2 4 5,0,0
+4,WarpCorp,Wrp,0 .5 0,0,FALSE,6,2,5,FALSE,TRUE,0,FALSE,,3,5,20
+5,The Society,Soc,1 1 0,0,FALSE,3,1,2,FALSE,FALSE,-10,TRUE,1,3,20,5

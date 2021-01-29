@@ -240,12 +240,15 @@ func take_damage(damage, source):
 	print(self.name, " Took damage from", source)
 	emit_signal("took_damage_from", source)
 	if health < 0 and is_network_master():
-		server_destroyed()
+		server_destroyed(source)
 
-func server_destroyed():
+func server_destroyed(by):
 	if is_player():
 		Server.set_respawn_timer(int(name))
 		Server.players[int(self.name)]
+	else:
+		if faction and by.is_player():
+			Game.factions[str(faction)].player_destroyed_mine(int(by.name))
 	for id in get_level().get_node("world").get_player_ids():
 		rpc_id(id, "destroyed")
 	destroyed()

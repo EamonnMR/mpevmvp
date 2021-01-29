@@ -54,6 +54,8 @@ func _client_connected(id):
 	net_players.add_child(player_input)
 	Client.rpc_id(id, "update_player_list", _get_public_players())
 	Client.rpc("add_net_player", id)
+	for faction_id in Game.factions:
+		Game.factions[faction_id].add_player(id)
 	spawn_player(id)
 
 func _get_public_players():
@@ -71,6 +73,8 @@ func _client_disconnected(id):
 	players.erase(id)
 	Client.rpc("remove_net_player", id)
 	net_players.remove_child(net_players.get_node(str(id)))
+	for faction_id in Game.factions:
+		Game.factions[faction_id].remove_player(id)
 
 remote func set_player_nick(new_nick):
 	var player_id = get_tree().get_rpc_sender_id()

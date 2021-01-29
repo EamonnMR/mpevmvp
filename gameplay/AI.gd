@@ -133,7 +133,7 @@ func is_faction_enemy(ship):
 	return int(ship.faction) != faction_dat.id and int(ship.faction) in faction_dat.enemies
 
 func is_player_enemy(ship):
-	return faction_dat.initial_disposition < 0
+	return faction_dat.disposition_per_player[int(ship.name)] < 0
 
 # TODO: Add a timer for this
 func _on_ai_rethink_timer_timeout():
