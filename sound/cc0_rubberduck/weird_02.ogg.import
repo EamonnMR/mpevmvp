@@ -1,0 +1,15 @@
+[remap]
+
+importer="ogg_vorbis"
+type="AudioStreamOGGVorbis"
+path="res://.import/weird_02.ogg-1b59ac940dbf0fc2be9c956019b4bd6c.oggstr"
+
+[deps]
+
+source_file="res://sound/cc0_rubberduck/weird_02.ogg"
+dest_files=[ "res://.import/weird_02.ogg-1b59ac940dbf0fc2be9c956019b4bd6c.oggstr" ]
+
+[params]
+
+loop=true
+loop_offset=0

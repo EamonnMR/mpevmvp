@@ -1,0 +1,15 @@
+[remap]
+
+importer="ogg_vorbis"
+type="AudioStreamOGGVorbis"
+path="res://.import/cannon_03.ogg-5aa4da14faeb54f6cfabef6d0910c243.oggstr"
+
+[deps]
+
+source_file="res://sound/cc0_rubberduck/cannon_03.ogg"
+dest_files=[ "res://.import/cannon_03.ogg-5aa4da14faeb54f6cfabef6d0910c243.oggstr" ]
+
+[params]
+
+loop=true
+loop_offset=0

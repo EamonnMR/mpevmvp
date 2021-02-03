@@ -1,0 +1,15 @@
+[remap]
+
+importer="ogg_vorbis"
+type="AudioStreamOGGVorbis"
+path="res://.import/shot_03.ogg-dc659bbc3e03a2d96825bd9e02a5a21d.oggstr"
+
+[deps]
+
+source_file="res://sound/cc0_rubberduck/shot_03.ogg"
+dest_files=[ "res://.import/shot_03.ogg-dc659bbc3e03a2d96825bd9e02a5a21d.oggstr" ]
+
+[params]
+
+loop=true
+loop_offset=0

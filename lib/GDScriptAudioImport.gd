@@ -114,7 +114,7 @@ func loadfile(filepath):
 	#if file is ogg
 	elif filepath.ends_with(".ogg"):
 		var newstream = AudioStreamOGGVorbis.new()
-		newstream.loop = true #set to false or delet this line if you dont want to loop
+		newstream.loop = false #set to false or delet this line if you dont want to loop
 		newstream.data = bytes
 		return newstream
 
