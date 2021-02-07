@@ -137,10 +137,10 @@ func _physics_process(delta):
 		handle_rotation(delta)
 		
 		rset_ex("puppet_dir", direction)
-		rset_ex("puppet_pos", position)
+		# rset_ex("puppet_pos", position)
 		rset_ex("puppet_thrusting", thrusting)
-		rset_ex("puppet_braking", braking)
-		rset_ex("puppet_velocity", get_linear_velocity())
+		# rset_ex("puppet_braking", braking)
+		# rset_ex("puppet_velocity", get_linear_velocity())
 		rset_ex("puppet_health", health)
 		rset_ex_cond("puppet_jumping_out", jumping_out)
 		rset_ex_cond("puppet_jumping_in", jumping_in)
@@ -149,14 +149,16 @@ func _physics_process(delta):
 			for weapon in $weapons.get_children():
 				weapon.try_shooting()
 	else:
+		var net_frame = _get_net_frame(0)
 		if puppet_health != health:
 			health = puppet_health
 			emit_signal("status_updated")
 			print("changed health")
 		direction = puppet_dir
-		thrusting = puppet_thrusting
-		braking = puppet_braking
-		position = puppet_pos # This should be in integrate forces, but for some reason the puppet pos variable does not work there
+		# thrusting = puppet_thrusting
+		# braking = puppet_braking
+		# position = puppet_pos # This should be in integrate forces, but for some reason the puppet pos variable does not work there
+		position = net_frame[position]
 		jumping_in = puppet_jumping_in
 		jumping_out = puppet_jumping_out
 
@@ -216,9 +218,9 @@ func _integrate_forces(state):
 	if (is_network_master()):
 		wrap_position_with_transform(state)
 		set_linear_velocity(get_limited_velocity_with_thrust())
-	else:
-		state.transform.origin = puppet_pos
-		set_linear_velocity(puppet_velocity)
+	#else:
+	#	state.transform.origin = puppet_pos
+	#	set_linear_velocity(puppet_velocity)
 	
 func is_far_enough_to_jump():
 	return Game.JUMP_DISTANCE < position.length()
@@ -489,3 +491,6 @@ func get_target():
 	if input:
 		return input.target
 	return null
+
+func _get_net_frame(offset):
+	get_level().get_net_frame(get_node("../").name, name, offset)

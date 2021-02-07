@@ -11,6 +11,9 @@ const MAX_PLAYERS = 6
 
 const STARTING_MONEY = 20000
 
+func time():
+	return OS.get_time_msecs()
+
 func start(game_name, port, max_players):
 	print("Starting Server: ", game_name, ", ", max_players)
 	
