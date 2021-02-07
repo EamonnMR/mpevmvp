@@ -56,6 +56,20 @@ func get_limited_velocity_with_thrust():
 	else:
 		return vel
 
+func remove():
+	# Hack because they weren't disappearing.
+	# Maybe the ship gets killed before the missile hits on the client.
+	if is_network_master():
+		"Server missile impact; dispatching update"
+		for id in get_level().get_node("world").get_player_ids():
+			rpc_id(id, "client_remove")
+	
+	queue_free()
+
+func client_remove():
+	"Instructed to remove missile"
+	queue_free()
+
 func rset_ex(puppet_var, value):
 	# TODO: Uncopypasta this
 	# Unreliable!

@@ -46,14 +46,23 @@ func _show_team_set():
 		$team_set_label.text += str(team) + ", "
 
 func _on_shot_body_entered(body):
+	print("begin impact")
 	for team_flag in team_set:
 		if body.team_set.has(team_flag):
+			print("Team Flag: ", team_flag, " Flag: ", body.team_set)
+			print("Friendly - no impact")
 			return
 	if( body.has_method("take_damage") ):
 		body.take_damage(damage, source)
 	for aoe_body in in_aoe:
 		if( aoe_body.has_method("take_damage") ):
 			aoe_body.take_damage(damage, source)
+	remove()
+	print("end impact")
+	
+func remove():
+	# Override this for long lived projectiles or ones that seem sticky.
+	# Also maybe handle "ghost bullet/beam" logic.
 	queue_free()
 
 func serialize():
