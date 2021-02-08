@@ -61,7 +61,7 @@ func remove():
 	# Maybe the ship gets killed before the missile hits on the client.
 	if is_network_master():
 		"Server missile impact; dispatching update"
-		for id in get_level().get_node("world").get_player_ids():
+		for id in get_level().get_player_ids():
 			rpc_id(id, "client_remove")
 	
 	queue_free()
@@ -75,15 +75,15 @@ func rset_ex(puppet_var, value):
 	# Unreliable!
 	# This avoids a whole lot of extra network traffic...
 	# and a whole lot of "Invalid packet received. Requested node was not found."
-	for id in get_level().get_node("world").get_player_ids():
+	for id in get_level().get_player_ids():
 		rset_unreliable_id(id, puppet_var, value)
 	set(puppet_var, value)
 
 
 func get_level():
-	# What universe are we in?
-	#      players ->   world      -> level 
-	return get_parent().get_parent().get_parent()
+	# What level are we in?
+	#      shots ->   -> level 
+	return get_parent().get_parent()
 
 # TODO: Dedupe, copied from ship controller:
 

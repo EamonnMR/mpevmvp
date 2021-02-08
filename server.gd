@@ -12,7 +12,7 @@ const MAX_PLAYERS = 6
 const STARTING_MONEY = 20000
 
 func time():
-	return OS.get_time_msecs()
+	return OS.get_system_time_msecs()
 
 func start(game_name, port, max_players):
 	print("Starting Server: ", game_name, ", ", max_players)
@@ -172,7 +172,7 @@ remote func purchase_commodity(commodity_id, quantity, trading_partner_path):
 	var player_id = get_tree().get_rpc_sender_id()
 	if _is_player_alive(player_id):
 		var player = _get_player_node(player_id)
-		var trading_partner = player.get_level().get_node("world/" + trading_partner_path)
+		var trading_partner = player.get_level().get_node(trading_partner_path)
 
 		var price_factor = trading_partner.commodities[commodity_id]
 		var type_data = Game.commodities[commodity_id]
@@ -186,7 +186,7 @@ remote func sell_commodity(commodity_id, quantity, trading_partner_path):
 	var player_id = get_tree().get_rpc_sender_id()
 	if _is_player_alive(player_id):
 		var player = _get_player_node(player_id)
-		var trading_partner = player.get_level().get_node("world/" + trading_partner_path)
+		var trading_partner = player.get_level().get_node(trading_partner_path)
 
 		var price_factor = trading_partner.commodities[commodity_id]
 		var type_data = Game.commodities[commodity_id]
@@ -263,12 +263,12 @@ func fire_shot(ship, weapon_id):
 	var shot = ship.get_shot(weapon_id)
 	shot.set_network_master(1)
 	shot.set_name(Uuid.v4())
-	ship.get_level().get_node("world/shots").add_child(shot)
+	ship.get_level().get_node("shots").add_child(shot)
 	Client.rpc("fire_shot", ship.name, ship.get_node("../").name, weapon_id, shot.name, shot.direction)
 
 func switch_system(ship):
-	var old_level = ship.get_level().get_node("world")
-	var old_level_name = ship.get_level().name
+	var old_level = ship.get_level()
+	var old_level_name = ship.get_system().name
 	
 	var new_level_name = ship.get_input_state().puppet_selected_system
 	if new_level_name != old_level_name:

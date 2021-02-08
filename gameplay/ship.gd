@@ -61,6 +61,7 @@ func _ready():
 		input_state = get_input_state()
 	else:
 		Client.hud.add_radar_pip(self)
+		# set_physics_process(false)
 	$RotationSprite.set_direction(direction)
 	
 	# TODO: Handle ships with no engine glow
@@ -150,6 +151,7 @@ func _physics_process(delta):
 				weapon.try_shooting()
 	else:
 		var net_frame = _get_net_frame(0)
+		print("Net frame: ", net_frame)
 		if puppet_health != health:
 			health = puppet_health
 			emit_signal("status_updated")
@@ -158,7 +160,8 @@ func _physics_process(delta):
 		# thrusting = puppet_thrusting
 		# braking = puppet_braking
 		# position = puppet_pos # This should be in integrate forces, but for some reason the puppet pos variable does not work there
-		position = net_frame[position]
+		if net_frame:
+			position = net_frame["position"]
 		jumping_in = puppet_jumping_in
 		jumping_out = puppet_jumping_out
 
@@ -218,9 +221,9 @@ func _integrate_forces(state):
 	if (is_network_master()):
 		wrap_position_with_transform(state)
 		set_linear_velocity(get_limited_velocity_with_thrust())
-	#else:
-	#	state.transform.origin = puppet_pos
-	#	set_linear_velocity(puppet_velocity)
+	else:
+		# state.transform.origin = puppet_pos
+		set_linear_velocity(Vector2(0,0))
 	
 func is_far_enough_to_jump():
 	return Game.JUMP_DISTANCE < position.length()
@@ -229,7 +232,7 @@ func selected_valid_system_to_jump_to():
 	return get_input_state().puppet_selected_system in Game.systems[current_system()].links
 	
 func current_system():
-	return get_level().name
+	return get_system().name
 	
 func _on_ShotTimer_timeout():
 	shot_cooldown = true
@@ -251,7 +254,7 @@ func server_destroyed(by):
 	else:
 		if faction and by.is_player():
 			Game.factions[str(faction)].player_destroyed_mine(int(by.name))
-	for id in get_level().get_node("world").get_player_ids():
+	for id in get_level().get_player_ids():
 		rpc_id(id, "destroyed")
 	destroyed()
 
@@ -273,10 +276,16 @@ sync func destroyed():
 func is_player():
 	return not has_node("AI")
 
+func get_system():
+	# What system are we in?
+	#      players ->   level      -> system 
+	return get_parent().get_parent().get_parent()
+
 func get_level():
 	# What universe are we in?
-	#      players ->   world      -> level 
-	return get_parent().get_parent().get_parent()
+	#      players ->   level 
+	return get_parent().get_parent()
+
 
 func anglemod(angle):
 	"""I wish this was a builtin"""
@@ -287,7 +296,7 @@ func anglemod(angle):
 func explosion_effect():
 	var explosion = preload("res://effects/explosion.tscn").instance()
 	explosion.position = position
-	get_level().get_node("world").add_effect(explosion)
+	get_level().add_effect(explosion)
 
 # General purpose networking functions.
 func serialize():
@@ -323,7 +332,7 @@ func rset_ex(puppet_var, value):
 	# Unreliable!
 	# This avoids a whole lot of extra network traffic...
 	# and a whole lot of "Invalid packet received. Requested node was not found."
-	for id in get_level().get_node("world").get_player_ids():
+	for id in get_level().get_player_ids():
 		rset_unreliable_id(id, puppet_var, value)
 	set(puppet_var, value)
 
@@ -421,7 +430,7 @@ func sell_commodity(commodity_id, quantity, price):
 
 func push_add_upgrade(type, quantity):
 	add_upgrade(type, quantity)
-	for id in get_level().get_node("world").get_player_ids():
+	for id in get_level().get_player_ids():
 		rpc_id(id, "add_upgrade", type, quantity)
 		
 sync func add_upgrade(type, quantity):
@@ -436,7 +445,7 @@ sync func add_upgrade(type, quantity):
 
 func push_remove_upgrade(type, quantity):
 	remove_upgrade(type, quantity)
-	for id in get_level().get_node("world").get_player_ids():
+	for id in get_level().get_player_ids():
 		rpc_id(id, "remove_upgrade", type, quantity)
 
 sync func remove_upgrade(type_int: int, quantity: int):
@@ -450,7 +459,7 @@ sync func remove_upgrade(type_int: int, quantity: int):
 	print("Upgrades updated emitted")
 
 func push_update_cargo_and_money():
-	for id in get_level().get_node("world").get_player_ids():
+	for id in get_level().get_player_ids():
 		rpc_id(id, "client_set_cargo_and_money", bulk_cargo, money)
 
 remote func client_set_cargo_and_money(new_bulk_cargo, new_money):
@@ -460,7 +469,7 @@ remote func client_set_cargo_and_money(new_bulk_cargo, new_money):
 	emit_signal("cargo_updated")
 
 func push_update_money():
-	for id in get_level().get_node("world").get_player_ids():
+	for id in get_level().get_player_ids():
 		rpc_id(id, "client_set_money", money)
 		
 remote func client_set_money(new_money):
@@ -494,3 +503,8 @@ func get_target():
 
 func _get_net_frame(offset):
 	get_level().get_net_frame(get_node("../").name, name, offset)
+
+func build_net_frame():
+	return {
+		"position": position
+	}

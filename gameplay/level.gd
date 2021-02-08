@@ -103,9 +103,9 @@ func get_net_frame_state():
 
 func get_net_frame_from_each(children: Node):
 	var net_frame = {}
-	for child in children:
-		if child.hash_method("get_net_frame"):
-			children[child.name] = child.get_net_frame()
+	for child in children.get_children():
+		if child.has_method("build_net_frame"):
+			net_frame[child.name] = child.build_net_frame()
 	return net_frame
 
 class NetFrame:
@@ -129,18 +129,26 @@ func prune_net_frames():
 			net_frames.pop_front()
 	
 remote func receive_net_frame(time: int, frame: Dictionary):
-	if time < Client.time():
+	var local_time = Client.time()
+	if time < local_time:
+		var ping = (local_time + Client.latency) - time
 		# Discard past frames
+		print("Discarded old net frame: ", time, " Client.time: ", local_time, " ping: ", ping)
 		return
 	else:
+		print("Got net frame")
 		net_frames.append(NetFrame.new(time, frame))
 		sort_net_frames()
 
 func dispatch_net_frame():
-	var server_time = Server.time()
 	var net_frame = get_net_frame_state()
+	var server_time = Server.time()
 	for player in get_player_ids():
 		rpc_unreliable_id(int(player), "receive_net_frame", server_time, net_frame)
+	# print("Sent net frame: ", server_time)
 
 func get_net_frame(parent, child, offset):
-	return net_frames[0].data[parent][child]
+	if len(net_frames):
+		return net_frames[0].data[parent][child]
+	else:
+		return null
