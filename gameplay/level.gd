@@ -123,10 +123,15 @@ func sort_net_frames():
 
 func prune_net_frames():
 	# Assumption: net frames are already sorted
+	var old_len = len(net_frames)
 	var time = Client.time()
 	while len(net_frames) > 2:  # Don't prune us down to nothing, even if the frames are outdated
 		if net_frames[0].time > time:
 			net_frames.pop_front()
+	if old_len > len(net_frames):
+		print("Dropped ", old_len - len(net_frames), " net frames")
+		for frame in net_frames:
+			print(frame.time)
 	
 remote func receive_net_frame(time: int, frame: Dictionary):
 	var local_time = Client.time()
@@ -142,13 +147,16 @@ remote func receive_net_frame(time: int, frame: Dictionary):
 
 func dispatch_net_frame():
 	var net_frame = get_net_frame_state()
+	print(net_frame.get("npcs", {}).keys())
 	var server_time = Server.time()
 	for player in get_player_ids():
 		rpc_unreliable_id(int(player), "receive_net_frame", server_time, net_frame)
 	# print("Sent net frame: ", server_time)
 
 func get_net_frame(parent, child, offset):
-	if len(net_frames):
-		return net_frames[0].data[parent][child]
+	if len(net_frames) >= offset + 1:
+		var state = net_frames[offset].state
+		var result = state[parent].get(child)
+		return result
 	else:
 		return null

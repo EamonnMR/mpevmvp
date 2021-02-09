@@ -151,7 +151,8 @@ func _physics_process(delta):
 				weapon.try_shooting()
 	else:
 		var net_frame = _get_net_frame(0)
-		print("Net frame: ", net_frame)
+		if net_frame:
+			print("Net frame: ", net_frame)
 		if puppet_health != health:
 			health = puppet_health
 			emit_signal("status_updated")
@@ -502,7 +503,7 @@ func get_target():
 	return null
 
 func _get_net_frame(offset):
-	get_level().get_net_frame(get_node("../").name, name, offset)
+	return get_level().get_net_frame(get_node("../").name, name, offset)
 
 func build_net_frame():
 	return {
