@@ -151,8 +151,6 @@ func _physics_process(delta):
 				weapon.try_shooting()
 	else:
 		var net_frame = _get_net_frame(0)
-		if net_frame:
-			print("Net frame: ", net_frame)
 		if puppet_health != health:
 			health = puppet_health
 			emit_signal("status_updated")

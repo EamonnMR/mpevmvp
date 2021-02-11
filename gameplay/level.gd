@@ -4,19 +4,23 @@ export var level_id: String
 export var dat: Dictionary
 var WAIT_TIME = 5
 var net_frames = []
-var latency_ms = 100
 
-# handle NPC spawning and despawning
+func _ready():
+	$FrameTimer.wait_time = 1.0 / Server.net_fps
+
 # TODO: Maybe handle this in enter/exit system funcs on the server?
 # Maybe despawn empty systems?
 func _physics_process(delta):
 	# TODO: This belongs in a timer
 	if is_network_master():
 		if $players.get_children().size() > 0:
+			if $FrameTimer.is_stopped():
+				$FrameTimer.start()
 			handle_npc_spawns()
-			dispatch_net_frame()
+			# dispatch_net_frame()
 		else:
 			remove_npcs_from_empty_system()
+			$FrameTimer.stop()
 	else:
 		prune_net_frames()
 
@@ -120,18 +124,25 @@ func net_frames_comparitor(l: NetFrame, r: NetFrame):
 
 func sort_net_frames():
 	net_frames.sort_custom(self, "net_frames_comparitor")
+	for net_frame in net_frames:
+		print(net_frame.time)
 
 func prune_net_frames():
 	# Assumption: net frames are already sorted
 	var old_len = len(net_frames)
 	var time = Client.time()
+	# This loop is fucked.
+	# rewrite it
 	while len(net_frames) > 2:  # Don't prune us down to nothing, even if the frames are outdated
-		if net_frames[0].time > time:
+		if net_frames[0].time < time:
+			print("Pruned frame: ")
 			net_frames.pop_front()
-	if old_len > len(net_frames):
-		print("Dropped ", old_len - len(net_frames), " net frames")
-		for frame in net_frames:
-			print(frame.time)
+		else:
+			break
+	# if old_len > len(net_frames):
+	print("Dropped ", old_len - len(net_frames), " net frames")
+	for frame in net_frames:
+		print(frame.time)
 	
 remote func receive_net_frame(time: int, frame: Dictionary):
 	var local_time = Client.time()
@@ -142,7 +153,9 @@ remote func receive_net_frame(time: int, frame: Dictionary):
 		return
 	else:
 		print("Got net frame")
+		# if len(net_frames) < 2:
 		net_frames.append(NetFrame.new(time, frame))
+		# instead of sorting, only insert newer frames and always add to the front?
 		sort_net_frames()
 
 func dispatch_net_frame():
@@ -160,3 +173,6 @@ func get_net_frame(parent, child, offset):
 		return result
 	else:
 		return null
+
+func _on_FrameTimer_timeout():
+	dispatch_net_frame()
