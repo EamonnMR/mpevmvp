@@ -6,7 +6,7 @@ var players_in_systems = {}
 var net_players
 
 var WAIT_TIME = 5
-var net_fps = 2
+var net_fps = 20
 
 const MAX_PLAYERS = 6
 

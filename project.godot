@@ -39,6 +39,11 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://gameplay/JumpAutopilot.gd"
 }, {
+"base": "Reference",
+"class": "NetFrame",
+"language": "GDScript",
+"path": "res://net_frame.gd"
+}, {
 "base": "ShipController",
 "class": "PlayerInput",
 "language": "GDScript",
@@ -96,6 +101,7 @@ _global_script_class_icons={
 "Hud": "",
 "Item": "",
 "JumpAutopilot": "",
+"NetFrame": "",
 "PlayerInput": "",
 "RotationSprite": "",
 "Ship": "",

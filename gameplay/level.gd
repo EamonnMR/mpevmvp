@@ -112,13 +112,6 @@ func get_net_frame_from_each(children: Node):
 			net_frame[child.name] = child.build_net_frame()
 	return net_frame
 
-class NetFrame:
-	var time: int
-	var state: Dictionary
-	func _init(time, state):
-		self.time = time
-		self.state = state
-
 func net_frames_comparitor(l: NetFrame, r: NetFrame):
 	return l.time < r.time
 
@@ -134,7 +127,7 @@ func prune_net_frames():
 	# This loop is fucked.
 	# rewrite it
 	while len(net_frames) > 2:  # Don't prune us down to nothing, even if the frames are outdated
-		if net_frames[0].time < time:
+		if net_frames[1].time < time:  # We want one and only one net frame to be in the past
 			print("Pruned frame: ")
 			net_frames.pop_front()
 		else:
@@ -164,13 +157,15 @@ func dispatch_net_frame():
 	var server_time = Server.time()
 	for player in get_player_ids():
 		rpc_unreliable_id(int(player), "receive_net_frame", server_time, net_frame)
-	# print("Sent net frame: ", server_time)
 
 func get_net_frame(parent, child, offset):
 	if len(net_frames) >= offset + 1:
-		var state = net_frames[offset].state
+		var frame = net_frames[offset]
+		var state = frame.state
 		var result = state[parent].get(child)
-		return result
+		if result:
+			return NetFrame.new(frame.time, result)
+		return null
 	else:
 		return null
 

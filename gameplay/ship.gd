@@ -150,7 +150,17 @@ func _physics_process(delta):
 			for weapon in $weapons.get_children():
 				weapon.try_shooting()
 	else:
-		var net_frame = _get_net_frame(0)
+		var time = Client.time()
+		var net_frame_latest = _get_net_frame(0)
+		var net_frame_future = _get_net_frame(1)
+		
+		if net_frame_latest and net_frame_future:
+			var time_range = net_frame_future.time - net_frame_latest.time
+			var time_offset = time - net_frame_latest.time
+			var lerp_factor = time_offset / time_range
+			
+			lerp_member("position", net_frame_latest, net_frame_future, lerp_factor)
+			
 		if puppet_health != health:
 			health = puppet_health
 			emit_signal("status_updated")
@@ -159,8 +169,6 @@ func _physics_process(delta):
 		# thrusting = puppet_thrusting
 		# braking = puppet_braking
 		# position = puppet_pos # This should be in integrate forces, but for some reason the puppet pos variable does not work there
-		if net_frame:
-			position = net_frame["position"]
 		jumping_in = puppet_jumping_in
 		jumping_out = puppet_jumping_out
 
@@ -507,3 +515,10 @@ func build_net_frame():
 	return {
 		"position": position
 	}
+	
+func lerp_member(member_name, past, future, factor):
+	set(member_name,
+		lerp(
+			past.state[member_name], future.state[member_name], factor
+		)
+	)
