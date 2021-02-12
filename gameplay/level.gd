@@ -123,29 +123,21 @@ func sort_net_frames():
 func prune_net_frames():
 	# Assumption: net frames are already sorted
 	var old_len = len(net_frames)
-	var time = Client.time()
+	var time = Client.time_update()
 	# This loop is fucked.
 	# rewrite it
 	while len(net_frames) > 2:  # Don't prune us down to nothing, even if the frames are outdated
 		if net_frames[1].time < time:  # We want one and only one net frame to be in the past
-			print("Pruned frame: ")
 			net_frames.pop_front()
 		else:
 			break
-	# if old_len > len(net_frames):
-	print("Dropped ", old_len - len(net_frames), " net frames")
-	for frame in net_frames:
-		print(frame.time)
 	
 remote func receive_net_frame(time: int, frame: Dictionary):
 	var local_time = Client.time()
 	if time < local_time:
-		var ping = (local_time + Client.latency) - time
 		# Discard past frames
-		print("Discarded old net frame: ", time, " Client.time: ", local_time, " ping: ", ping)
 		return
 	else:
-		print("Got net frame")
 		# if len(net_frames) < 2:
 		net_frames.append(NetFrame.new(time, frame))
 		# instead of sorting, only insert newer frames and always add to the front?
@@ -153,7 +145,6 @@ remote func receive_net_frame(time: int, frame: Dictionary):
 
 func dispatch_net_frame():
 	var net_frame = get_net_frame_state()
-	print(net_frame.get("npcs", {}).keys())
 	var server_time = Server.time()
 	for player in get_player_ids():
 		rpc_unreliable_id(int(player), "receive_net_frame", server_time, net_frame)

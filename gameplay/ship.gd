@@ -513,10 +513,18 @@ func _get_net_frame(offset):
 
 func build_net_frame():
 	return {
-		"position": position
+		"position": position,
+		"direction": direction,
+		"thrusting": thrusting
 	}
 	
 func lerp_member(member_name, past, future, factor):
+	set(member_name,
+		lerp(
+			past.state[member_name], future.state[member_name], factor
+		)
+	)
+func lerp_angle_member(member_name, past, future, factor):
 	set(member_name,
 		lerp(
 			past.state[member_name], future.state[member_name], factor

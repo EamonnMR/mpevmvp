@@ -16,8 +16,15 @@ signal player_left
 
 var latency = 100
 
+var time: int
+
 func time():
-	return OS.get_system_time_msecs() - latency
+	# return OS.get_system_time_msecs() - latency
+	return time
+
+func time_update():
+	time = OS.get_system_time_msecs() - latency
+	return time
 
 func start(ip, port, player_nick):
 	get_tree().connect("connected_to_server", self, "_client_connected")
