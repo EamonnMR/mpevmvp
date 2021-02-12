@@ -154,6 +154,12 @@ func _physics_process(delta):
 		var net_frame_latest = _get_net_frame(0)
 		var net_frame_future = _get_net_frame(1)
 		
+		if not net_frame_future:
+			print("Laggy: No future frame")
+		elif net_frame_future.time < time:
+			print("Laggy: Future frame is in past")
+		
+		
 		if net_frame_latest and net_frame_future:
 			var time_range = net_frame_future.time - net_frame_latest.time
 			var time_offset = time - net_frame_latest.time

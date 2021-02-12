@@ -117,8 +117,6 @@ func net_frames_comparitor(l: NetFrame, r: NetFrame):
 
 func sort_net_frames():
 	net_frames.sort_custom(self, "net_frames_comparitor")
-	for net_frame in net_frames:
-		print(net_frame.time)
 
 func prune_net_frames():
 	# Assumption: net frames are already sorted
