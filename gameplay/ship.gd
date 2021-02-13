@@ -156,16 +156,17 @@ func _physics_process(delta):
 		
 		if not net_frame_future:
 			print("Laggy: No future frame")
-		elif net_frame_future.time < time:
-			print("Laggy: Future frame is in past")
-		
-		
-		if net_frame_latest and net_frame_future:
+		elif net_frame_future.time > time and net_frame_latest: # Interpolate
+			print("Interpolating")
 			var time_range = net_frame_future.time - net_frame_latest.time
 			var time_offset = time - net_frame_latest.time
 			var lerp_factor = time_offset / time_range
 			
 			lerp_member("position", net_frame_latest, net_frame_future, lerp_factor)
+		elif net_frame_future.time < time: # Extrapolate
+			print("TODO: Extrapolate")
+		else: # Cannot extrapolate - probably waiting on frames
+			print("Cannot extrapolate or interpolate")
 			
 		if puppet_health != health:
 			health = puppet_health
