@@ -152,21 +152,22 @@ func _physics_process(delta):
 	else:
 		var time = Client.time()
 		var net_frame_latest = _get_net_frame(0)
-		var net_frame_future = _get_net_frame(1)
+		var net_frame_next = _get_net_frame(1)
 		
-		if not net_frame_future:
-			print("Laggy: No future frame")
-		elif net_frame_future.time > time and net_frame_latest: # Interpolate
-			print("Interpolating")
-			var time_range = net_frame_future.time - net_frame_latest.time
+		if not net_frame_next:
+			print(name, ": Lag: No future frame")
+		elif net_frame_next.time > time and net_frame_latest: # Interpolate
+			var time_range = net_frame_next.time - net_frame_latest.time
 			var time_offset = time - net_frame_latest.time
-			var lerp_factor = time_offset / time_range
+			var lerp_factor = float(time_offset) / float(time_range)
 			
-			lerp_member("position", net_frame_latest, net_frame_future, lerp_factor)
-		elif net_frame_future.time < time: # Extrapolate
-			print("TODO: Extrapolate")
+			lerp_member("position", net_frame_latest, net_frame_next, lerp_factor)
+		elif net_frame_next.time < time and net_frame_latest: # Extrapolate
+			# Extrapolate by dead reckoning
+			var extrapolation_factor = float(time - net_frame_latest.time) / float(net_frame_next.time - net_frame_latest.time) - 1.00
+			extrapolate_member("position", net_frame_latest, net_frame_next, extrapolation_factor)
 		else: # Cannot extrapolate - probably waiting on frames
-			print("Cannot extrapolate or interpolate")
+			pass
 			
 		if puppet_health != health:
 			health = puppet_health
@@ -525,15 +526,22 @@ func build_net_frame():
 		"thrusting": thrusting
 	}
 	
-func lerp_member(member_name, past, future, factor):
-	set(member_name,
+func lerp_member(member, past, future, factor):
+	set(member,
 		lerp(
-			past.state[member_name], future.state[member_name], factor
+			past.state[member], future.state[member], factor
 		)
 	)
-func lerp_angle_member(member_name, past, future, factor):
-	set(member_name,
-		lerp(
-			past.state[member_name], future.state[member_name], factor
+	
+func lerp_angle_member(member, past, future, factor):
+	set(member,
+		lerp_angle(
+			past.state[member], future.state[member], factor
 		)
+	)
+
+func extrapolate_member(member, latest, next, factor):
+	var known_delta = next.state[member] - next.state[member]
+	set(member,
+		next.state[member] + (known_delta * factor)
 	)

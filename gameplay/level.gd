@@ -120,7 +120,6 @@ func sort_net_frames():
 
 func prune_net_frames():
 	# Assumption: net frames are already sorted
-	var old_len = len(net_frames)
 	var time = Client.time_update()
 	# This loop is fucked.
 	# rewrite it
@@ -129,6 +128,8 @@ func prune_net_frames():
 			net_frames.pop_front()
 		else:
 			break
+	
+	# print("Net Buffer size: ", len(net_frames), "future" if len(net_frames) > 0 and net_frames[0].time < time else "past")
 	
 remote func receive_net_frame(time: int, frame: Dictionary):
 	var local_time = Client.time()
