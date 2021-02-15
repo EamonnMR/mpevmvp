@@ -314,19 +314,6 @@ func deserialize(data):
 		var ai = Node.new()
 		ai.name = "AI"
 		add_child(ai)
-
-func rset_ex(puppet_var, value):
-	# Unreliable!
-	# This avoids a whole lot of extra network traffic...
-	# and a whole lot of "Invalid packet received. Requested node was not found."
-	for id in get_level().get_player_ids():
-		rset_unreliable_id(id, puppet_var, value)
-	set(puppet_var, value)
-
-func rset_ex_cond(puppet_var, value):
-	if self[puppet_var] != value:
-		self[puppet_var] = value
-		rset_ex(puppet_var, value)
 		
 # Single-message moves:
 remote func try_jump():
