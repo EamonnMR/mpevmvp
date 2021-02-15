@@ -3,6 +3,11 @@ extends Store
 signal player_purchased_upgrade(type, quantity)
 signal player_sold_upgrade(type, quantity)
 
+func _physics_process(delta):
+	#HACK: Too many things to connect to this.
+	# Throw up hands in despair.
+	update()
+
 func _enter_tree():
 	Client.player_ship.connect("upgrades_updated", self, "update")
 	update()
