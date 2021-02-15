@@ -4,9 +4,6 @@ var target: Node
 var turn: float
 var accel: float
 var max_speed: float
-puppet var puppet_dir: float
-puppet var puppet_pos: Vector2 = Vector2(0,0)
-puppet var puppet_velocity: Vector2 = Vector2(0,0)
 
 func init(dat: WeaponData, direction, position, velocity, source):
 	.init(dat, direction, position, velocity, source)
@@ -19,15 +16,29 @@ func _physics_process(delta):
 	if (is_network_master()):
 		if is_instance_valid(target):
 			handle_rotation(delta)
-		
-		rset_ex("puppet_dir", direction)
-		rset_ex("puppet_pos", position)
-		rset_ex("puppet_velocity", get_linear_velocity())
-
 	else:
-		direction = puppet_dir
-		position = puppet_pos # This should be in integrate forces, but for some reason the puppet pos variable does not work there
+		var time = Client.time()
+		var net_frame_latest = _get_net_frame(0)
+		var net_frame_next = _get_net_frame(1)
+		
+		if not net_frame_next:
+			print(name, ": Lag: No future frame")
+		elif net_frame_next.time > time and net_frame_latest: # Interpolate
+			var time_range = net_frame_next.time - net_frame_latest.time
+			var time_offset = time - net_frame_latest.time
+			var lerp_factor = float(time_offset) / float(time_range)
+			
+			lerp_member("position", net_frame_latest, net_frame_next, lerp_factor)
+			lerp_angle_member("direction", net_frame_latest, net_frame_next, lerp_factor)
+			
+		elif net_frame_next.time < time and net_frame_latest: # Extrapolate
+			# Extrapolate by dead reckoning
+			var extrapolation_factor = float(time - net_frame_latest.time) / float(net_frame_next.time - net_frame_latest.time) - 1.00
+			extrapolate_member("position", net_frame_latest, net_frame_next, extrapolation_factor)
+			extrapolate_angle_member("direction", net_frame_latest, net_frame_next, extrapolation_factor)
 
+		else: # Cannot extrapolate - probably waiting on frames
+			pass
 	$RotationSprite.set_direction(direction)
 
 func _integrate_forces(state):
@@ -36,8 +47,7 @@ func _integrate_forces(state):
 	if (is_network_master()):
 		set_linear_velocity(get_limited_velocity_with_thrust())
 	else:
-		state.transform.origin = puppet_pos
-		set_linear_velocity(puppet_velocity)
+		set_linear_velocity(Vector2(0,0))
 
 func get_direction_change(delta):
 	var impulse = _constrained_point(
@@ -69,16 +79,6 @@ func remove():
 func client_remove():
 	"Instructed to remove missile"
 	queue_free()
-
-func rset_ex(puppet_var, value):
-	# TODO: Uncopypasta this
-	# Unreliable!
-	# This avoids a whole lot of extra network traffic...
-	# and a whole lot of "Invalid packet received. Requested node was not found."
-	for id in get_level().get_player_ids():
-		rset_unreliable_id(id, puppet_var, value)
-	set(puppet_var, value)
-
 
 func get_level():
 	# What level are we in?
@@ -117,3 +117,38 @@ static func _flatten_to_sign(value):
 	if value < 0:
 		return -1
 	return 0
+
+func _get_net_frame(offset):
+	return get_level().get_net_frame(get_node("../").name, name, offset)
+
+func build_net_frame():
+	return {
+		"position": position,
+		"direction": direction
+	}
+
+func lerp_member(member, past, future, factor):
+	set(member,
+		lerp(
+			past.state[member], future.state[member], factor
+		)
+	)
+	
+func lerp_angle_member(member, past, future, factor):
+	set(member,
+		lerp_angle(
+			past.state[member], future.state[member], factor
+		)
+	)
+
+func extrapolate_member(member, latest, next, factor):
+	var known_delta = next.state[member] - next.state[member]
+	set(member,
+		next.state[member] + (known_delta * factor)
+	)
+
+func extrapolate_angle_member(member, latest, next, factor):
+	var known_delta = next.state[member] - next.state[member]
+	set(member,
+		_anglemod(next.state[member] + (known_delta * factor))
+	)
