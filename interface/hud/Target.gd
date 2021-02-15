@@ -14,6 +14,11 @@ func _selection_changed():
 		ship.connect("disappeared", self, "_selection_changed")
 	_update()
 
+func _physics_process(delta):
+	var ship = Client.player_input.selected_ship
+	if is_instance_valid(ship):
+		$Health.value = ship.health
+		
 func _update():
 	var ship: Ship = Client.player_input.selected_ship
 	if is_instance_valid(ship):

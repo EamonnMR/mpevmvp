@@ -16,11 +16,6 @@ var subtitle: String
 var armor: float
 var upgrades: Dictionary
 
-puppet var puppet_thrusting = false
-puppet var puppet_braking = false
-puppet var puppet_jumping_out = false
-puppet var puppet_jumping_in = false
-
 var direction: float = 0
 
 var shooting = false
@@ -131,11 +126,6 @@ func _physics_process(delta):
 		braking = input_state.puppet_braking
 		
 		handle_rotation(delta)
-		
-		# rset_ex("puppet_braking", braking)
-		rset_ex_cond("puppet_jumping_out", jumping_out)
-		rset_ex_cond("puppet_jumping_in", jumping_in)
-		
 		if shooting:
 			for weapon in $weapons.get_children():
 				weapon.try_shooting()
@@ -154,12 +144,7 @@ func _physics_process(delta):
 			lerp_member("position", net_frame_latest, net_frame_next, lerp_factor)
 			lerp_angle_member("direction", net_frame_latest, net_frame_next, lerp_factor)
 			lerp_boolean_member("thrusting", net_frame_latest, net_frame_next, lerp_factor)
-			
-			# TODO: Lose this interaction; pull rather than push this data
-			var old_health = health
 			lerp_member("health", net_frame_latest, net_frame_next, lerp_factor)
-			if health != old_health:
-				emit_signal("status_updated")
 			
 		elif net_frame_next.time < time and net_frame_latest: # Extrapolate
 			# Extrapolate by dead reckoning
@@ -171,10 +156,6 @@ func _physics_process(delta):
 		else: # Cannot extrapolate - probably waiting on frames
 			pass
 			
-		# braking = puppet_braking
-		jumping_in = puppet_jumping_in
-		jumping_out = puppet_jumping_out
-
 	$RotationSprite.set_direction(direction)
 	
 	if $EngineGlowSprite:
@@ -223,7 +204,6 @@ func wrap_position_with_transform(state):
 	else:
 		if jumping_in:
 			jumping_in = false
-			puppet_jumping_in = false
 
 func _integrate_forces(state):
 	set_applied_torque(0)  # No rotation component
