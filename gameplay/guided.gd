@@ -77,7 +77,7 @@ func remove():
 	queue_free()
 
 func client_remove():
-	"Instructed to remove missile"
+	print("Instructed to remove missile")
 	queue_free()
 
 func get_level():

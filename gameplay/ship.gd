@@ -279,7 +279,7 @@ func anglemod(angle):
 	return fmod(angle + ARC, ARC)
 
 func explosion_effect():
-	var explosion = preload("res://effects/explosion.tscn").instance()
+	var explosion = data().explosion.instance()
 	explosion.position = position
 	get_level().add_effect(explosion)
 

@@ -16,6 +16,7 @@ var faction: int
 var upgrades: Dictionary
 var scene: PackedScene
 var readout: Texture
+var explosion: PackedScene
 
 func _init(data: Dictionary):
 	init(data)

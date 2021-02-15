@@ -94,6 +94,7 @@ animations = [ {
 
 [node name="animation" type="AnimatedSprite"]
 frames = SubResource( 17 )
+frame = 3
 speed_scale = 4.0
 playing = true
 script = ExtResource( 3 )
