@@ -265,7 +265,7 @@ func fire_shot(ship, weapon_id):
 	shot.set_network_master(1)
 	shot.set_name(Uuid.v4())
 	ship.get_level().get_node("shots").add_child(shot)
-	Client.rpc("fire_shot", ship.name, ship.get_node("../").name, weapon_id, shot.name, shot.direction)
+	Client.rpc("fire_shot", time(), ship.name, ship.get_node("../").name, weapon_id, shot.name, shot.direction, shot.get_linear_velocity())
 
 func switch_system(ship):
 	var old_level = ship.get_level()

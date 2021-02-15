@@ -137,9 +137,9 @@ func toggle_landing():
 			if Client.player_ship.get_linear_velocity().length() < MAX_LAND_SPEED:
 				land()
 			else:
-				Client.complain("Moving too fast to land on " + selected_spob.name)
+				Client.complain_local("Moving too fast to land on " + selected_spob.name)
 		else:
-			Client.complain("Cannot land on " + selected_spob.name + ", too far away.")
+			Client.complain_local("Cannot land on " + selected_spob.name + ", too far away.")
 			
 func land():
 	rset_id(1, "puppet_landing", true)

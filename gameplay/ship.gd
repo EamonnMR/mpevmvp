@@ -354,9 +354,9 @@ remote func try_jump():
 		if selected_valid_system_to_jump_to():
 			start_jump()
 		else:
-			Client.rpc_id(int(name), "complain", "Cannot enter hyperspace - Current System %s has no hyperlane to selected (%s)" % [current_system(), get_input_state().puppet_selected_system])
+			Client.rpc_id(int(name), "complain", Server.time(), "Cannot enter hyperspace - Current System %s has no hyperlane to selected (%s)" % [current_system(), get_input_state().puppet_selected_system])
 	else:
-		Client.rpc_id(int(name), "complain", "Cannot enter hyperspace - too close to sytem center")
+		Client.rpc_id(int(name), "complain", Server.time(), "Cannot enter hyperspace - too close to sytem center")
 
 func start_jump():
 	var autopilot: Node = preload("res://gameplay/JumpAutopilot.tscn").instance()
@@ -417,7 +417,7 @@ func sell_upgrade(upgrade, quantity: int):
 		money += upgrade.price * quantity
 		push_remove_upgrade(upgrade.id, quantity)
 	else:
-		Client.rpc_id(int(name), "complain", "Can't sell an upgrade you don't have")
+		Client.rpc_id(int(name), "complain", Server.time(), "Can't sell an upgrade you don't have")
 
 func purchase_commodity(commodity_id, quantity, price):
 	if money >= price and free_cargo() >= quantity:
