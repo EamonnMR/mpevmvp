@@ -179,14 +179,10 @@ func get_input_state():
 		return get_tree().get_root().get_node(Game.INPUT).get_node(name)
 
 func get_limited_velocity_with_thrust():
-	# TODO: Slowly slow down for landing
-	if landing:
-		return Vector2(0,0)
-	
 	var vel = get_linear_velocity()
 	if thrusting:
 		vel += Vector2(accel, 0).rotated(direction)
-	if braking:
+	if braking or landing:
 		vel -= (Vector2(min(accel, vel.length()), 0).rotated(vel.angle()))
 	var tmp_max_speed = max_speed
 	if jumping_out:

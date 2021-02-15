@@ -49,7 +49,8 @@ func _client_connected(id):
 		"nick": str(id),
 		"name": id,
 		"ship_type": 0,
-		"money": STARTING_MONEY  # Really not in love with storing this here (only when the player is unspawned) 
+		"money": STARTING_MONEY,  # Really not in love with storing this here (only when the player is unspawned)
+		"spawn_point": "128"
 	}
 	
 	var player_input = preload("res://gameplay/PlayerInput.tscn").instance()
@@ -217,12 +218,12 @@ remote func sell_upgrade(upgrade_id, quantity):
 
 func spawn_player(player_id, level="128"):
 	print("Server.spawn_player: ", player_id)
-	var SPAWN_LEVEL = "128"
-	players[player_id]["level"] = SPAWN_LEVEL
-	print("level: ", SPAWN_LEVEL, " (", get_level(SPAWN_LEVEL), ")")
-	send_level(player_id, SPAWN_LEVEL, get_level(SPAWN_LEVEL))
-	var ship = create_ship(player_id, players[player_id]["ship_type"], Vector2(0.0, 0.0), SPAWN_LEVEL, players[player_id]["money"])
-	send_entity(get_level(SPAWN_LEVEL), "players", ship)
+	var spawn_level = players[player_id]["spawn_point"]
+	players[player_id]["level"] = spawn_level
+	print("level: ", spawn_level, " (", get_level(spawn_level), ")")
+	send_level(player_id, spawn_level, get_level(spawn_level))
+	var ship = create_ship(player_id, players[player_id]["ship_type"], Vector2(0.0, 0.0), spawn_level, players[player_id]["money"])
+	send_entity(get_level(spawn_level), "players", ship)
 	
 func spawn_npc(level, type, faction):
 	print("Server.spawn: ")
@@ -300,3 +301,12 @@ func _is_player_alive(id):
 func _get_player_node(id):
 	var level = get_level_for_player(id)
 	return level.get_node("players/" + str(id))
+
+remote func do_landing(spob):
+	# TODO: Landing stuff
+	pass
+	
+remote func do_liftoff(spob):
+	print("Liftoff!")
+	var player_id = get_tree().get_rpc_sender_id()
+	players[player_id]["spawn_point"] = players[player_id]["level"]

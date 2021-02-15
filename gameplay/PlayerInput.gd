@@ -129,9 +129,7 @@ func _handle_jump():
 
 func toggle_landing():
 	if landing.is_inside_tree():
-		rset_id(1, "puppet_landing", false)
-		set_process_input(true)
-		get_tree().get_root().remove_child(landing)
+		liftoff()
 	else:
 		if selected_spob.position.distance_to(Client.player_ship.position) < MAX_LAND_DISTANCE:
 			if Client.player_ship.get_linear_velocity().length() < MAX_LAND_SPEED:
@@ -146,6 +144,13 @@ func land():
 	set_process_input(false)
 	landing.set_spob(selected_spob)
 	get_tree().get_root().add_child(landing)
+	Server.rpc_id(1, "do_landing", selected_spob)
+	
+func liftoff():
+	rset_id(1, "puppet_landing", false)
+	set_process_input(true)
+	get_tree().get_root().remove_child(landing)
+	Server.rpc_id(1, "do_liftoff", selected_spob)
 
 func _handle_show_map():
 	if Input.is_action_just_pressed("show_map"):
