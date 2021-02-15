@@ -16,10 +16,7 @@ var subtitle: String
 var armor: float
 var upgrades: Dictionary
 
-puppet var puppet_pos = Vector2(0,0)
-puppet var puppet_dir: float = 0
 puppet var puppet_thrusting = false
-puppet var puppet_velocity = Vector2(0,0)
 puppet var puppet_braking = false
 puppet var puppet_jumping_out = false
 puppet var puppet_jumping_in = false
@@ -33,7 +30,6 @@ var jumping_in = false
 var thrusting = false
 var braking = false
 var health = 20
-puppet var puppet_health = 20
 var input_state: ShipController
 var landing = false
 
@@ -81,7 +77,6 @@ func apply_stats(new_type):
 	data().apply(self)
 	
 	health = armor
-	puppet_health = armor
 
 func _apply_upgrades():
 	for upgrade in upgrades:
@@ -137,12 +132,7 @@ func _physics_process(delta):
 		
 		handle_rotation(delta)
 		
-		rset_ex("puppet_dir", direction)
-		# rset_ex("puppet_pos", position)
-		rset_ex("puppet_thrusting", thrusting)
 		# rset_ex("puppet_braking", braking)
-		# rset_ex("puppet_velocity", get_linear_velocity())
-		rset_ex("puppet_health", health)
 		rset_ex_cond("puppet_jumping_out", jumping_out)
 		rset_ex_cond("puppet_jumping_in", jumping_in)
 		
@@ -162,21 +152,26 @@ func _physics_process(delta):
 			var lerp_factor = float(time_offset) / float(time_range)
 			
 			lerp_member("position", net_frame_latest, net_frame_next, lerp_factor)
+			lerp_angle_member("direction", net_frame_latest, net_frame_next, lerp_factor)
+			lerp_boolean_member("thrusting", net_frame_latest, net_frame_next, lerp_factor)
+			
+			# TODO: Lose this interaction; pull rather than push this data
+			var old_health = health
+			lerp_member("health", net_frame_latest, net_frame_next, lerp_factor)
+			if health != old_health:
+				emit_signal("status_updated")
+			
 		elif net_frame_next.time < time and net_frame_latest: # Extrapolate
 			# Extrapolate by dead reckoning
 			var extrapolation_factor = float(time - net_frame_latest.time) / float(net_frame_next.time - net_frame_latest.time) - 1.00
 			extrapolate_member("position", net_frame_latest, net_frame_next, extrapolation_factor)
+			extrapolate_angle_member("direction", net_frame_latest, net_frame_next, extrapolation_factor)
+			thrusting = net_frame_next.state.get("thrusting")
+			# Don't update health
 		else: # Cannot extrapolate - probably waiting on frames
 			pass
 			
-		if puppet_health != health:
-			health = puppet_health
-			emit_signal("status_updated")
-			print("changed health")
-		direction = puppet_dir
-		# thrusting = puppet_thrusting
 		# braking = puppet_braking
-		# position = puppet_pos # This should be in integrate forces, but for some reason the puppet pos variable does not work there
 		jumping_in = puppet_jumping_in
 		jumping_out = puppet_jumping_out
 
@@ -237,7 +232,6 @@ func _integrate_forces(state):
 		wrap_position_with_transform(state)
 		set_linear_velocity(get_limited_velocity_with_thrust())
 	else:
-		# state.transform.origin = puppet_pos
 		set_linear_velocity(Vector2(0,0))
 	
 func is_far_enough_to_jump():
@@ -329,9 +323,7 @@ func serialize():
 func deserialize(data):
 	# Maybe use 'set' and some reflection to simplify this?
 	position = data["position"]
-	puppet_pos = position
 	direction = data["direction"]
-	puppet_dir = direction
 	team_set = data["team_set"]
 	money = data["money"]
 	bulk_cargo = data["bulk_cargo"]
@@ -523,9 +515,10 @@ func build_net_frame():
 	return {
 		"position": position,
 		"direction": direction,
-		"thrusting": thrusting
+		"thrusting": thrusting,
+		"health": health
 	}
-	
+
 func lerp_member(member, past, future, factor):
 	set(member,
 		lerp(
@@ -540,8 +533,17 @@ func lerp_angle_member(member, past, future, factor):
 		)
 	)
 
+func lerp_boolean_member(member, past, future, factor):
+	set(member, past.state[member] if factor < 0.5 else future.state[member])
+
 func extrapolate_member(member, latest, next, factor):
 	var known_delta = next.state[member] - next.state[member]
 	set(member,
 		next.state[member] + (known_delta * factor)
+	)
+
+func extrapolate_angle_member(member, latest, next, factor):
+	var known_delta = next.state[member] - next.state[member]
+	set(member,
+		anglemod(next.state[member] + (known_delta * factor))
 	)
