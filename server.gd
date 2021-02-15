@@ -92,8 +92,9 @@ func send_level(client_id, new_level_name, new_level):
 	Client.rpc_id(client_id, "switch_level", new_level_name, new_level.serialize())
 
 func send_entity(level, destination, entity):
+	var time = time()
 	for id in level.get_player_ids():
-		Client.rpc_id(id, "send_entity", destination, {
+		Client.rpc_id(id, "send_entity", time, destination, {
 			"name": entity.name,
 			"scene": entity.filename,
 			"state": entity.serialize(),
@@ -101,8 +102,9 @@ func send_entity(level, destination, entity):
 		})
 
 func replace_entity(level, destination, entity, replace_on_server=false):
+	var time = time()
 	for id in level.get_player_ids():
-		Client.rpc_id(id, "replace_entity", destination, {
+		Client.rpc_id(id, "replace_entity", time, destination, {
 			"name": entity.name,
 			"scene": entity.filename,
 			"state": entity.serialize(),
@@ -116,13 +118,14 @@ func replace_entity(level, destination, entity, replace_on_server=false):
 		dest.add_child(entity)
 
 func remove_entity(level, destination, entity_name, remove_on_server=false):
+	var time = time()
 	if remove_on_server:
 		var old_node = level.get_node(destination).get_node(entity_name)
 		level.get_node(destination).remove_child(old_node)
 		old_node.queue_free()
 	print('remove entity: ', entity_name, 'from level: ', level.get_node('../').name)
 	for id in level.get_player_ids():
-		Client.rpc_id(id, "remove_entity", destination, entity_name)
+		Client.rpc_id(id, "remove_entity", time, destination, entity_name)
 	
 func get_level(level):
 	return get_multiverse().get_level(level)
