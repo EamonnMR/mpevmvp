@@ -3,32 +3,47 @@ extends Node2D
 export var level_id: String
 export var dat: Dictionary
 var WAIT_TIME = 5
+var net_frames = []
 
-# handle NPC spawning and despawning
+func _ready():
+	$FrameTimer.wait_time = 1.0 / Server.net_fps
+
 # TODO: Maybe handle this in enter/exit system funcs on the server?
 # Maybe despawn empty systems?
 func _physics_process(delta):
 	# TODO: This belongs in a timer
-	if is_network_master() and "npc_spawns" in dat:
+	if is_network_master():
 		if $players.get_children().size() > 0:
-			if $npcs.get_children().size() < dat["npc_count"]:
-				randomize()
-				var faction_id = dat["npc_spawns"][randi() % dat["npc_spawns"].size()]
-				var faction = Game.factions[faction_id]
-				print("System: ", get_node("../").name, " needs an NPC, spawn a ", faction["name"])
-				var ship_type = Game.random_ship_for_faction(int(faction_id))
-				randomize()
-				var x_pos = randi() % 20
-				randomize()
-				var y_pos = randi() % 20
-				Server.spawn_npc(get_node("../").name, ship_type, faction_id)
+			if $FrameTimer.is_stopped():
+				$FrameTimer.start()
+			handle_npc_spawns()
+			# dispatch_net_frame()
 		else:
-			for child in $npcs.get_children():
-				$npcs.remove_child(child)
-				child.queue_free()
+			remove_npcs_from_empty_system()
+			$FrameTimer.stop()
+	else:
+		prune_net_frames()
 
 func get_player_entity(player_id):
 	return $players.get_node(str(player_id))
+
+func handle_npc_spawns():
+	if "npc_spawns" in dat and $npcs.get_children().size() < dat["npc_count"]:
+		randomize()
+		var faction_id = dat["npc_spawns"][randi() % dat["npc_spawns"].size()]
+		var faction = Game.factions[faction_id]
+		print("System: ", get_node("../").name, " needs an NPC, spawn a ", faction["name"])
+		var ship_type = Game.random_ship_for_faction(int(faction_id))
+		randomize()
+		var x_pos = randi() % 20
+		randomize()
+		var y_pos = randi() % 20
+		Server.spawn_npc(get_node("../").name, ship_type, faction_id)
+
+func remove_npcs_from_empty_system():
+	for child in $npcs.get_children():
+		$npcs.remove_child(child)
+		child.queue_free()
 
 func serialize():
 	var children = {}
@@ -80,3 +95,69 @@ func get_player_ids():
 func add_effect( effect ):
 	$effects.add_child(effect)
 
+func get_net_frame_state():
+	var net_frame = {}
+	for child in [
+		"shots",
+		"players",
+		"npcs"
+	]:
+		net_frame[child] = get_net_frame_from_each(get_node(child))
+	return net_frame
+
+func get_net_frame_from_each(children: Node):
+	var net_frame = {}
+	for child in children.get_children():
+		if child.has_method("build_net_frame"):
+			net_frame[child.name] = child.build_net_frame()
+	return net_frame
+
+func net_frames_comparitor(l: NetFrame, r: NetFrame):
+	return l.time < r.time
+
+func sort_net_frames():
+	net_frames.sort_custom(self, "net_frames_comparitor")
+
+func prune_net_frames():
+	# Assumption: net frames are already sorted
+	var time = Client.time_update()
+	# This loop is fucked.
+	# rewrite it
+	while len(net_frames) > 2:  # Don't prune us down to nothing, even if the frames are outdated
+		if net_frames[1].time < time:  # We want one and only one net frame to be in the past
+			net_frames.pop_front()
+		else:
+			break
+	
+	# print("Net Buffer size: ", len(net_frames), "future" if len(net_frames) > 0 and net_frames[0].time < time else "past")
+	
+remote func receive_net_frame(time: int, frame: Dictionary):
+	var local_time = Client.time()
+	if time < local_time:
+		# Discard past frames
+		return
+	else:
+		# if len(net_frames) < 2:
+		net_frames.append(NetFrame.new(time, frame))
+		# instead of sorting, only insert newer frames and always add to the front?
+		sort_net_frames()
+
+func dispatch_net_frame():
+	var net_frame = get_net_frame_state()
+	var server_time = Server.time()
+	for player in get_player_ids():
+		rpc_unreliable_id(int(player), "receive_net_frame", server_time, net_frame)
+
+func get_net_frame(parent, child, offset):
+	if len(net_frames) >= offset + 1:
+		var frame = net_frames[offset]
+		var state = frame.state
+		var result = state[parent].get(child)
+		if result:
+			return NetFrame.new(frame.time, result)
+		return null
+	else:
+		return null
+
+func _on_FrameTimer_timeout():
+	dispatch_net_frame()

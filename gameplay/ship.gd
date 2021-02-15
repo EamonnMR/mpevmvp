@@ -16,14 +16,6 @@ var subtitle: String
 var armor: float
 var upgrades: Dictionary
 
-puppet var puppet_pos = Vector2(0,0)
-puppet var puppet_dir: float = 0
-puppet var puppet_thrusting = false
-puppet var puppet_velocity = Vector2(0,0)
-puppet var puppet_braking = false
-puppet var puppet_jumping_out = false
-puppet var puppet_jumping_in = false
-
 var direction: float = 0
 
 var shooting = false
@@ -33,7 +25,6 @@ var jumping_in = false
 var thrusting = false
 var braking = false
 var health = 20
-puppet var puppet_health = 20
 var input_state: ShipController
 var landing = false
 
@@ -61,6 +52,7 @@ func _ready():
 		input_state = get_input_state()
 	else:
 		Client.hud.add_radar_pip(self)
+		# set_physics_process(false)
 	$RotationSprite.set_direction(direction)
 	
 	# TODO: Handle ships with no engine glow
@@ -80,7 +72,6 @@ func apply_stats(new_type):
 	data().apply(self)
 	
 	health = armor
-	puppet_health = armor
 
 func _apply_upgrades():
 	for upgrade in upgrades:
@@ -135,31 +126,36 @@ func _physics_process(delta):
 		braking = input_state.puppet_braking
 		
 		handle_rotation(delta)
-		
-		rset_ex("puppet_dir", direction)
-		rset_ex("puppet_pos", position)
-		rset_ex("puppet_thrusting", thrusting)
-		rset_ex("puppet_braking", braking)
-		rset_ex("puppet_velocity", get_linear_velocity())
-		rset_ex("puppet_health", health)
-		rset_ex_cond("puppet_jumping_out", jumping_out)
-		rset_ex_cond("puppet_jumping_in", jumping_in)
-		
 		if shooting:
 			for weapon in $weapons.get_children():
 				weapon.try_shooting()
 	else:
-		if puppet_health != health:
-			health = puppet_health
-			emit_signal("status_updated")
-			print("changed health")
-		direction = puppet_dir
-		thrusting = puppet_thrusting
-		braking = puppet_braking
-		position = puppet_pos # This should be in integrate forces, but for some reason the puppet pos variable does not work there
-		jumping_in = puppet_jumping_in
-		jumping_out = puppet_jumping_out
-
+		var time = Client.time()
+		var net_frame_latest = _get_net_frame(0)
+		var net_frame_next = _get_net_frame(1)
+		
+		if not net_frame_next:
+			print(name, ": Lag: No future frame")
+		elif net_frame_next.time > time and net_frame_latest: # Interpolate
+			var time_range = net_frame_next.time - net_frame_latest.time
+			var time_offset = time - net_frame_latest.time
+			var lerp_factor = float(time_offset) / float(time_range)
+			
+			lerp_member("position", net_frame_latest, net_frame_next, lerp_factor)
+			lerp_angle_member("direction", net_frame_latest, net_frame_next, lerp_factor)
+			lerp_boolean_member("thrusting", net_frame_latest, net_frame_next, lerp_factor)
+			lerp_member("health", net_frame_latest, net_frame_next, lerp_factor)
+			
+		elif net_frame_next.time < time and net_frame_latest: # Extrapolate
+			# Extrapolate by dead reckoning
+			var extrapolation_factor = float(time - net_frame_latest.time) / float(net_frame_next.time - net_frame_latest.time) - 1.00
+			extrapolate_member("position", net_frame_latest, net_frame_next, extrapolation_factor)
+			extrapolate_angle_member("direction", net_frame_latest, net_frame_next, extrapolation_factor)
+			thrusting = net_frame_next.state.get("thrusting")
+			# Don't update health
+		else: # Cannot extrapolate - probably waiting on frames
+			pass
+			
 	$RotationSprite.set_direction(direction)
 	
 	if $EngineGlowSprite:
@@ -208,7 +204,6 @@ func wrap_position_with_transform(state):
 	else:
 		if jumping_in:
 			jumping_in = false
-			puppet_jumping_in = false
 
 func _integrate_forces(state):
 	set_applied_torque(0)  # No rotation component
@@ -217,8 +212,7 @@ func _integrate_forces(state):
 		wrap_position_with_transform(state)
 		set_linear_velocity(get_limited_velocity_with_thrust())
 	else:
-		state.transform.origin = puppet_pos
-		set_linear_velocity(puppet_velocity)
+		set_linear_velocity(Vector2(0,0))
 	
 func is_far_enough_to_jump():
 	return Game.JUMP_DISTANCE < position.length()
@@ -227,7 +221,7 @@ func selected_valid_system_to_jump_to():
 	return get_input_state().puppet_selected_system in Game.systems[current_system()].links
 	
 func current_system():
-	return get_level().name
+	return get_system().name
 	
 func _on_ShotTimer_timeout():
 	shot_cooldown = true
@@ -249,7 +243,7 @@ func server_destroyed(by):
 	else:
 		if faction and by.is_player():
 			Game.factions[str(faction)].player_destroyed_mine(int(by.name))
-	for id in get_level().get_node("world").get_player_ids():
+	for id in get_level().get_player_ids():
 		rpc_id(id, "destroyed")
 	destroyed()
 
@@ -271,10 +265,16 @@ sync func destroyed():
 func is_player():
 	return not has_node("AI")
 
+func get_system():
+	# What system are we in?
+	#      players ->   level      -> system 
+	return get_parent().get_parent().get_parent()
+
 func get_level():
 	# What universe are we in?
-	#      players ->   world      -> level 
-	return get_parent().get_parent().get_parent()
+	#      players ->   level 
+	return get_parent().get_parent()
+
 
 func anglemod(angle):
 	"""I wish this was a builtin"""
@@ -285,7 +285,7 @@ func anglemod(angle):
 func explosion_effect():
 	var explosion = preload("res://effects/explosion.tscn").instance()
 	explosion.position = position
-	get_level().get_node("world").add_effect(explosion)
+	get_level().add_effect(explosion)
 
 # General purpose networking functions.
 func serialize():
@@ -303,9 +303,7 @@ func serialize():
 func deserialize(data):
 	# Maybe use 'set' and some reflection to simplify this?
 	position = data["position"]
-	puppet_pos = position
 	direction = data["direction"]
-	puppet_dir = direction
 	team_set = data["team_set"]
 	money = data["money"]
 	bulk_cargo = data["bulk_cargo"]
@@ -316,19 +314,6 @@ func deserialize(data):
 		var ai = Node.new()
 		ai.name = "AI"
 		add_child(ai)
-
-func rset_ex(puppet_var, value):
-	# Unreliable!
-	# This avoids a whole lot of extra network traffic...
-	# and a whole lot of "Invalid packet received. Requested node was not found."
-	for id in get_level().get_node("world").get_player_ids():
-		rset_unreliable_id(id, puppet_var, value)
-	set(puppet_var, value)
-
-func rset_ex_cond(puppet_var, value):
-	if self[puppet_var] != value:
-		self[puppet_var] = value
-		rset_ex(puppet_var, value)
 		
 # Single-message moves:
 remote func try_jump():
@@ -336,9 +321,9 @@ remote func try_jump():
 		if selected_valid_system_to_jump_to():
 			start_jump()
 		else:
-			Client.rpc_id(int(name), "complain", "Cannot enter hyperspace - Current System %s has no hyperlane to selected (%s)" % [current_system(), get_input_state().puppet_selected_system])
+			Client.rpc_id(int(name), "complain", Server.time(), "Cannot enter hyperspace - Current System %s has no hyperlane to selected (%s)" % [current_system(), get_input_state().puppet_selected_system])
 	else:
-		Client.rpc_id(int(name), "complain", "Cannot enter hyperspace - too close to sytem center")
+		Client.rpc_id(int(name), "complain", Server.time(), "Cannot enter hyperspace - too close to sytem center")
 
 func start_jump():
 	var autopilot: Node = preload("res://gameplay/JumpAutopilot.tscn").instance()
@@ -399,7 +384,7 @@ func sell_upgrade(upgrade, quantity: int):
 		money += upgrade.price * quantity
 		push_remove_upgrade(upgrade.id, quantity)
 	else:
-		Client.rpc_id(int(name), "complain", "Can't sell an upgrade you don't have")
+		Client.rpc_id(int(name), "complain", Server.time(), "Can't sell an upgrade you don't have")
 
 func purchase_commodity(commodity_id, quantity, price):
 	if money >= price and free_cargo() >= quantity:
@@ -419,7 +404,7 @@ func sell_commodity(commodity_id, quantity, price):
 
 func push_add_upgrade(type, quantity):
 	add_upgrade(type, quantity)
-	for id in get_level().get_node("world").get_player_ids():
+	for id in get_level().get_player_ids():
 		rpc_id(id, "add_upgrade", type, quantity)
 		
 sync func add_upgrade(type, quantity):
@@ -434,7 +419,7 @@ sync func add_upgrade(type, quantity):
 
 func push_remove_upgrade(type, quantity):
 	remove_upgrade(type, quantity)
-	for id in get_level().get_node("world").get_player_ids():
+	for id in get_level().get_player_ids():
 		rpc_id(id, "remove_upgrade", type, quantity)
 
 sync func remove_upgrade(type_int: int, quantity: int):
@@ -448,7 +433,7 @@ sync func remove_upgrade(type_int: int, quantity: int):
 	print("Upgrades updated emitted")
 
 func push_update_cargo_and_money():
-	for id in get_level().get_node("world").get_player_ids():
+	for id in get_level().get_player_ids():
 		rpc_id(id, "client_set_cargo_and_money", bulk_cargo, money)
 
 remote func client_set_cargo_and_money(new_bulk_cargo, new_money):
@@ -458,7 +443,7 @@ remote func client_set_cargo_and_money(new_bulk_cargo, new_money):
 	emit_signal("cargo_updated")
 
 func push_update_money():
-	for id in get_level().get_node("world").get_player_ids():
+	for id in get_level().get_player_ids():
 		rpc_id(id, "client_set_money", money)
 		
 remote func client_set_money(new_money):
@@ -489,3 +474,43 @@ func get_target():
 	if input:
 		return input.target
 	return null
+
+func _get_net_frame(offset):
+	return get_level().get_net_frame(get_node("../").name, name, offset)
+
+func build_net_frame():
+	return {
+		"position": position,
+		"direction": direction,
+		"thrusting": thrusting,
+		"health": health
+	}
+
+func lerp_member(member, past, future, factor):
+	set(member,
+		lerp(
+			past.state[member], future.state[member], factor
+		)
+	)
+	
+func lerp_angle_member(member, past, future, factor):
+	set(member,
+		lerp_angle(
+			past.state[member], future.state[member], factor
+		)
+	)
+
+func lerp_boolean_member(member, past, future, factor):
+	set(member, past.state[member] if factor < 0.5 else future.state[member])
+
+func extrapolate_member(member, latest, next, factor):
+	var known_delta = next.state[member] - next.state[member]
+	set(member,
+		next.state[member] + (known_delta * factor)
+	)
+
+func extrapolate_angle_member(member, latest, next, factor):
+	var known_delta = next.state[member] - next.state[member]
+	set(member,
+		anglemod(next.state[member] + (known_delta * factor))
+	)

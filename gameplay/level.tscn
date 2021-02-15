@@ -14,3 +14,7 @@ script = ExtResource( 1 )
 [node name="players" type="Node2D" parent="."]
 
 [node name="effects" type="Node2D" parent="."]
+
+[node name="FrameTimer" type="Timer" parent="."]
+wait_time = 0.005
+[connection signal="timeout" from="FrameTimer" to="." method="_on_FrameTimer_timeout"]

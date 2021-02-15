@@ -14,6 +14,18 @@ signal player_ship_set
 signal player_added
 signal player_left
 
+var latency = 100
+
+var time: int
+
+func time():
+	# return OS.get_system_time_msecs() - latency
+	return time
+
+func time_update():
+	time = OS.get_system_time_msecs() - latency
+	return time
+
 func start(ip, port, player_nick):
 	get_tree().connect("connected_to_server", self, "_client_connected")
 	get_tree().connect("network_peer_connected", self, "_player_connected_client")
@@ -95,8 +107,10 @@ func get_level():
 func get_multiverse():
 	return get_tree().get_root().get_node("Multiverse")
 
-remote func fire_shot(entity_name, destination, weapon_id, shot_name, angle):
+remote func fire_shot(appointed_time, entity_name, destination, weapon_id, shot_name, angle, velocity):
+	delay_until(appointed_time)
 	var shot = get_level().get_node(destination + "/" + entity_name).get_shot(weapon_id, angle)
+	shot.set_linear_velocity(velocity)
 	shot.set_name(shot_name)
 	get_level().get_node("shots").add_child(shot)
 	if shot.name != shot_name:
@@ -109,7 +123,8 @@ remote func switch_level(new_level_name, level_data):
 	
 	emit_signal("system_changed")
 
-remote func remove_entity(destination, ent_name):
+remote func remove_entity(time, destination, ent_name):
+	delay_until(time)
 	var entity_to_remove = get_level().get_node(destination + "/" + ent_name)
 	# Hacky.
 	# if entity_to_remove is Ship:
@@ -117,16 +132,30 @@ remote func remove_entity(destination, ent_name):
 		# entity_to_remove.emit_signal("removed")
 	get_level().get_node(destination).remove_child(entity_to_remove)
 	
-remote func send_entity(destination, entity_data):
+remote func send_entity(time, destination, entity_data):
+	delay_until(time)
 	get_level().receive_entity(destination, entity_data)
 
-remote func replace_entity(destination, entity_data):
+remote func replace_entity(time, destination, entity_data):
+	delay_until(time)
 	var entity_to_remove = get_level().get_node(destination + "/" + entity_data["name"])
 	get_level().get_node(destination).remove_child(entity_to_remove)
 	get_level().receive_entity(destination, entity_data)
 
-remote func complain(text):
+func complain_local(text):
+	hud.get_node("messages").display(text)
+	
+remote func complain(appointed_time, text):
+	delay_until(appointed_time)
 	hud.get_node("messages").display(text)
 	
 func current_system_id():
 	return get_level().get_node("../").name
+
+func delay_until(appointed_time):
+	# https://godotengine.org/qa/1660/execute-a-function-after-a-time-delay
+	var delay = appointed_time - time()
+	if delay > 0:
+		yield(get_tree().create_timer(delay), "timeout")
+	else:
+		print("Arrived late!")

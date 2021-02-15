@@ -42,7 +42,7 @@ func _idle_fly(delta):
 		arrived = true
 		_set_wait_timer()
 	if not destination:
-		var spobs = parent.get_level().get_node("world/spobs").get_children()
+		var spobs = parent.get_level().get_node("spobs").get_children()
 		if spobs:
 			randomize()
 			var rng = rand_range(0,1)
