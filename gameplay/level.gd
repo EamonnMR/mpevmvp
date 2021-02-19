@@ -112,11 +112,6 @@ func get_net_frame_from_each(children: Node):
 			net_frame[child.name] = child.build_net_frame()
 	return net_frame
 
-func net_frames_comparitor(l: NetFrame, r: NetFrame):
-	return l.time < r.time
-
-func sort_net_frames():
-	net_frames.sort_custom(self, "net_frames_comparitor")
 
 func prune_net_frames():
 	# Assumption: net frames are already sorted
@@ -132,15 +127,8 @@ func prune_net_frames():
 	# print("Net Buffer size: ", len(net_frames), "future" if len(net_frames) > 0 and net_frames[0].time < time else "past")
 	
 remote func receive_net_frame(time: int, frame: Dictionary):
-	var local_time = Client.time()
-	if time < local_time:
-		# Discard past frames
-		return
-	else:
-		# if len(net_frames) < 2:
+	if len(net_frames) == 0 or time > net_frames[-1].time:
 		net_frames.append(NetFrame.new(time, frame))
-		# instead of sorting, only insert newer frames and always add to the front?
-		sort_net_frames()
 
 func dispatch_net_frame():
 	var net_frame = get_net_frame_state()

@@ -14,7 +14,7 @@ signal player_ship_set
 signal player_added
 signal player_left
 
-var latency = 100
+var latency = 150
 
 var time: int
 

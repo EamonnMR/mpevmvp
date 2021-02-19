@@ -135,7 +135,7 @@ func _physics_process(delta):
 		var net_frame_next = _get_net_frame(1)
 		
 		if not net_frame_next:
-			print(name, ": Lag: No future frame")
+			pass
 		elif net_frame_next.time > time and net_frame_latest: # Interpolate
 			var time_range = net_frame_next.time - net_frame_latest.time
 			var time_offset = time - net_frame_latest.time
