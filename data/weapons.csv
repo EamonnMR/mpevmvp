@@ -1,7 +1,19 @@
-id,damage,projectile_velocity,projectile_lifetime,cooldown,arc,aoe,guided_turn,guided_accel,projectile_scene,sound_effect
-0,5,200,3,0.5,0,0,0,0,res://gameplay/projectiles/dual_red.tscn,res://sound/cc0_rubberduck/synth_laser_02.wav
-1,5,400,2,1,90,0,0,0,res://gameplay/projectiles/green_bolt.tscn,res://sound/cc0_rubberduck/synth_laser_06.ogg
-2,5,200,3,0.5,360,0,0,0,res://gameplay/projectiles/dual_red.tscn,res://sound/cc0_rubberduck/synth_laser_02.wav
-3,1,750,0.2,0.1,0,0,0,0,res://gameplay/beams/blue.tscn,res://sound/cc0_rubberduck/weird_04.wav
-4,25,210,5,2,270,5,5,50,res://gameplay/projectiles/torp.tscn,res://sound/cc0_rubberduck/weird_02.ogg
-5,10,450,10,1.5,0,10,3.5,100,res://gameplay/projectiles/missile.tscn,res://sound/cc0_rubberduck/synth_misc_09.ogg
+id,remark,damage,projectile_velocity,projectile_lifetime,cooldown,arc,aoe,_nonlethal,_no_momentum,_use_ammo,_ammo_oft,guided_turn,guided_accel,projectile_scene,sound_effect
+0,Flak Cannon,5,150,2.5,2,0,10,,,,,,,,
+1,Flak Turret,5,150,2.5,1,360,10,,,,,,,,
+2,Flak Array,5,150,2.5,0.33,15,10,,,,,,,,
+3,Heater,5,200,3,1,360,0,,,,,,,,
+4,Heater Turret,5,200,3,0.25,360,0,,,,,,,,
+5,Inverter,2,250,1,0.3,0,0,,,,,,,,
+6,Quad Inverter,2,250,1,0.075,0,0,,,,,,,,
+7,Ion Gun,5,200,3,1,360,0,TRUE,,,,,,,
+8,Ion Turret,5,200,3,0.25,360,0,TRUE,,,,,,,
+9,Mine Layer,20,0,10,3,0,30,,TRUE,TRUE,10,,,,
+10,Missile Launcher,10,450,10,1.5,0,20,,,TRUE,12,3.5,100,,
+11,Reaver,20,200,1.5,1,30,5,,,,,,,,
+12,Rocket Pod,5,450,10,1,270,15,,,TRUE,14,,,,
+13,Divebomb Bay,35,0,2,2,0,5,,,TRUE,17,,,,
+14,Torpedo Tube,25,210,5,2,270,5,,,,,5,50,,
+15,Duelist,5,400,3,1,90,0,,,,,,,,
+16,Duelist Turret,5,400,2,1,360,0,,,,,,,,
+17,Beam,1,750,0.2,0.1,0,0,,,,,,,,
