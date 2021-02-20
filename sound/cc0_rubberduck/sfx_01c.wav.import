@@ -1,0 +1,21 @@
+[remap]
+
+importer="wav"
+type="AudioStreamSample"
+path="res://.import/sfx_01c.wav-97b9985112fa450b89e90f98a5deec93.sample"
+
+[deps]
+
+source_file="res://sound/cc0_rubberduck/sfx_01c.wav"
+dest_files=[ "res://.import/sfx_01c.wav-97b9985112fa450b89e90f98a5deec93.sample" ]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop=false
+compress/mode=0
