@@ -1,11 +1,11 @@
-id,name,mass,price,icon,effect_0,value_0,effect_1,Value_1,desc
+id,name,mass,price,icon,effect_0,value_0,effect_1,value_1,desc
 0,Flak Cannon,5,500,res://sprites/onyx_cc_nc/icons/outfits/4.png,weapon,0,,,"Aiming is hard, especially when your targets move around. And you’ll still have to aim with this cannon just, you know, less."
 1,Flak Turret,10,1000,res://sprites/onyx_cc_nc/icons/outfits/5.png,weapon,1,,,"Two flak cannons mounted on a turret, for the not-aiming-even-a-little enthusiast."
 2,Flak Array,35,35000,res://sprites/onyx_cc_nc/icons/outfits/30.png,weapon,2,,,"Five flak cannons ought to be enough for anyone, but here we are."
-3,Heater,3,200,res://sprites/onyx_cc_nc/icons/outfits/3.png,weapon,3,,,What better way to damage something in space then to introduce a little entropy than the time honored method of red hot plasma?
-4,Heater Turret,12,800,res://sprites/onyx_cc_nc/icons/outfits/28.png,weapon,4,,,"Some ships are too slow to track targets, and a heater turret is about the simplest turret there is. You don’t even need to point, just shoot."
-5,Inverter,10,10000,res://sprites/onyx_cc_nc/icons/outfits/21.png,weapon,5,,,Effectively an advanced heater.
-6,Quad Inverter,35,20000,res://sprites/onyx_cc_nc/icons/outfits/35.png,weapon,6,,,Invert four times as much. Or at least four times as fast.
+3,Heater,3,200,res://sprites/onyx_cc_nc/icons/outfits/28.png,weapon,3,,,What better way to damage something in space then to introduce a little entropy than the time honored method of red hot plasma?
+4,Heater Turret,12,800,res://sprites/onyx_cc_nc/icons/outfits/3.png,weapon,4,,,"Some ships are too slow to track targets, and a heater turret is about the simplest turret there is. You don’t even need to point, just shoot."
+5,Inverter,10,10000,res://sprites/onyx_cc_nc/icons/outfits/31.png,weapon,5,,,Effectively an advanced heater.
+6,Quad Inverter,35,20000,res://sprites/onyx_cc_nc/icons/outfits/25.png,weapon,6,,,Invert four times as much. Or at least four times as fast.
 7,Ion Gun,5,1000,res://sprites/onyx_cc_nc/icons/outfits/27.png,weapon,7,,,Ionized plasma weapon for disabling (rather than destroying) ships. You can thoroughly house an opponent without letting their air out.
 8,Ion Turret,10,2500,res://sprites/onyx_cc_nc/icons/outfits/6.png,weapon,8,,,"Favorite of pacifists and pirates alike, ion turrets lessen your risk of blowing up your target."
 9,Mine Layer,10,10000,res://sprites/onyx_cc_nc/icons/outfits/36.png,weapon,9,,,Exploit the tendency of opponents to follow you by leaving them a gift.
@@ -17,8 +17,8 @@ id,name,mass,price,icon,effect_0,value_0,effect_1,Value_1,desc
 15,Rocket Pod,15,3000,res://sprites/onyx_cc_nc/icons/outfits/15.png,weapon,12,,,"Dumb-fire rockets. They move fast, hit hard, and go pretty far. Make sure you buy ammo."
 16,Divebomb,0,3000,res://sprites/onyx_cc_nc/icons/outfits/16.png,ammo,0,,,This projectile is dropped more than launched.
 17,Divebomb Bay,20,4000,res://sprites/onyx_cc_nc/icons/outfits/17.png,weapon,13,,,"Instructions: move towards target, drop dive bomb at the last possible moment, "
-18,Torpedo Tube,30,,res://sprites/onyx_cc_nc/icons/outfits/32.png,weapon,14,,,"If the Lovelace is the instrument of The Society’s will, the torpedo is the instrument of its wrath."
-19,Torpedo,5,,res://sprites/onyx_cc_nc/icons/outfits/33.png,ammo,0,,,Each is equipped with a fully conscious (if small) AI that ensures a successful fire mission.
+18,Torpedo Tube,30,,res://sprites/onyx_cc_nc/icons/outfits/33.png,weapon,14,,,"If the Lovelace is the instrument of The Society’s will, the torpedo is the instrument of its wrath."
+19,Torpedo,5,,res://sprites/onyx_cc_nc/icons/outfits/32.png,ammo,0,,,Each is equipped with a fully conscious (if small) AI that ensures a successful fire mission.
 20,Duelist,10,1200,res://sprites/onyx_cc_nc/icons/outfits/10.png,weapon,15,,,Enhanced double-barreled cannon for the most discerning captains
 21,Duelist Turret,15,2400,res://sprites/onyx_cc_nc/icons/outfits/29.png,weapon,16,,,The unstable technology of the Duelist requires advanced turret ring techniques.
 22,Beam,10,1000,res://sprites/onyx_cc_nc/icons/outfits/26.png,weapon,17,,,Collimated plasma beam. It can melt through any armor if you can get close enough to use it.
