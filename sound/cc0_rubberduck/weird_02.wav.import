@@ -1,0 +1,21 @@
+[remap]
+
+importer="wav"
+type="AudioStreamSample"
+path="res://.import/weird_02.wav-e75ff4f146d6d428a0fe349da2764876.sample"
+
+[deps]
+
+source_file="res://sound/cc0_rubberduck/weird_02.wav"
+dest_files=[ "res://.import/weird_02.wav-e75ff4f146d6d428a0fe349da2764876.sample" ]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop=false
+compress/mode=0

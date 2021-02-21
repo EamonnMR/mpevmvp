@@ -1,8 +1,26 @@
-id,name,mass,price,desc,icon,effect_0,value_0
-0,cannon,1,100,"Damage shields and armor with sweet, sweet plasma",sprites/onyx_cc_nc/icons/upg_0.png,weapon,0
-1,gun,2,200,Hoaky religions and anchient weapons are no match for a good 20mm cannon at your side,sprites/onyx_cc_nc/icons/upg_1.png,weapon,1
-2,Applique,3,100,"Survival in space depends on keeping space on the outside and air on the inside. Sure, everyone drills for hull breach - reach for masks and gloves, don helmets, communicate by radio and hand sign. But at the end of the day, the ship that keeps its atmosphere usually wins the fight. Sometimes that means welding on additional pieces of armor over weak spots, even if the design does not call for them",sprites/onyx_cc_nc/icons/upg_2.png,armor,10
-3,Cannon (tr),3,300,Why turn your whole ship when you could mount the cannons on a turret? We thought so.,sprites/onyx_cc_nc/icons/upg_3.png,weapon,2
-4,Beam,10,1000,Collimated plasma beam. It can melt through any armor if you can get close enough to use it.,sprites/onyx_cc_nc/icons/upg_4.png,weapon,3
-5,Torpedo,10,2000,"If the Lovelace is the instrument of <Goldfaction>’s will, the torpedo is the instrument of its wrath. Each is equipped with a fully conscious (if small) AI that ensures a successful fire mission.",sprites/onyx_cc_nc/icons/upg_5.png,weapon,4
-6,Missile,5,500,The design of these hasn’t changed much. Suppose the fins give it away; those are for use in-atmo. It would be more of a hassle to stop putting fins on missiles at this point.,sprites/onyx_cc_nc/icons/upg_6.png,weapon,5
+id,name,mass,price,icon,effect_0,value_0,effect_1,value_1,desc
+0,Flak Cannon,5,500,res://sprites/onyx_cc_nc/icons/outfits/4.png,weapon,0,,,"Aiming is hard, especially when your targets move around. And you’ll still have to aim with this cannon just, you know, less."
+1,Flak Turret,10,1000,res://sprites/onyx_cc_nc/icons/outfits/5.png,weapon,1,,,"Two flak cannons mounted on a turret, for the not-aiming-even-a-little enthusiast."
+2,Flak Array,35,35000,res://sprites/onyx_cc_nc/icons/outfits/30.png,weapon,2,,,"Five flak cannons ought to be enough for anyone, but here we are."
+3,Heater,3,200,res://sprites/onyx_cc_nc/icons/outfits/28.png,weapon,3,,,What better way to damage something in space then to introduce a little entropy than the time honored method of red hot plasma?
+4,Heater Turret,12,800,res://sprites/onyx_cc_nc/icons/outfits/3.png,weapon,4,,,"Some ships are too slow to track targets, and a heater turret is about the simplest turret there is. You don’t even need to point, just shoot."
+5,Inverter,10,10000,res://sprites/onyx_cc_nc/icons/outfits/31.png,weapon,5,,,Effectively an advanced heater.
+6,Quad Inverter,35,20000,res://sprites/onyx_cc_nc/icons/outfits/25.png,weapon,6,,,Invert four times as much. Or at least four times as fast.
+7,Ion Gun,5,1000,res://sprites/onyx_cc_nc/icons/outfits/27.png,weapon,7,,,Ionized plasma weapon for disabling (rather than destroying) ships. You can thoroughly house an opponent without letting their air out.
+8,Ion Turret,10,2500,res://sprites/onyx_cc_nc/icons/outfits/6.png,weapon,8,,,"Favorite of pacifists and pirates alike, ion turrets lessen your risk of blowing up your target."
+9,Mine Layer,10,10000,res://sprites/onyx_cc_nc/icons/outfits/36.png,weapon,9,,,Exploit the tendency of opponents to follow you by leaving them a gift.
+10,Mine,0,300,res://sprites/onyx_cc_nc/icons/outfits/37.png,ammo,0,,,The best way to deal with that hair-raising feeling of someone right behind you is to deploy ordinance.
+11,Missile Launcher,5,3000,res://sprites/onyx_cc_nc/icons/outfits/12.png,weapon,10,,,"Really more of an ejector rack to be honest, this outfit lets you deploy guided missiles."
+12,Missile,5,500,res://sprites/onyx_cc_nc/icons/outfits/13.png,ammo,0,,,Think of missiles as a small ship with a very specific misson profile. They will home in on your selected target and make quite the impression. But they don’t come cheap.
+13,Reaver,15,20000,res://sprites/onyx_cc_nc/icons/outfits/18.png,weapon,11,,,A unique ship like the Raptor demands unique armament. It’s not just twice as much. It’s not just bigger.
+14,Rocket,1,200,res://sprites/onyx_cc_nc/icons/outfits/14.png,ammo,0,,,The fins on these are a pretty good indication of how old the design is. These where first deployed when “blowing things up” didn’t require achieving orbit.
+15,Rocket Pod,15,3000,res://sprites/onyx_cc_nc/icons/outfits/15.png,weapon,12,,,"Dumb-fire rockets. They move fast, hit hard, and go pretty far. Make sure you buy ammo."
+16,Divebomb,0,3000,res://sprites/onyx_cc_nc/icons/outfits/16.png,ammo,0,,,This projectile is dropped more than launched.
+17,Divebomb Bay,20,4000,res://sprites/onyx_cc_nc/icons/outfits/17.png,weapon,13,,,"Instructions: move towards target, drop dive bomb at the last possible moment, "
+18,Torpedo Tube,30,,res://sprites/onyx_cc_nc/icons/outfits/33.png,weapon,14,,,"If the Lovelace is the instrument of The Society’s will, the torpedo is the instrument of its wrath."
+19,Torpedo,5,,res://sprites/onyx_cc_nc/icons/outfits/32.png,ammo,0,,,Each is equipped with a fully conscious (if small) AI that ensures a successful fire mission.
+20,Duelist,10,1200,res://sprites/onyx_cc_nc/icons/outfits/10.png,weapon,15,,,Enhanced double-barreled cannon for the most discerning captains
+21,Duelist Turret,15,2400,res://sprites/onyx_cc_nc/icons/outfits/29.png,weapon,16,,,The unstable technology of the Duelist requires advanced turret ring techniques.
+22,Beam,10,1000,res://sprites/onyx_cc_nc/icons/outfits/26.png,weapon,17,,,Collimated plasma beam. It can melt through any armor if you can get close enough to use it.
+23,Applique Armor,3,100,res://sprites/onyx_cc_nc/icons/outfits/38.png,armor,10,,,"Survival in space depends on keeping space on the outside and air on the inside. Sure, everyone drills for hull breach - reach for masks and gloves, don helmets, communicate by radio and hand sign. But at the end of the day, the ship that keeps its atmosphere usually wins the fight. Sometimes that means welding on additional pieces of armor over weak spots, even if the design does not call for them"
+24,Nanite Armor,3,10000,res://sprites/onyx_cc_nc/icons/outfits/43.png,armor,10,armor_regen,1,"Society ships don’t like getting blown out of the sky, so they’ve developed a type of armor that uses microscopic robots to repair itself."

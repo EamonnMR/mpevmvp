@@ -1,0 +1,21 @@
+[remap]
+
+importer="wav"
+type="AudioStreamSample"
+path="res://.import/synth_misc_09.wav-d5d58e88f18c6ec563acd73ba1efffbf.sample"
+
+[deps]
+
+source_file="res://sound/cc0_rubberduck/synth_misc_09.wav"
+dest_files=[ "res://.import/synth_misc_09.wav-d5d58e88f18c6ec563acd73ba1efffbf.sample" ]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop=false
+compress/mode=0

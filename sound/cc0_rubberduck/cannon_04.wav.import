@@ -1,0 +1,21 @@
+[remap]
+
+importer="wav"
+type="AudioStreamSample"
+path="res://.import/cannon_04.wav-d2f2d1f0d09f104843c1c3ccc13e44de.sample"
+
+[deps]
+
+source_file="res://sound/cc0_rubberduck/cannon_04.wav"
+dest_files=[ "res://.import/cannon_04.wav-d2f2d1f0d09f104843c1c3ccc13e44de.sample" ]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop=false
+compress/mode=0
