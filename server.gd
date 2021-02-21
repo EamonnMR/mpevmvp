@@ -84,6 +84,7 @@ func _client_disconnected(id):
 remote func set_player_nick(new_nick):
 	var player_id = get_tree().get_rpc_sender_id()
 	# TODO: Abuse Filter here
+	new_nick = new_nick.left(20)
 	players[player_id]["nick"] = new_nick
 	Client.rpc("update_player_nick", player_id, new_nick)
 	print("New Nickname: ", new_nick)
