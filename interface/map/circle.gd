@@ -31,7 +31,9 @@ func get_color():
 		return Color(brightness, brightness, brightness)
 	if mode == 2:
 		if "faction" in dat():
-			return Game.factions[dat()["faction"]]["color"] / (dat().get("grow_generation", 0) + 1)
+			var color = Game.factions[dat()["faction"]].color
+			var divisor = dat().get("grow_generation", 0) + 1
+			return color / divisor
 		else:
 			return Color(0.5, 0.5, 0.5)
 	if mode == 3:
@@ -41,7 +43,7 @@ func get_color():
 			for faction_id in dat()["npc_spawns"]:
 				var faction = Game.factions[faction_id]
 				if not faction["spawn_anywhere"]:
-					sum_color += faction["color"]
+					sum_color += faction.color
 					colors_count += 1
 			return sum_color / colors_count
 		else:

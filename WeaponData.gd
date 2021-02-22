@@ -13,6 +13,7 @@ var aoe: int
 var guided_turn: float
 var guided_accel: float
 var spread: float
+var no_momentum: bool
 
 func _init(data: Dictionary):
 	init(data)

@@ -1,4 +1,4 @@
-id,remark,damage,projectile_velocity,projectile_lifetime,cooldown,arc,spread,aoe,_nonlethal,_no_momentum,_use_ammo,_ammo_oft,guided_turn,guided_accel,projectile_scene,sound_effect
+id,remark,damage,projectile_velocity,projectile_lifetime,cooldown,arc,spread,aoe,_nonlethal,no_momentum,_use_ammo,_ammo_oft,guided_turn,guided_accel,projectile_scene,sound_effect
 0,Flak Cannon,5,150,2.5,2,,5,10,,,,,,,res://gameplay/projectiles/red_blob.tscn,res://sound/cc0_rubberduck/cannon_03.wav
 1,Flak Turret,5,150,2.5,1,360,6,10,,,,,,,res://gameplay/projectiles/red_blob.tscn,res://sound/cc0_rubberduck/cannon_03.wav
 2,Flak Array,5,150,2.5,0.33,15,8,10,,,,,,,res://gameplay/projectiles/red_blob.tscn,res://sound/cc0_rubberduck/cannon_03.wav

@@ -13,11 +13,13 @@ var arc: int
 var arc_radians: float
 var projectile_scene: PackedScene
 var spread_radians: float
+var momentum: bool
 
 func apply_stats():
-	var data = Game.weapons[name]
+	var data = dat()
 	arc = data.arc
 	projectile_scene = data.projectile_scene
+	momentum = not data.no_momentum
 
 	# Stacking weapons
 	$CooldownTimer.wait_time = data.cooldown / count
@@ -78,10 +80,10 @@ func get_shot(angle):
 	var ship = get_ship()
 	shot.team_set = get_ship().team_set
 	shot.init(
-		Game.weapons[name],
+		dat(),
 		_get_angle(angle, ship),
 		ship.position,
-		ship.get_linear_velocity(),
+		ship.get_linear_velocity() if momentum else Vector2(0,0),
 		_parent_ship()  # The ship node
 	)
 	if not ship.is_network_master():
@@ -93,3 +95,6 @@ func anglemod(angle):
 	var ARC = 2 * PI
 	# TODO: Recursive might be too slow
 	return fmod(angle + ARC, ARC)
+	
+func dat():
+	return Game.weapons[name]
