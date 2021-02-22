@@ -7,6 +7,8 @@ func init(data: Dictionary):
 		if prop_name in data:
 			var type: int = prop["type"]
 			var string_val = data[prop_name]
+			if prop_name == "color":
+				print("Prop name: ", prop_name, " Type Class: ", prop["class_name"], " Type Const: ", prop["type"])
 			set(prop_name, convert_column_value(
 				data[prop_name],
 				prop["type"],
@@ -22,11 +24,11 @@ func convert_column_value(string_val: String, type: int, type_class: String):
 		return float(string_val)
 	elif type == TYPE_STRING:
 		return string_val
+	elif type == TYPE_COLOR:
+		return parse_color(string_val)
 	elif type == TYPE_OBJECT:
 		if type_class in ["PackedScene", "Texture"]:
 			return load(string_val)
-		elif type_class == "Color":
-			return parse_color(string_val)
 		elif type_class == "AudioStream":
 			return GdScriptAudioImport.loadfile(string_val)
 			
