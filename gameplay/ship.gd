@@ -27,6 +27,7 @@ var braking = false
 var health = 20
 var input_state: ShipController
 var landing = false
+var disabled = false
 
 export var bulk_cargo = {}
 export var money = 0
@@ -66,6 +67,9 @@ func _ready():
 
 func is_alive():
 	return true
+
+func is_disabled():
+	return health / armor < 0.15
 
 func apply_stats(new_type):
 	type = new_type
@@ -118,17 +122,23 @@ func _show_team_set():
 
 func _physics_process(delta):
 	if (is_network_master()):
-		input_state = get_input_state()
+		if not is_disabled():
+			input_state = get_input_state()
+			
+			shooting = input_state.puppet_shooting
+			thrusting = input_state.puppet_thrusting and not input_state.puppet_braking
+			landing = input_state.puppet_landing
+			braking = input_state.puppet_braking
 		
-		shooting = input_state.puppet_shooting
-		thrusting = input_state.puppet_thrusting and not input_state.puppet_braking
-		landing = input_state.puppet_landing
-		braking = input_state.puppet_braking
-		
-		handle_rotation(delta)
-		if shooting:
-			for weapon in $weapons.get_children():
-				weapon.try_shooting()
+			handle_rotation(delta)
+			if shooting:
+				for weapon in $weapons.get_children():
+					weapon.try_shooting()
+		else:
+			shooting = false
+			thrusting = false
+			landing = false
+			braking = true
 	else:
 		var time = Client.time()
 		var net_frame_latest = _get_net_frame(0)
@@ -226,9 +236,12 @@ func get_shot(weapon_id, angle=null):
 	return $weapons.get_node(weapon_id).get_shot(angle)
 
 func take_damage(damage, source):
+	var was_not_disabled = not is_disabled()
 	health -= damage
 	print(self.name, " Took damage from", source)
 	emit_signal("took_damage_from", source)
+	if is_disabled() and was_not_disabled:
+		disabled_callback()
 	if health < 0 and is_network_master():
 		server_destroyed(source)
 
@@ -242,6 +255,9 @@ func server_destroyed(by):
 	for id in get_level().get_player_ids():
 		rpc_id(id, "destroyed")
 	destroyed()
+
+func disabled_callback():
+	pass
 
 sync func destroyed():
 	if not is_network_master():
@@ -510,3 +526,6 @@ func extrapolate_angle_member(member, latest, next, factor):
 	set(member,
 		anglemod(next.state[member] + (known_delta * factor))
 	)
+
+func adjacent_player_ids():
+	return get_level().get_player_ids()

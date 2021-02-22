@@ -1,4 +1,4 @@
-[gd_scene load_steps=40 format=2]
+[gd_scene load_steps=41 format=2]
 
 [ext_resource path="res://sprites/onyx_cc_nc/proj/214.png" type="Texture" id=1]
 [ext_resource path="res://gameplay/bullet.tscn" type="PackedScene" id=2]
@@ -155,7 +155,13 @@ animations = [ {
 "speed": 5.0
 } ]
 
+[sub_resource type="CircleShape2D" id=38]
+radius = 3.57812
+
 [node name="shot" instance=ExtResource( 2 )]
 
 [node name="RotationSprite" parent="." index="0"]
 frames = SubResource( 37 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D" index="0"]
+shape = SubResource( 38 )
