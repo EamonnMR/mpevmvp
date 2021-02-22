@@ -12,6 +12,7 @@ var gimbal = false
 var arc: int
 var arc_radians: float
 var projectile_scene: PackedScene
+var spread_radians: float
 
 func apply_stats():
 	var data = Game.weapons[name]
@@ -22,6 +23,7 @@ func apply_stats():
 	$CooldownTimer.wait_time = data.cooldown / count
 	$shot_sfx.stream = data.sound_effect
 	arc_radians = 2 * PI * (float(arc) / 360)
+	spread_radians = 2 * PI * (float(data.spread) / 360)
 
 
 func get_ship():
@@ -61,10 +63,15 @@ func within_arc(angle: float, direction: float) -> bool:
 func _get_angle(angle, ship) -> float:
 	if angle:
 		return angle
-	var turret_facing = _turret_facing_if_applicable(ship)
-	if turret_facing:
-		return turret_facing
-	return ship.direction
+	else:
+		var spread_angle = _get_spread()
+		var turret_facing = _turret_facing_if_applicable(ship)
+		if turret_facing:
+			return anglemod(turret_facing + spread_angle)
+		return anglemod(ship.direction + spread_angle)
+
+func _get_spread():
+	return anglemod((randf() * spread_radians) - (spread_radians/2))
 
 func get_shot(angle):
 	var shot = projectile_scene.instance()
