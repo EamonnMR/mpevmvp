@@ -74,8 +74,8 @@ func deserialize(data):
 
 func receive_entity(destination, serial_data):
 	var node = get_node(destination)
-	# TODO: Is `load` the smartest thing to use here?
-	var object = load(serial_data["scene"]).instance()
+	var cache = Game.scene_cache
+	var object = Game.scene_cache[serial_data["scene"]].instance()
 	object.apply_stats(serial_data["type"])
 	object.deserialize(serial_data["state"])
 	object.name = serial_data["name"]

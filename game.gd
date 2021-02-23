@@ -13,6 +13,7 @@ var spobs = {}
 var ships_by_faction = {}
 var weapons = {}
 var upgrades = {}
+var scene_cache = {}
 
 const INPUT = "input_nodes"
 const PLAY_AREA_RADIUS = 2000

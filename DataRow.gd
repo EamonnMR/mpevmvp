@@ -28,7 +28,10 @@ func convert_column_value(string_val: String, type: int, type_class: String):
 		return parse_color(string_val)
 	elif type == TYPE_OBJECT:
 		if type_class in ["PackedScene", "Texture"]:
-			return load(string_val)
+			print("loading packed scene: ", string_val)
+			var loaded = load(string_val)
+			Game.scene_cache[string_val] = loaded
+			return loaded
 		elif type_class == "AudioStream":
 			return GdScriptAudioImport.loadfile(string_val)
 			
