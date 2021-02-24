@@ -76,7 +76,7 @@ func remove():
 	
 	queue_free()
 
-func client_remove():
+remote func client_remove():
 	print("Instructed to remove missile")
 	queue_free()
 
