@@ -266,11 +266,14 @@ func create_npc(type, faction, position, level=null):
 	return ship
 	
 func fire_shot(ship, weapon_id):
-	var shot = ship.get_shot(weapon_id)
-	shot.set_network_master(1)
-	shot.set_name(Uuid.v4())
-	ship.get_level().get_node("shots").add_child(shot)
-	Client.rpc("fire_shot", time(), ship.name, ship.get_node("../").name, weapon_id, shot.name, shot.direction, shot.get_linear_velocity())
+	var shots = []
+	for i in range(ship.get_shot_count(weapon_id)):
+		var shot = ship.get_shot(weapon_id)
+		shot.set_network_master(1)
+		shot.set_name(Uuid.v4())
+		ship.get_level().get_node("shots").add_child(shot)
+		shots.append([shot.name, shot.direction, shot.get_linear_velocity()])
+	Client.rpc("fire_shots", time(), ship.name, ship.get_node("../").name, weapon_id, shots)
 
 func switch_system(ship):
 	var old_level = ship.get_level()

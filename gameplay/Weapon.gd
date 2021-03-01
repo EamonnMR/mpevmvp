@@ -14,12 +14,14 @@ var arc_radians: float
 var projectile_scene: PackedScene
 var spread_radians: float
 var momentum: bool
+var projectile_count: int
 
 func apply_stats():
 	var data = dat()
 	arc = data.arc
 	projectile_scene = data.projectile_scene
 	momentum = not data.no_momentum
+	projectile_count = data.count
 
 	# Stacking weapons
 	$CooldownTimer.wait_time = data.cooldown / count

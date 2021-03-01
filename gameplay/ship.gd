@@ -234,6 +234,9 @@ func _on_ShotTimer_timeout():
 
 func get_shot(weapon_id, angle=null):
 	return $weapons.get_node(weapon_id).get_shot(angle)
+	
+func get_shot_count(weapon_id):
+	return $weapons.get_node(weapon_id).projectile_count
 
 func take_damage(damage, source):
 	var was_not_disabled = not is_disabled()
