@@ -162,6 +162,8 @@ func delay_until(appointed_time):
 	# https://godotengine.org/qa/1660/execute-a-function-after-a-time-delay
 	var delay = appointed_time - time()
 	if delay > 0:
+		var before = OS.get_system_time_msecs()
 		yield(get_tree().create_timer(delay), "timeout")
+		var actual_delay = OS.get_system_time_msecs() - before
 	else:
 		print("Arrived late!")

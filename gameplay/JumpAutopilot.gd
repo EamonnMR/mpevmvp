@@ -40,7 +40,7 @@ func _physics_process(delta):
 		if not facing_destination:
 			rotate_to_face_destination(delta)
 		else:
-			if parent.get_linear_velocity().length() > (parent.max_speed * 9.9):
+			if parent.get_linear_velocity().length() > (parent.max_speed * 3):
 				parent.complete_jump(_get_jump_in_position())
 			else:
 				puppet_direction_change = 0

@@ -1,4 +1,4 @@
-id,remark,damage,projectile_velocity,projectile_lifetime,cooldown,count,arc,spread,aoe,_nonlethal,no_momentum,_use_ammo,_ammo_oft,guided_turn,guided_accel,projectile_scene,sound_effect
+id,remark,damage,projectile_velocity,projectile_lifetime,cooldown,count,arc,spread,aoe,_nonlethal,no_momentum,use_ammo,ammo_oft,guided_turn,guided_accel,projectile_scene,sound_effect
 0,Flak Cannon,5,150,2.5,2,1,,5,10,,,,,,,res://gameplay/projectiles/red_blob.tscn,res://sound/cc0_rubberduck/cannon_03.wav
 1,Flak Turret,5,150,2.5,2,2,360,6,10,,,,,,,res://gameplay/projectiles/red_blob.tscn,res://sound/cc0_rubberduck/cannon_03.wav
 2,Flak Array,5,150,2.5,2,6,15,8,10,,,,,,,res://gameplay/projectiles/red_blob.tscn,res://sound/cc0_rubberduck/cannon_03.wav
@@ -13,7 +13,7 @@ id,remark,damage,projectile_velocity,projectile_lifetime,cooldown,count,arc,spre
 11,Reaver,10,200,1.5,1,1,30,2,5,,,,,,,res://gameplay/projectiles/dual_red.tscn,res://sound/cc0_rubberduck/cannon_04.wav
 12,Rocket Pod,5,450,10,1,1,270,1,15,,,TRUE,14,,,res://gameplay/projectiles/rocket.tscn,res://sound/cc0_rubberduck/synth_misc_09_up.wav
 13,Divebomb Bay,35,0,2,2,1,,0,5,,,TRUE,17,,,res://gameplay/projectiles/green_blast.tscn,res://sound/cc0_rubberduck/sfx_13a.wav
-14,Torpedo Tube,25,210,5,2,1,270,0,5,,,,,5,50,res://gameplay/projectiles/torp.tscn,res://sound/cc0_rubberduck/weird_02.wav
+14,Torpedo Tube,25,210,5,2,1,270,0,5,,,TRUE,19,5,50,res://gameplay/projectiles/torp.tscn,res://sound/cc0_rubberduck/weird_02.wav
 15,Duelist,5,400,3,1,1,90,1,,,,,,,,res://gameplay/projectiles/dual_green.tscn,res://sound/cc0_rubberduck/sfx_01c.wav
 16,Duelist Turret,5,400,2,1,1,360,1,,,,,,,,res://gameplay/projectiles/dual_green.tscn,res://sound/cc0_rubberduck/sfx_01c.wav
 17,Beam,1,750,0.2,0.1,1,,0,,,,,,,,res://gameplay/beams/blue.tscn,res://sound/cc0_rubberduck/weird_04.wav

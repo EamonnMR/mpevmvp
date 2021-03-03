@@ -15,6 +15,8 @@ var projectile_scene: PackedScene
 var spread_radians: float
 var momentum: bool
 var projectile_count: int
+var use_ammo: bool
+var ammo_oft: int
 
 func apply_stats():
 	var data = dat()
@@ -22,6 +24,8 @@ func apply_stats():
 	projectile_scene = data.projectile_scene
 	momentum = not data.no_momentum
 	projectile_count = data.count
+	use_ammo = dat().use_ammo
+	ammo_oft = dat().ammo_oft
 
 	# Stacking weapons
 	$CooldownTimer.wait_time = data.cooldown / count
@@ -35,9 +39,19 @@ func get_ship():
 
 func try_shooting():
 	if cooldown:
-		cooldown = false
-		Server.fire_shot(get_ship(), name)
-		$CooldownTimer.start()
+		if (not use_ammo) or has_ammo():
+			cooldown = false
+			Server.fire_shot(get_ship(), name)
+			$CooldownTimer.start()
+
+func has_ammo():
+	var upg = _parent_ship().upgrades
+	if str(ammo_oft) in _parent_ship().upgrades:
+		print("Has ammo: ", _parent_ship().upgrades)
+		return true
+	else:
+		print("No ammo")
+		return false
 
 func _on_CooldownTimer_timeout():
 	cooldown = true
@@ -78,6 +92,7 @@ func _get_spread():
 	return anglemod((randf() * spread_radians) - (spread_radians/2))
 
 func get_shot(angle):
+	_deduct_ammo()
 	var shot = projectile_scene.instance()
 	var ship = get_ship()
 	shot.team_set = get_ship().team_set
@@ -100,3 +115,10 @@ func anglemod(angle):
 	
 func dat():
 	return Game.weapons[name]
+	
+func _deduct_ammo():
+	if use_ammo:
+		print("Ammo expended")
+		_parent_ship().remove_upgrade(ammo_oft, 1)
+	else:
+		print("No ammo expended")

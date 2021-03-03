@@ -22,8 +22,9 @@ func _physics_process(delta):
 		var net_frame_next = _get_net_frame(1)
 		
 		if not net_frame_next:
-			print(name, ": Lag: No future frame")
+			hide()
 		elif net_frame_next.time > time and net_frame_latest: # Interpolate
+			show()
 			var time_range = net_frame_next.time - net_frame_latest.time
 			var time_offset = time - net_frame_latest.time
 			var lerp_factor = float(time_offset) / float(time_range)
@@ -32,6 +33,7 @@ func _physics_process(delta):
 			lerp_angle_member("direction", net_frame_latest, net_frame_next, lerp_factor)
 			
 		elif net_frame_next.time < time and net_frame_latest: # Extrapolate
+			show()
 			# Extrapolate by dead reckoning
 			var extrapolation_factor = float(time - net_frame_latest.time) / float(net_frame_next.time - net_frame_latest.time) - 1.00
 			extrapolate_member("position", net_frame_latest, net_frame_next, extrapolation_factor)

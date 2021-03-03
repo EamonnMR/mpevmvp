@@ -15,6 +15,8 @@ var guided_accel: float
 var spread: float
 var no_momentum: bool
 var count: int
+var use_ammo: bool
+var ammo_oft: int
 
 func _init(data: Dictionary):
 	init(data)
