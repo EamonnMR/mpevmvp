@@ -40,6 +40,8 @@ func get_multiverse():
 	return get_tree().get_root().get_node("Multiverse")
 
 func _ready():
+	_load_mods()
+	
 	call_deferred("load_multiple_csvs", {
 		"spob_types": "res://data/spob_types.csv",
 		"commodities": "res://data/trade.csv",
@@ -48,6 +50,31 @@ func _ready():
 		"weapons": "res://data/weapons.csv",
 		"upgrades": "res://data/upgrades.csv"
 	}, "process_data")
+	
+func list_files_in_directory(path):
+	# https://godotengine.org/qa/1349/find-files-in-directories
+	var files = []
+	var dir = Directory.new()
+	dir.open(path)
+	dir.list_dir_begin()
+
+	while true:
+		var file = dir.get_next()
+		if file == "":
+			break
+		elif not file.begins_with("."):
+			files.append(file)
+
+	dir.list_dir_end()
+	return files
+	
+func _load_mods():
+	for mod in list_files_in_directory("plugins"):
+		var success = ProjectSettings.load_resource_pack("plugins/" + mod)
+		if success:
+			print("Plugin successfully: ", mod)
+		else:
+			print("Plugin failed to load: ", mod)
 
 func process_data():
 	load_spob_types()
@@ -85,7 +112,7 @@ func load_spob_types():
 		spob_type["landing"] = load(spob_type["landing"]) if spob_type["landing"] else null
 	
 	Procgen.index_spob_types()
-			
+
 func load_commodities():
 	for commodity_id in commodities:
 		var commodity = commodities[commodity_id]
@@ -113,6 +140,7 @@ func load_ships():
 
 func load_weapons():
 	for i in weapons:
+		var wep = weapons[i]
 		weapons[i] = WeaponData.new(weapons[i])
 	
 func load_upgrades():
