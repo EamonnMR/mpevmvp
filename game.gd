@@ -71,7 +71,7 @@ func list_files_in_directory(path):
 func _load_mods():
 	for mod in list_files_in_directory("plugins"):
 		var success = ProjectSettings.load_resource_pack("plugins/" + mod)
-		if success:
+		if success: 
 			print("Plugin successfully: ", mod)
 		else:
 			print("Plugin failed to load: ", mod)

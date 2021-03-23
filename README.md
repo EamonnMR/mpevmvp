@@ -33,4 +33,3 @@ Contains a fork of Cyberfilth's [Fantasy Names Generator](https://github.com/cyb
 And a copy of [Godot uuid](https://github.com/binogure-studio/godot-uuid) because don't let godot's auto assigned names 
 into your network code, it will mess stuff up!
 
-Also contains a copy of [GDScript Audio Import](https://github.com/Gianclgar/GDScriptAudioImport) because otherwise loading sound from gdscript is a pain.

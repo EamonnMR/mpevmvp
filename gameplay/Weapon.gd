@@ -29,7 +29,9 @@ func apply_stats():
 
 	# Stacking weapons
 	$CooldownTimer.wait_time = data.cooldown / count
+	
 	$shot_sfx.stream = data.sound_effect
+		
 	arc_radians = 2 * PI * (float(arc) / 360)
 	spread_radians = 2 * PI * (float(data.spread) / 360)
 

@@ -8,7 +8,7 @@ var projectile_lifetime: float
 var cooldown: float
 var arc: int
 var projectile_scene: PackedScene
-var sound_effect: AudioStream
+var sound_effect: Resource
 var aoe: int
 var guided_turn: float
 var guided_accel: float
