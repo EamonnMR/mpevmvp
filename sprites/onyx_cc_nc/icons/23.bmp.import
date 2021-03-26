@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/ship07GLOW.png-5c7a9b1e28178cdf480bb60d11cfaf00.stex"
+path="res://.import/23.bmp-b76a6f2b0c268c279cf3e692cb764eed.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://sprites/onyx_cc_nc/ships/ship07GLOW.png"
-dest_files=[ "res://.import/ship07GLOW.png-5c7a9b1e28178cdf480bb60d11cfaf00.stex" ]
+source_file="res://sprites/onyx_cc_nc/icons/23.bmp"
+dest_files=[ "res://.import/23.bmp-b76a6f2b0c268c279cf3e692cb764eed.stex" ]
 
 [params]
 
