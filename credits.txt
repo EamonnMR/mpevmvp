@@ -1,0 +1,22 @@
+Credits for art assets
+
+* Ships, weapons, projectiles, planets (except gas giants)
+Onyx
+https://archive.org/details/onyx_shipyard
+http://maxkarlkey.com/
+CC NC
+
+* All of the game's sound effects
+Rubberduck
+https://opengameart.org/users/rubberduck
+CC0
+
+* User Interface Elements
+DanC
+https://lostgarden.home.blog/2005/03/27/game-post-mortem-hard-vacuum/
+CC BY
+
+* Explosion
+Cuzco
+https://opengameart.org/content/explosion
+
