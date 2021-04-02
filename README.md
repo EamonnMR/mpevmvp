@@ -2,7 +2,7 @@
 
 Networked multiplayer Space Trading/Combat game with asteroids style mechanics and a procedurally generated world. Built in Godot using free graphics.
 
-![Spaceship combat](https://raw.githubusercontent.com/EamonnMR/mpevmvp/master/screenshots/hero.png)
+![screenshot of gameplay](https://raw.githubusercontent.com/EamonnMR/mpevmvp/master/screenshots/gameplay.png)
 
 Built to sort of scratch an itch: can [EV](http://escape-velocity.games) mechanics work in a multiplayer setting?
 
@@ -12,11 +12,12 @@ Download:
 
 https://github.com/EamonnMR/mpevmvp/releases
 
-![screenshot of gameplay](https://raw.githubusercontent.com/EamonnMR/mpevmvp/master/screenshots/gameplay.png)
 
 Make sure you host a server then run another instance of the game and join it as a client. Make sure you've opened the port on your router! (default port is 26000!)
 
 (windows and linux users will also need the .pck file)
+
+![screenshot of store](https://raw.githubusercontent.com/EamonnMR/mpevmvp/master/screenshots/store.png)
 
 Trello board where I try to track work:
 
@@ -35,4 +36,3 @@ Contains a fork of Cyberfilth's [Fantasy Names Generator](https://github.com/cyb
 And a copy of [Godot uuid](https://github.com/binogure-studio/godot-uuid) because don't let godot's auto assigned names 
 into your network code, it will mess stuff up!
 
-![screenshot of store](https://raw.githubusercontent.com/EamonnMR/mpevmvp/master/screenshots/store.png)
